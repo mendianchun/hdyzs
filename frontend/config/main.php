@@ -32,7 +32,7 @@ return [
         ],
        
         'urlManager' => [
-            'enablePrettyUrl' => false,
+            'enablePrettyUrl' => true,
             'showScriptName' => false,
         	'suffix'=>'.html',
             'rules' => [

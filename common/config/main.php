@@ -9,4 +9,5 @@ return [
     			'class' =>'yii\rbac\DbManager',
     	],
     ],
+    'timeZone'=>'Asia/Shanghai',
 ];

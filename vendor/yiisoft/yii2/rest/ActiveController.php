@@ -11,6 +11,12 @@ use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\web\ForbiddenHttpException;
 
+use yii\helpers\ArrayHelper;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
+use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
+use filsh\yii2\oauth2server\filters\auth\CompositeAuth;
+
 /**
  * ActiveController implements a common set of actions for supporting RESTful access to ActiveRecord.
  *
@@ -52,6 +58,25 @@ class ActiveController extends Controller
      */
     public $createScenario = Model::SCENARIO_DEFAULT;
 
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return ArrayHelper::merge(parent::behaviors(), [
+            'authenticator' => [
+                'class' => CompositeAuth::className(),
+                'authMethods' => [
+                    ['class' => HttpBearerAuth::className()],
+                    ['class' => QueryParamAuth::className(), 'tokenParam' => 'token'],
+                ]
+            ],
+//            'exceptionFilter' => [
+//                'class' => ErrorToExceptionFilter::className()
+//            ],
+        ]);
+    }
 
     /**
      * @inheritdoc

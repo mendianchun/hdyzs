@@ -88,7 +88,15 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        echo $token;
+        exit;
+        // 如果token无效的话，
+        if(!static::apiTokenIsValid($token)) {
+            throw new \yii\web\UnauthorizedHttpException("token is invalid.");
+        }
+
+        return static::findOne(['api_token' => $token, 'status' => self::STATUS_ACTIVE]);
+        // throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
@@ -215,14 +223,26 @@ class User extends ActiveRecord implements IdentityInterface
     {
     	return $this->status==self::STATUS_ACTIVE?'正常':'已删除'; 
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
- 
+
+    /**
+     * 生成 api_token
+     */
+    public function generateApiToken()
+    {
+        $this->api_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * 校验api_token是否有效
+     */
+    public static function apiTokenIsValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = Yii::$app->params['user.apiTokenExpire'];
+        return $timestamp + $expire >= time();
+    }
 }

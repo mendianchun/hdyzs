@@ -67,7 +67,7 @@ class Adminuser extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getPosts()
     {
-        return $this->hasMany(Post::className(), ['author_id' => 'id']);
+        return $this->hasMany(Post::className(), ['dz' => 'id']);
     }
     
     /**

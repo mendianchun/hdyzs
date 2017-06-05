@@ -23,6 +23,10 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
         ),
+        'f' => 
+        array (
+            'filsh\\yii2\\oauth2server\\' => 24,
+        ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
@@ -66,6 +70,10 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'filsh\\yii2\\oauth2server\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/filsh/yii2-oauth2-server',
+        ),
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
@@ -77,6 +85,13 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
     );
 
     public static $prefixesPsr0 = array (
+        'O' => 
+        array (
+            'OAuth2' => 
+            array (
+                0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-php/src',
+            ),
+        ),
         'H' => 
         array (
             'HTMLPurifier' => 
