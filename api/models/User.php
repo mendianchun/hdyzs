@@ -25,7 +25,15 @@ class User extends \common\models\User implements \OAuth2\Storage\UserCredential
     public function checkUserCredentials($username, $password)
     {
         $user = static::findByUsername($username);
-        if (empty($user)) {
+        if(empty($user)){
+            $user = static::findByMobile($username);
+            if(empty($user)){
+                $user = static::findByEmail($username);
+            }
+        }
+
+        $post = Yii::$app->request->post();
+        if (empty($user) || $user['type'] != $post['type']) {
             return false;
         }
         return $user->validatePassword($password);
@@ -37,6 +45,12 @@ class User extends \common\models\User implements \OAuth2\Storage\UserCredential
     public function getUserDetails($username)
     {
         $user = static::findByUsername($username);
+        if(empty($user)){
+            $user = static::findByMobile($username);
+            if(empty($user)){
+                $user = static::findByEmail($username);
+            }
+        }
         return ['user_id' => $user->getId()];
     }
 }

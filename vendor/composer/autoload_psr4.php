@@ -16,5 +16,6 @@ return array(
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'filsh\\yii2\\oauth2server\\' => array($vendorDir . '/filsh/yii2-oauth2-server'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
+    'Pingpp\\' => array($vendorDir . '/pingplusplus/pingpp-php/lib'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

@@ -75,31 +75,9 @@ return [
             'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'controller' => ['v1/user'],
-//                    'extraPatterns' => [
-//                        'POST login' => 'login',
-//                        'GET signup-test' => 'signup-test',
-//                        'POST login-oauth' => 'login-oauth',
-//                        'GET profile' => 'profile',
-//                        'GET search' => 'search',
-//                    ],
-//                ],
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'controller' => ['v1/country'],
-//                    'extraPatterns' => [
-//                        'GET test' => 'test',
-//                    ],
-//                ],
-                'GET v1/user' => 'v1/user/index',
-                'GET v1/user/<action:\w+>' => 'v1/user/<action>',
-                'POST v1/user/<action:\w+>' => 'v1/user/<action>',
-
-                'GET v1/user' => 'v1/user/index',
-                'GET v1/country/<action:\w+>' => 'v1/country/<action>',
-                'POST v1/country/<action:\w+>' => 'v1/country/<action>',
+                'GET v1/<controller:\w+>' => 'v1/<controller>/index',
+                'GET v1/<controller:\w+>/<action:\w+>' => 'v1/<controller>/<action>',
+                'POST v1/<controller:\w+>/<action:\w+>' => 'v1/<controller>/<action>',
 
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
             ],
@@ -114,6 +92,10 @@ return [
 //                    'message' => $response->statusText
 //                ];
 
+                if(isset($response->data['code']) && $response->data['code'] != 0){
+                    $response->data['data'] = [];
+                }
+
                 if(!isset($response->data['data'])){
                     $response->data['data'] = $response->data;
                 }
@@ -123,12 +105,12 @@ return [
                 }
 
                 if(!isset($response->data['message'])){
-                    $response->data['message'] = '';
+                    $response->data['message'] = 'succ';
                 }
 
                 if($response->getStatusCode() != 200){
                     $response->data = [
-                        'code' => $response->getStatusCode(),
+                        'code' => '10'.$response->getStatusCode(),
                         'data' => [],
                         'message' => $response->data['message']
                     ];

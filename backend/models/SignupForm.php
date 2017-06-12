@@ -36,7 +36,8 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-        		
+
+            ['password_repeat', 'required'],
         	['password_repeat','compare','compareAttribute'=>'password','message'=>'两次输入的密码不一致！'],
         		
         	['nickname','required'],

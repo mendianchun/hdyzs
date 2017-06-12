@@ -1,7 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: damen
- * Date: 2017/6/5
- * Time: 下午3:55
- */
+use yii\widgets\ActiveForm;
+?>
+
+<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+
+<?= $form->field($model, 'file')->fileInput() ?>
+
+    <button>Submit</button>
+
+<?php ActiveForm::end() ?>

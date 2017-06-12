@@ -3,17 +3,20 @@ namespace api\modules\v1\controllers;
 
 use yii;
 use yii\rest\ActiveController;
-use common\models\User;
+use api\models\User;
 use common\models\UserSearch;
-use api\modules\v1\models\LoginForm;
-use yii\web\IdentityInterface;
-use yii\filters\auth\QueryParamAuth;
-use yii\helpers\ArrayHelper;
 
-use OAuth2\Request;
-use OAuth2\Response;
-use OAuth2\Storage\Pdo;
-use OAuth2\GrantType\RefreshToken;
+//use api\modules\v1\models\LoginForm;
+//use yii\web\IdentityInterface;
+//use yii\filters\auth\QueryParamAuth;
+use yii\helpers\ArrayHelper;
+use common\service\Service;
+use api\models\Signup;
+
+//use OAuth2\Request;
+//use OAuth2\Response;
+//use OAuth2\Storage\Pdo;
+//use OAuth2\GrantType\RefreshToken;
 
 
 class UserController extends ActiveController
@@ -28,10 +31,15 @@ class UserController extends ActiveController
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
                 'optional' => [
-                    'login',
                     'signup-test',
-                    'login-oauth',
                     'index',
+                    'view',
+                    'create',
+                    'search',
+                    'update',
+                    'delete',
+                    'test',
+                    'login',
                 ],
             ]
         ]);
@@ -41,10 +49,15 @@ class UserController extends ActiveController
     {
         $actions = parent::actions();
         // 禁用""index,delete" 和 "create" 操作
-        unset($actions['index'], $actions['delete'], $actions['create']);
+//        unset($actions['index'], $actions['delete'], $actions['create'], $actions['update']);
 
         return $actions;
 
+    }
+
+    public function actionTest()
+    {
+        return ['test'];
     }
 
     /**
@@ -64,64 +77,118 @@ class UserController extends ActiveController
         ];
     }
 
-    public function actionLogin()
+    /**
+     * Creates a new User model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
     {
-        $model = new LoginForm;
-        $model->setAttributes(Yii::$app->request->post());
-        if ($user = $model->login()) {
-            if ($user instanceof IdentityInterface) {
-                return ['access-token' => $user->api_token];
-            } else {
-                return $user->errors;
-            }
-        } else {
-            return $model->errors;
+//        $post = Yii::$app->request->post();
+//        $user = new User();
+//        $user->generateAuthKey();
+//        $user->setPassword($post['password']);
+//        $user->username = $post['username'];
+//        $user->email = $post['email'];
+//        $user->mobile = $post['mobile'];
+//        $user->uuid = Service::create_uuid();
+//        if($user->save()){
+//            return [];
+//        }
+//        else{
+//            $code = 21001;
+//            $message = array_values($user->getFirstErrors())[0];;
+//            return [
+//                'code' => $code,
+//                'message' => $message,
+//            ];
+//        }
+
+        $Signup = new Signup();
+
+//        $post = Yii::$app->request->post();
+//        $Signup->setUserName($post['username']);
+//        $Signup->setMobile($post['mobile']);
+        $Signup->setAttributes(Yii::$app->request->post());
+
+        if ($user = $Signup->signup()) {
+            return [];
+        }else{
+            $code = 21001;
+            $message = array_values($Signup->getFirstErrors())[0];;
+            return [
+                'code' => $code,
+                'message' => $message,
+            ];
         }
     }
 
-//    public function actionLoginOauth()
-//    {
-//        $storage = new Pdo(array('dsn' => Yii::$app->db->dsn, 'username' => Yii::$app->db->username, 'password' => Yii::$app->db->password));
-//        $server = new \OAuth2\Server($storage, array('enforce_state' => false, 'access_lifetime' => Yii::$app->params['user.apiTokenExpire']));
-//        $server->addGrantType(new \OAuth2\GrantType\ClientCredentials($storage));
-//        $server->addGrantType(new \OAuth2\GrantType\AuthorizationCode($storage));
-//        $server->addGrantType(new \OAuth2\GrantType\UserCredentials($storage));
-//        $server->addGrantType(new RefreshToken($storage));
-//
-////        $request = Request::createFromGlobals();
-//        $response = $server->handleTokenRequest(\OAuth2\Request::createFromGlobals());
-////        $response = new \OAuth2\Response();
-////        $response = $server->handleAuthorizeRequest(\OAuth2\Request::createFromGlobals(),$response,false,123);
-//        $response_array = $response->getParameters();
-//        return $response_array;
-//    }
+    public function actionUpdate()
+    {
+        $post = Yii::$app->request->post();
+        $user = User::findOne($post['id']);
+        if (!$user) {
+            $code = 210001;
+            $message = '用户不存在';
+            return [
+                'code' => $code,
+                'message' => $message,
+            ];
+        }
+        $user->email = $post['email'];
+        if ($user->save()) {
+            return [];
+        } else {
+            $code = 21002;
+            $message = array_values($user->getFirstErrors())[0];;
+            return [
+                'code' => $code,
+                'message' => $message,
+            ];
+        }
+    }
+
+    public function actionDelete()
+    {
+        $post = Yii::$app->request->post();
+        $user = User::findOne($post['id']);
+        if (!$user) {
+            $code = 21003;
+            $message = '用户不存在';
+            return [
+                'code' => $code,
+                'data' => [],
+                'message' => $message,
+            ];
+        }
+        $user->status = 0;
+        if ($user->save()) {
+            return [];
+        } else {
+            $code = 21003;
+            $message = array_values($user->getFirstErrors())[0];;
+            return [
+                'code' => $code,
+                'data' => [],
+                'message' => $message,
+            ];
+        }
+    }
 
     public function actionProfile()
     {
         $user = \yii::$app->user->identity;
-        $data = [
-            'uid' => $user['id'],
-            'username' => $user['username'],
-            'email' => $user['email'],
-        ];
-
-        return [
-            'code' => 0,
-            'data' => $data,
-            'message' => 'succ',
-        ];
+        return $user;
     }
 
-    public function actionIndex()
-    {
-        $users = new yii\data\ActiveDataProvider(['query' => \api\models\User::find()]);
-        $data = $users->getModels();
-        return [
-            'code' => 0,
-            'data' => $data,
-            'message' => 'succ',
-        ];
-    }
+//    public function actionIndex()
+//    {
+//        $query = User::find();
+//        $users = new yii\data\ActiveDataProvider(['query' => $query]);
+////        $query->andFilterWhere(['like', 'username', 'weixi']);
+//        $data = $users->getModels();
+//        return $data;
+//    }
 
     public function actionSearch($username)
     {
@@ -129,18 +196,6 @@ class UserController extends ActiveController
         $userSearch = new UserSearch();
         $provider = $userSearch->search($params);
         $data = $provider->getModels();
-        $returnData = array();
-        foreach ($data as $user) {
-            $returnData[] = [
-                'uid' => $user['id'],
-                'username' => $user['username'],
-                'email' => $user['email'],
-            ];
-        }
-        return [
-            'code' => 0,
-            'data' => $returnData,
-            'message' => 'succ',
-        ];
+        return $data;
     }
 }  

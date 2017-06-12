@@ -74,7 +74,7 @@ class AdminuserController extends Controller
            {
            		return $this->redirect(['view', 'id' => $user->id]);
            }    	
-        } 
+        }
        
         return $this->render('create', [
                 'model' => $model,
@@ -136,7 +136,6 @@ class AdminuserController extends Controller
     	$model = new ResetpwdForm();
     
     	if ($model->load(Yii::$app->request->post())) {
-    		
     		if($model->resetPassword($id))
     		{
     			return $this->redirect(['index']);

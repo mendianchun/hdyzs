@@ -17,19 +17,20 @@ class CountryController extends ActiveController
             'authenticator' => [
                 'optional' => [
                     'index',
+                    'test',
                 ],
             ]
         ] );
     }
 
-//    public function actions() {
-//        $actions = parent::actions();
-//        // 禁用""index,delete" 和 "create" 操作
-//        unset($actions['index'],$actions['delete'], $actions['create']);
-//
-//        return $actions;
-//
-//    }
+    public function actions() {
+        $actions = parent::actions();
+        // 禁用""index,delete" 和 "create" 操作
+        unset($actions['index'],$actions['delete'], $actions['create']);
+
+        return $actions;
+
+    }
 //    //重写index的业务实现
 //    public function actionIndex()
 //    {
@@ -45,5 +46,10 @@ class CountryController extends ActiveController
     public function actionTest()
     {
         return ['test'];
+    }
+
+    public function actionIndex()
+    {
+        return ['index'];
     }
 }  

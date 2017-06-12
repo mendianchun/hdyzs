@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		],
             //'userid',
             [
-            'attribute'=>userid,
+            'attribute'=>'userid',
             'value'=>$model->user->username,
 		    ],
             'email:email',

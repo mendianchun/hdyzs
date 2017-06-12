@@ -105,23 +105,23 @@ class ActiveController extends Controller
                 'modelClass' => $this->modelClass,
                 'checkAccess' => [$this, 'checkAccess'],
             ],
-            'create' => [
-                'class' => 'yii\rest\CreateAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-                'scenario' => $this->createScenario,
-            ],
-            'update' => [
-                'class' => 'yii\rest\UpdateAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-                'scenario' => $this->updateScenario,
-            ],
-            'delete' => [
-                'class' => 'yii\rest\DeleteAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-            ],
+//            'create' => [
+//                'class' => 'yii\rest\CreateAction',
+//                'modelClass' => $this->modelClass,
+//                'checkAccess' => [$this, 'checkAccess'],
+//                'scenario' => $this->createScenario,
+//            ],
+//            'update' => [
+//                'class' => 'yii\rest\UpdateAction',
+//                'modelClass' => $this->modelClass,
+//                'checkAccess' => [$this, 'checkAccess'],
+//                'scenario' => $this->updateScenario,
+//            ],
+//            'delete' => [
+//                'class' => 'yii\rest\DeleteAction',
+//                'modelClass' => $this->modelClass,
+//                'checkAccess' => [$this, 'checkAccess'],
+//            ],
             'options' => [
                 'class' => 'yii\rest\OptionsAction',
             ],
@@ -137,8 +137,8 @@ class ActiveController extends Controller
             'index' => ['GET', 'HEAD'],
             'view' => ['GET', 'HEAD'],
             'create' => ['POST'],
-            'update' => ['PUT', 'PATCH'],
-            'delete' => ['DELETE'],
+            'update' => ['POST'],
+            'delete' => ['POST'],
         ];
     }
 

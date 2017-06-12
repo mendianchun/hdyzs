@@ -20,9 +20,13 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
- * 
+ * @property string $api_token
+ * @property string $mobile
+ * @property string $uuid
+ *
  * @property Comment[] $comments
  */
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
@@ -53,11 +57,17 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [['username'],'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        	[['email'], 'unique'],
-        	[['email'], 'required'],
+//        	[['email'], 'unique'],
+//        	[['email'], 'required'],
         	[['email'], 'email'],
+            [['mobile'], 'unique'],
+            [['mobile'], 'required'],
+//            [['mobile'], 'mobile'],
+            [['uuid'], 'unique'],
+            [['uuid'], 'required'],
         ];
     }
 
@@ -73,8 +83,22 @@ class User extends ActiveRecord implements IdentityInterface
     			'status' => '状态',
     			'created_at' => '创建时间',
     			'updated_at' => '修改时间',
+                'mobile' => '手机号',
+                'uuid' => 'uuid',
     	];
     }
+
+    // 过滤掉一些字段，适用于你希望继承父类实现同时你想屏蔽掉一些敏感字段
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // 删除一些包含敏感信息的字段
+        unset($fields['auth_key'], $fields['password_hash'], $fields['password_reset_token']);
+
+        return $fields;
+    }
+
     /**
      * @inheritdoc
      */
@@ -88,15 +112,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        echo $token;
-        exit;
-        // 如果token无效的话，
-        if(!static::apiTokenIsValid($token)) {
-            throw new \yii\web\UnauthorizedHttpException("token is invalid.");
-        }
-
-        return static::findOne(['api_token' => $token, 'status' => self::STATUS_ACTIVE]);
-        // throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
@@ -108,6 +124,28 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by mobile
+     *
+     * @param string mobile
+     * @return static|null
+     */
+    public static function findByMobile($mobile)
+    {
+        return static::findOne(['mobile' => $mobile, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by email
+     *
+     * @param string email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -224,25 +262,4 @@ class User extends ActiveRecord implements IdentityInterface
     	return $this->status==self::STATUS_ACTIVE?'正常':'已删除'; 
     }
 
-    /**
-     * 生成 api_token
-     */
-    public function generateApiToken()
-    {
-        $this->api_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * 校验api_token是否有效
-     */
-    public static function apiTokenIsValid($token)
-    {
-        if (empty($token)) {
-            return false;
-        }
-
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        $expire = Yii::$app->params['user.apiTokenExpire'];
-        return $timestamp + $expire >= time();
-    }
 }
