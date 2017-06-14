@@ -52,8 +52,8 @@ class Appointment extends \yii\db\ActiveRecord
     {
         return [
             [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_description', 'create_at', 'update_at'], 'required'],
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
-            [['patient_description', 'expert_diagnosis'], 'string'],
+            [[ 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
+            [['appointment_no','patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
             [['patient_name'], 'string', 'max' => 10],
             [['patient_mobile'], 'string', 'max' => 11],
