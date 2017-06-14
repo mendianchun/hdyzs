@@ -17,8 +17,8 @@ use Yii;
  * @property string $introduction
  * @property string $user_uuid
  *
+ * @property Appointment[] $appointments
  * @property User $userUu
- * @property Order[] $orders
  */
 class Expert extends \yii\db\ActiveRecord
 {
@@ -69,16 +69,16 @@ class Expert extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserUu()
+    public function getAppointments()
     {
-        return $this->hasOne(User::className(), ['uuid' => 'user_uuid']);
+        return $this->hasMany(Appointment::className(), ['expert_uuid' => 'user_uuid']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrders()
+    public function getUserUu()
     {
-        return $this->hasMany(Order::className(), ['expert_uuid' => 'user_uuid']);
+        return $this->hasOne(User::className(), ['uuid' => 'user_uuid']);
     }
 }
