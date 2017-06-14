@@ -4,15 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Order */
+/* @var $model common\models\Appointment */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="order-form">
+<div class="appointment-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'order_no')->textInput() ?>
+    <?= $form->field($model, 'appointment_no')->textInput() ?>
 
     <?= $form->field($model, 'clinic_uuid')->textInput(['maxlength' => true]) ?>
 

@@ -5,26 +5,26 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "order_video".
+ * This is the model class for table "appointment_video".
  *
  * @property integer $id
- * @property integer $order_no
+ * @property integer $appointment_no
  * @property string $zhumu_uuid
  * @property integer $meeting_number
  * @property string $audio_url
  * @property integer $create_at
  *
- * @property Order $orderNo
+ * @property Appointment $appointmentNo
  * @property Zhumu $zhumuUu
  */
-class OrderVideo extends \yii\db\ActiveRecord
+class AppointmentVideo extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'order_video';
+        return 'appointment_video';
     }
 
     /**
@@ -33,11 +33,11 @@ class OrderVideo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_no', 'zhumu_uuid', 'meeting_number', 'audio_url', 'create_at'], 'required'],
-            [['order_no', 'meeting_number', 'create_at'], 'integer'],
+            [['appointment_no', 'zhumu_uuid', 'meeting_number', 'audio_url', 'create_at'], 'required'],
+            [['appointment_no', 'meeting_number', 'create_at'], 'integer'],
             [['zhumu_uuid'], 'string', 'max' => 36],
             [['audio_url'], 'string', 'max' => 100],
-            [['order_no'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_no' => 'order_no']],
+            [['appointment_no'], 'exist', 'skipOnError' => true, 'targetClass' => Appointment::className(), 'targetAttribute' => ['appointment_no' => 'appointment_no']],
             [['zhumu_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Zhumu::className(), 'targetAttribute' => ['zhumu_uuid' => 'uuid']],
         ];
     }
@@ -49,7 +49,7 @@ class OrderVideo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_no' => 'Order No',
+            'appointment_no' => 'Appointment No',
             'zhumu_uuid' => 'Zhumu Uuid',
             'meeting_number' => 'Meeting Number',
             'audio_url' => 'Audio Url',
@@ -60,9 +60,9 @@ class OrderVideo extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderNo()
+    public function getAppointmentNo()
     {
-        return $this->hasOne(Order::className(), ['order_no' => 'order_no']);
+        return $this->hasOne(Appointment::className(), ['appointment_no' => 'appointment_no']);
     }
 
     /**

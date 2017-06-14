@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Order;
+use common\models\Appointment;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\Order`.
+ * AppointmentSearch represents the model behind the search form about `common\models\Appointment`.
  */
-class OrderSearch extends Order
+class AppointmentSearch extends Appointment
 {
     /**
      * @inheritdoc
@@ -18,7 +18,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['order_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
             [['clinic_uuid', 'expert_uuid', 'patient_name', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis'], 'safe'],
         ];
     }
@@ -41,7 +41,7 @@ class OrderSearch extends Order
      */
     public function search($params)
     {
-        $query = Order::find();
+        $query = Appointment::find();
 
         // add conditions that should always apply here
 
@@ -59,7 +59,7 @@ class OrderSearch extends Order
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'order_no' => $this->order_no,
+            'appointment_no' => $this->appointment_no,
             'order_starttime' => $this->order_starttime,
             'order_endtime' => $this->order_endtime,
             'order_fee' => $this->order_fee,

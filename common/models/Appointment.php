@@ -5,9 +5,9 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "order".
+ * This is the model class for table "appointment".
  *
- * @property integer $order_no
+ * @property integer $appointment_no
  * @property string $clinic_uuid
  * @property string $expert_uuid
  * @property integer $order_starttime
@@ -32,17 +32,17 @@ use Yii;
  *
  * @property Clinic $clinicUu
  * @property Expert $expertUu
- * @property OrderVideo[] $orderVideos
+ * @property AppointmentVideo[] $appointmentVideos
  * @property Pay[] $pays
  */
-class Order extends \yii\db\ActiveRecord
+class Appointment extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'order';
+        return 'appointment';
     }
 
     /**
@@ -51,8 +51,8 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_name', 'patient_age', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis', 'pay_type', 'fee_type', 'create_at', 'update_at'], 'required'],
-            [['order_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
+            [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_name', 'patient_age', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis', 'pay_type', 'fee_type', 'create_at', 'update_at'], 'required'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
             [['patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
             [['patient_name'], 'string', 'max' => 10],
@@ -69,7 +69,7 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'order_no' => 'Order No',
+            'appointment_no' => 'Appointment No',
             'clinic_uuid' => 'Clinic Uuid',
             'expert_uuid' => 'Expert Uuid',
             'order_starttime' => 'Order Starttime',
@@ -113,9 +113,9 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderVideos()
+    public function getAppointmentVideos()
     {
-        return $this->hasMany(OrderVideo::className(), ['order_no' => 'order_no']);
+        return $this->hasMany(AppointmentVideo::className(), ['appointment_no' => 'appointment_no']);
     }
 
     /**
@@ -123,6 +123,6 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getPays()
     {
-        return $this->hasMany(Pay::className(), ['order_no' => 'order_no']);
+        return $this->hasMany(Pay::className(), ['appointment_no' => 'appointment_no']);
     }
 }

@@ -38,7 +38,7 @@ class UserController extends ActiveController
                     'search',
                     'update',
                     'delete',
-                    'test',
+//                    'test',
                     'login',
                 ],
             ]

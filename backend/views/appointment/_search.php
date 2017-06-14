@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OrderSearch */
+/* @var $model common\models\AppointmentSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="order-search">
+<div class="appointment-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'order_no') ?>
+    <?= $form->field($model, 'appointment_no') ?>
 
     <?= $form->field($model, 'clinic_uuid') ?>
 

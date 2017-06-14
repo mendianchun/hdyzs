@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pay_no')->textInput() ?>
 
-    <?= $form->field($model, 'order_no')->textInput() ?>
+    <?= $form->field($model, 'appointment_no')->textInput() ?>
 
     <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
 

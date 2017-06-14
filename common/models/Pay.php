@@ -8,13 +8,13 @@ use Yii;
  * This is the model class for table "pay".
  *
  * @property integer $pay_no
- * @property integer $order_no
+ * @property integer $appointment_no
  * @property string $type
  * @property integer $time
  * @property integer $create_at
  * @property integer $status
  *
- * @property Order $orderNo
+ * @property Appointment $appointmentNo
  */
 class Pay extends \yii\db\ActiveRecord
 {
@@ -32,10 +32,10 @@ class Pay extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pay_no', 'order_no', 'type', 'time', 'create_at', 'status'], 'required'],
-            [['pay_no', 'order_no', 'time', 'create_at', 'status'], 'integer'],
+            [['pay_no', 'appointment_no', 'type', 'time', 'create_at', 'status'], 'required'],
+            [['pay_no', 'appointment_no', 'time', 'create_at', 'status'], 'integer'],
             [['type'], 'string', 'max' => 10],
-            [['order_no'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_no' => 'order_no']],
+            [['appointment_no'], 'exist', 'skipOnError' => true, 'targetClass' => Appointment::className(), 'targetAttribute' => ['appointment_no' => 'appointment_no']],
         ];
     }
 
@@ -46,7 +46,7 @@ class Pay extends \yii\db\ActiveRecord
     {
         return [
             'pay_no' => 'Pay No',
-            'order_no' => 'Order No',
+            'appointment_no' => 'Appointment No',
             'type' => 'Type',
             'time' => 'Time',
             'create_at' => 'Create At',
@@ -57,8 +57,8 @@ class Pay extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderNo()
+    public function getAppointmentNo()
     {
-        return $this->hasOne(Order::className(), ['order_no' => 'order_no']);
+        return $this->hasOne(Appointment::className(), ['appointment_no' => 'appointment_no']);
     }
 }

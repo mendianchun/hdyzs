@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pay_no') ?>
 
-    <?= $form->field($model, 'order_no') ?>
+    <?= $form->field($model, 'appointment_no') ?>
 
     <?= $form->field($model, 'type') ?>
 
