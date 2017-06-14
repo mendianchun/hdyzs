@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Post;
-use common\models\PostSearch;
+use common\models\Zhumu;
+use common\models\ZhumuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
- * PostController implements the CRUD actions for Post model.
+ * ZhumuController implements the CRUD actions for Zhumu model.
  */
-class PostController extends Controller
+class ZhumuController extends Controller
 {
     /**
      * @inheritdoc
@@ -26,34 +25,17 @@ class PostController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
-            ],  
-
-        	'access' =>[
-        				'class' => AccessControl::className(),
-        				'rules' =>
-        				[
-        						[
-        								'actions' => ['index', 'view'],
-        								'allow' => true,
-        								'roles' => ['?'],
-        						],
-        				[
-        				'actions' => ['view', 'index', 'create','update','delete'],
-        				'allow' => true,
-        				'roles' => ['@'],
-        			],
-        		],
-        		],        		
+            ],
         ];
     }
 
     /**
-     * Lists all Post models.
+     * Lists all Zhumu models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PostSearch();
+        $searchModel = new ZhumuSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,7 +45,7 @@ class PostController extends Controller
     }
 
     /**
-     * Displays a single Post model.
+     * Displays a single Zhumu model.
      * @param integer $id
      * @return mixed
      */
@@ -75,14 +57,14 @@ class PostController extends Controller
     }
 
     /**
-     * Creates a new Post model.
+     * Creates a new Zhumu model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Post();
-        
+        $model = new Zhumu();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -93,7 +75,7 @@ class PostController extends Controller
     }
 
     /**
-     * Updates an existing Post model.
+     * Updates an existing Zhumu model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -112,7 +94,7 @@ class PostController extends Controller
     }
 
     /**
-     * Deletes an existing Post model.
+     * Deletes an existing Zhumu model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -125,15 +107,15 @@ class PostController extends Controller
     }
 
     /**
-     * Finds the Post model based on its primary key value.
+     * Finds the Zhumu model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Post the loaded model
+     * @return Zhumu the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Post::findOne($id)) !== null) {
+        if (($model = Zhumu::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Comment;
-use common\models\CommentSearch;
+use common\models\ScoreLog;
+use common\models\ScoreLogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CommentController implements the CRUD actions for Comment model.
+ * ScorelogController implements the CRUD actions for ScoreLog model.
  */
-class CommentController extends Controller
+class ScorelogController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class CommentController extends Controller
     }
 
     /**
-     * Lists all Comment models.
+     * Lists all ScoreLog models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CommentSearch();
+        $searchModel = new ScoreLogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class CommentController extends Controller
     }
 
     /**
-     * Displays a single Comment model.
+     * Displays a single ScoreLog model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +57,13 @@ class CommentController extends Controller
     }
 
     /**
-     * Creates a new Comment model.
+     * Creates a new ScoreLog model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Comment();
+        $model = new ScoreLog();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +75,7 @@ class CommentController extends Controller
     }
 
     /**
-     * Updates an existing Comment model.
+     * Updates an existing ScoreLog model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,7 +94,7 @@ class CommentController extends Controller
     }
 
     /**
-     * Deletes an existing Comment model.
+     * Deletes an existing ScoreLog model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,37 +107,18 @@ class CommentController extends Controller
     }
 
     /**
-     * Finds the Comment model based on its primary key value.
+     * Finds the ScoreLog model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Comment the loaded model
+     * @return ScoreLog the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Comment::findOne($id)) !== null) {
+        if (($model = ScoreLog::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
-    public function actionApprove($id)
-    {
-    	$model = $this->findModel($id);
-    	if($model->approve())  //审核
-    	{
-    		return $this->redirect(['index']);
-    	}
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

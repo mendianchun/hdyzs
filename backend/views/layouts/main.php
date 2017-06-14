@@ -29,17 +29,21 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'BlogDemo 2',
+        'brandLabel' => '汉典云诊所管理后台',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-    		['label' => '文章管理', 'url' => ['/post/index']],
-    		['label' => '评论管理', 'url' => ['/comment/index']],
-    		'<li><span class="badge">'.Comment::getPengdingCommentCount().'</span></li>',
     		['label' => '用户管理', 'url' => ['/user/index']],
+    		['label' => '诊所管理', 'url' => ['/clinic/index']],
+    		['label' => '专家管理', 'url' => ['/expert/index']],
+    		['label' => '预约管理', 'url' => ['/order/index']],
+    		['label' => '积分记录管理', 'url' => ['/scorelog/index']],
+    		['label' => '系统配置管理', 'url' => ['/systemconfig/index']],
+    		['label' => '瞩目管理', 'url' => ['/zhumu/index']],
+            ['label' => '药监码管理', 'url' => ['/drugcode/index']],
     		['label' => '管理员', 'url' => ['/adminuser/index']],
     ];
     if (Yii::$app->user->isGuest) {
