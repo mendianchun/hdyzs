@@ -57,7 +57,9 @@ class UserController extends ActiveController
 
     public function actionTest()
     {
-        return ['test'];
+//        $data = array('123');
+        return Service::sendSucc('234');
+        return Service::sendError('20302','data error');
     }
 
     /**
@@ -146,6 +148,10 @@ class UserController extends ActiveController
                 'message' => $message,
             ];
         }
+    }
+
+    public function test(){
+        return [];
     }
 
     public function actionDelete()

@@ -19,6 +19,7 @@ use Yii;
  * @property integer $score
  * @property integer $verify_status
  * @property string $user_uuid
+ * @property string $verify_reason
  *
  * @property User $userUu
  * @property DrugCode[] $drugCodes
@@ -43,6 +44,7 @@ class Clinic extends \yii\db\ActiveRecord
         return [
             [['name', 'address', 'tel', 'chief', 'idcard', 'Business_license_img', 'local_img', 'doctor_certificate_img', 'user_uuid'], 'required'],
             [['score', 'verify_status'], 'integer'],
+            [['verify_reason'], 'string'],
             [['name'], 'string', 'max' => 100],
             [['address', 'Business_license_img', 'local_img', 'doctor_certificate_img'], 'string', 'max' => 255],
             [['tel'], 'string', 'max' => 12],
@@ -74,6 +76,7 @@ class Clinic extends \yii\db\ActiveRecord
             'score' => 'Score',
             'verify_status' => 'Verify Status',
             'user_uuid' => 'User Uuid',
+            'verify_reason' => 'Verify Reason',
         ];
     }
 
