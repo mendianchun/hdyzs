@@ -51,29 +51,6 @@ class Signup extends Model
         ];
     }
 
-//    public function setMobile($mobile){
-//        $this->mobile = $mobile;
-//    }
-//
-//    public function setUserName($userName){
-//        $this->username = $userName;
-//    }
-//
-//    public function setVerifyCode($verifyCode){
-//        $this->verifyCode = $verifyCode;
-//    }
-//
-//    public function setEmail($email){
-//        $this->email = $email;
-//    }
-//
-//    public function setPassword($password){
-//        $this->password = $password;
-//    }
-//
-//    public function setPasswordRepeat($passwordRepeat){
-//        $this->password_repeat = $passwordRepeat;
-//    }
     /**
      * Signs user up.
      *
