@@ -17,7 +17,7 @@ use Yii;
  * @property integer $create_at
  * @property integer $update_at
  *
- * @property OrderVideo[] $orderVideos
+ * @property AppointmentVideo[] $appointmentVideos
  */
 class Zhumu extends \yii\db\ActiveRecord
 {
@@ -35,7 +35,7 @@ class Zhumu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'appkey', 'appsecret', 'username', 'password', 'status', 'create_at', 'update_at'], 'required'],
+            [['uuid', 'appkey', 'appsecret', 'username', 'password', 'create_at', 'update_at'], 'required'],
             [['status', 'create_at', 'update_at'], 'integer'],
             [['uuid'], 'string', 'max' => 36],
             [['appkey'], 'string', 'max' => 20],
@@ -65,8 +65,8 @@ class Zhumu extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderVideos()
+    public function getAppointmentVideos()
     {
-        return $this->hasMany(OrderVideo::className(), ['zhumu_uuid' => 'uuid']);
+        return $this->hasMany(AppointmentVideo::className(), ['zhumu_uuid' => 'uuid']);
     }
 }

@@ -31,7 +31,7 @@ class DrugCode extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'info', 'create_at', 'clinic_uuid'], 'required'],
+            [['code', 'create_at', 'clinic_uuid'], 'required'],
             [['info'], 'string'],
             [['create_at'], 'integer'],
             [['code'], 'string', 'max' => 50],
