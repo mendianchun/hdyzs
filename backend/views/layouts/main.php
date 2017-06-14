@@ -39,7 +39,7 @@ AppAsset::register($this);
     		['label' => '用户管理', 'url' => ['/user/index']],
     		['label' => '诊所管理', 'url' => ['/clinic/index']],
     		['label' => '专家管理', 'url' => ['/expert/index']],
-    		['label' => '预约管理', 'url' => ['/order/index']],
+    		['label' => '预约管理', 'url' => ['/appointment/index']],
     		['label' => '积分记录管理', 'url' => ['/scorelog/index']],
     		['label' => '系统配置管理', 'url' => ['/systemconfig/index']],
     		['label' => '瞩目管理', 'url' => ['/zhumu/index']],
