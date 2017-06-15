@@ -41,4 +41,20 @@ class Service
             'message' => $message,
         ];
     }
+
+    //生成六位验证码
+    public static function createSmsCode()
+    {
+        return rand(100000, 999999);
+    }
+
+    public static function isEmail($email)
+    {
+        $mode = '/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/';
+        if (preg_match($mode, $email)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

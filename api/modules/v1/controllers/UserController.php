@@ -12,6 +12,8 @@ use common\models\UserSearch;
 use yii\helpers\ArrayHelper;
 use common\service\Service;
 use api\models\Signup;
+use common\models\VerifycodeCache;
+use common\models\Clinic;
 
 //use OAuth2\Request;
 //use OAuth2\Response;
@@ -36,10 +38,11 @@ class UserController extends ActiveController
                     'view',
                     'create',
                     'search',
-                    'update',
                     'delete',
-//                    'test',
+                    'test',
                     'login',
+                    'sendcode',
+                    'resetpassword',
                 ],
             ]
         ]);
@@ -55,6 +58,7 @@ class UserController extends ActiveController
 
     }
 
+
     public function actionTest()
     {
 //        $data = array('123');
@@ -62,21 +66,22 @@ class UserController extends ActiveController
         return Service::sendError('20302','data error');
     }
 
-    /**
-     * 添加测试用户
-     */
-    public function actionSignupTest()
-    {
-        $user = new User();
-        $user->generateAuthKey();
-        $user->setPassword('123456');
-        $user->username = '111';
-        $user->email = '111@111.com';
-        $user->save(false);
+    public function actionSendcode($mobile){
+        $model = VerifycodeCache::findOne(['mobile'=>$mobile]);
+        if(!$model){
+            $model = new VerifycodeCache();
+            $model->mobile = $mobile;
+        }
+        $smscode = Service::createSmsCode();
+        $model->code = "$smscode";
+        $model->expire_time = time()+30*60;
 
-        return [
-            'code' => 0
-        ];
+        if($model->save()){
+            //发送短信给用户
+            return Service::sendSucc(['smscode'=>$smscode,'mobile'=>$mobile]);
+        }else{
+            return Service::sendError(20102,'验证码生成出错');
+        }
     }
 
     /**
@@ -86,72 +91,172 @@ class UserController extends ActiveController
      */
     public function actionCreate()
     {
-//        $post = Yii::$app->request->post();
-//        $user = new User();
-//        $user->generateAuthKey();
-//        $user->setPassword($post['password']);
-//        $user->username = $post['username'];
-//        $user->email = $post['email'];
-//        $user->mobile = $post['mobile'];
-//        $user->uuid = Service::create_uuid();
-//        if($user->save()){
-//            return [];
-//        }
-//        else{
-//            $code = 21001;
-//            $message = array_values($user->getFirstErrors())[0];;
-//            return [
-//                'code' => $code,
-//                'message' => $message,
-//            ];
-//        }
+        $post = Yii::$app->request->post();
 
-        $Signup = new Signup();
+        //参数检查
+        if(!$post['mobile'] || !$post['code'] || !$post['password'] || !$post['password_confirm']){
+            return Service::sendError(10400,'缺少参数');
+        }
 
-//        $post = Yii::$app->request->post();
-//        $Signup->setUserName($post['username']);
-//        $Signup->setMobile($post['mobile']);
-        $Signup->setAttributes(Yii::$app->request->post());
+        //检查验证码是否正确
+        $verfiycode = VerifycodeCache::find()
+            ->where(['mobile' => $post['mobile']])
+            ->andWhere(['code' => $post['code']])
+            ->andWhere(['>=','expire_time',time()])
+            ->one();
+        if(!$verfiycode){
+            return Service::sendError(20103,'验证码错误');
+        }
 
-        if ($user = $Signup->signup()) {
-            return [];
+        //检查手机号是否存在
+        if(User::findOne(['mobile' => $post['mobile']])){
+            return Service::sendError(20104,'手机号已存在');
+        }
+
+        //检查用户名是否存在（可以为空）
+        if(isset($post['username']) && User::findOne(['username' => $post['username']])){
+            return Service::sendError(20105,'用户名已存在');
+        }
+
+        //检查邮箱是否合法并且是否存在（可以为空）
+        if(isset($post['email'])){
+            if(!Service::isEmail($post['email'])){
+                return Service::sendError(20106,'邮箱格式不正确');
+            }
+            if(User::findOne(['email' => $post['email']])){
+                return Service::sendError(20107,'邮箱已存在');
+            }
+        }
+        //检查密码强度并且检查两次输入的是否一样
+        if(strlen($post['password']) < 6){
+            return Service::sendError(20108,'密码长度不能小于6');
+        }
+
+        if($post['password'] !== $post['password_confirm']){
+            return Service::sendError(20109,'两次输入密码不一致');
+        }
+
+        $user = new User();
+        isset($post['username']) && $user->username = $post['username'];
+        isset($post['email']) && $user->email = $post['email'];
+        $user->mobile = $post['mobile'];
+        $user->setPassword($post['password']);
+        $user->generateAuthKey();
+        $user->uuid = Service::create_uuid();
+        if($user->save()){
+            return Service::sendSucc();
         }else{
-            $code = 21001;
-            $message = array_values($Signup->getFirstErrors())[0];;
-            return [
-                'code' => $code,
-                'message' => $message,
-            ];
+            return Service::sendError(20110,'注册出错');
         }
     }
+
+    /**
+     * Creates a new User model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionResetpassword()
+    {
+        $post = Yii::$app->request->post();
+
+        //参数检查
+        if(!$post['mobile'] || !$post['code'] || !$post['password'] || !$post['password_confirm']){
+            return Service::sendError(10400,'缺少参数');
+        }
+
+        //检查验证码是否正确
+        $verfiycode = VerifycodeCache::find()
+            ->where(['mobile' => $post['mobile']])
+            ->andWhere(['code' => $post['code']])
+            ->andWhere(['>=','expire_time',time()])
+            ->one();
+        if(!$verfiycode){
+            return Service::sendError(20103,'验证码错误');
+        }
+
+        //检查密码强度并且检查两次输入的是否一样
+        if(strlen($post['password']) < 6){
+            return Service::sendError(20108,'密码长度不能小于6');
+        }
+
+        if($post['password'] !== $post['password_confirm']){
+            return Service::sendError(20109,'两次输入密码不一致');
+        }
+
+        //检查用户是否存在
+        $user = User::findOne(['mobile' => $post['mobile']]);
+        if(!$user){
+            return Service::sendError(20112,'用户不存在');
+        }
+
+        $user->setPassword($post['password']);
+        $user->removePasswordResetToken();
+        if($user->save()){
+            return Service::sendSucc();
+        }else{
+            return Service::sendError(20113,'修改密码出错');
+        }
+    }
+
 
     public function actionUpdate()
     {
+        //当前用户
+        $user = \yii::$app->user->identity;
         $post = Yii::$app->request->post();
-        $user = User::findOne($post['id']);
-        if (!$user) {
-            $code = 210001;
-            $message = '用户不存在';
-            return [
-                'code' => $code,
-                'message' => $message,
-            ];
+
+        //参数检查
+        if(!$post['username'] && !$post['email']){
+            return Service::sendError(10400,'缺少参数');
         }
-        $user->email = $post['email'];
-        if ($user->save()) {
-            return [];
-        } else {
-            $code = 21002;
-            $message = array_values($user->getFirstErrors())[0];;
-            return [
-                'code' => $code,
-                'message' => $message,
-            ];
+
+        //检查用户名是否存在（可以为空）
+        if(isset($post['username'])
+            && User::find()->where(['<>','uuid',$user->uuid])
+                ->andWhere(['username' => $post['username']])
+                ->one()){
+            return Service::sendError(20105,'用户名已存在');
+        }
+
+        //检查邮箱是否合法并且是否存在（可以为空）
+        if(isset($post['email'])){
+            if(!Service::isEmail($post['email'])){
+                return Service::sendError(20106,'邮箱格式不正确');
+            }
+            if(User::find()->where(['<>','uuid',$user->uuid])
+                ->andWhere(['email' => $post['email']])
+                ->one()){
+                return Service::sendError(20107,'邮箱已存在');
+            }
+        }
+
+        isset($post['username']) && $user->username = $post['username'];
+        isset($post['email']) && $user->email = $post['email'];
+        if($user->save()){
+            return Service::sendSucc();
+        }else{
+            return Service::sendError(20114,'编辑用户信息出错');
         }
     }
 
-    public function test(){
-        return [];
+    //当前用户信息
+    public function actionProfile()
+    {
+        $user = \yii::$app->user->identity;
+        $info = $user->attributes;
+        unset($info['id'],$info['auth_key'],$info['password_hash'],$info['password_reset_token'],$info['status'],
+        $info['api_token'],$info['type']);
+        //诊所获取积分信息
+        if($user->type == 2){
+            $clinic = $user->clinicUu->attributes;
+            unset($clinic['id'],$clinic['user_uuid']);
+            $info['clinic'] = $clinic;
+        }else if($user->type == 1){
+            $expert = $user->expertUu->attributes;
+            unset($expert['id'],$expert['user_uuid']);
+            $info['expert'] = $expert;
+        }
+        return Service::sendSucc($info);
     }
 
     public function actionDelete()
@@ -172,7 +277,7 @@ class UserController extends ActiveController
             return [];
         } else {
             $code = 21003;
-            $message = array_values($user->getFirstErrors())[0];;
+            $message = array_values($user->getFirstErrors())[0];
             return [
                 'code' => $code,
                 'data' => [],
@@ -181,11 +286,7 @@ class UserController extends ActiveController
         }
     }
 
-    public function actionProfile()
-    {
-        $user = \yii::$app->user->identity;
-        return $user;
-    }
+
 
 //    public function actionIndex()
 //    {
@@ -204,4 +305,6 @@ class UserController extends ActiveController
         $data = $provider->getModels();
         return $data;
     }
+
+
 }  

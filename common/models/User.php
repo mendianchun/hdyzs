@@ -57,15 +57,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username'],'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-//        	[['email'], 'unique'],
-//        	[['email'], 'required'],
         	[['email'], 'email'],
             [['mobile'], 'unique'],
             [['mobile'], 'required'],
-//            [['mobile'], 'mobile'],
             [['uuid'], 'unique'],
             [['uuid'], 'required'],
         ];
@@ -262,4 +258,19 @@ class User extends ActiveRecord implements IdentityInterface
     	return $this->status==self::STATUS_ACTIVE?'正常':'已删除'; 
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClinicUu()
+    {
+        return $this->hasOne(Clinic::className(), ['user_uuid' => 'uuid']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExpertUu()
+    {
+        return $this->hasOne(Expert::className(), ['user_uuid' => 'uuid']);
+    }
 }
