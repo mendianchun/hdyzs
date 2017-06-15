@@ -258,53 +258,53 @@ class UserController extends ActiveController
         }
         return Service::sendSucc($info);
     }
-
-    public function actionDelete()
-    {
-        $post = Yii::$app->request->post();
-        $user = User::findOne($post['id']);
-        if (!$user) {
-            $code = 21003;
-            $message = '用户不存在';
-            return [
-                'code' => $code,
-                'data' => [],
-                'message' => $message,
-            ];
-        }
-        $user->status = 0;
-        if ($user->save()) {
-            return [];
-        } else {
-            $code = 21003;
-            $message = array_values($user->getFirstErrors())[0];
-            return [
-                'code' => $code,
-                'data' => [],
-                'message' => $message,
-            ];
-        }
-    }
-
-
-
-//    public function actionIndex()
+//
+//    public function actionDelete()
 //    {
-//        $query = User::find();
-//        $users = new yii\data\ActiveDataProvider(['query' => $query]);
-////        $query->andFilterWhere(['like', 'username', 'weixi']);
-//        $data = $users->getModels();
+//        $post = Yii::$app->request->post();
+//        $user = User::findOne($post['id']);
+//        if (!$user) {
+//            $code = 21003;
+//            $message = '用户不存在';
+//            return [
+//                'code' => $code,
+//                'data' => [],
+//                'message' => $message,
+//            ];
+//        }
+//        $user->status = 0;
+//        if ($user->save()) {
+//            return [];
+//        } else {
+//            $code = 21003;
+//            $message = array_values($user->getFirstErrors())[0];
+//            return [
+//                'code' => $code,
+//                'data' => [],
+//                'message' => $message,
+//            ];
+//        }
+//    }
+//
+//
+//
+////    public function actionIndex()
+////    {
+////        $query = User::find();
+////        $users = new yii\data\ActiveDataProvider(['query' => $query]);
+//////        $query->andFilterWhere(['like', 'username', 'weixi']);
+////        $data = $users->getModels();
+////        return $data;
+////    }
+//
+//    public function actionSearch($username)
+//    {
+//        $params['UserSearch']['username'] = $username;
+//        $userSearch = new UserSearch();
+//        $provider = $userSearch->search($params);
+//        $data = $provider->getModels();
 //        return $data;
 //    }
-
-    public function actionSearch($username)
-    {
-        $params['UserSearch']['username'] = $username;
-        $userSearch = new UserSearch();
-        $provider = $userSearch->search($params);
-        $data = $provider->getModels();
-        return $data;
-    }
 
 
 }  
