@@ -9,8 +9,6 @@ use Yii;
  *
  * @property integer $id
  * @property string $uuid
- * @property string $appkey
- * @property string $appsecret
  * @property string $username
  * @property string $password
  * @property integer $status
@@ -21,6 +19,9 @@ use Yii;
  */
 class Zhumu extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
+
     /**
      * @inheritdoc
      */
@@ -35,11 +36,10 @@ class Zhumu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'appkey', 'appsecret', 'username', 'password', 'create_at', 'update_at'], 'required'],
+            [['uuid', 'username', 'password', 'create_at', 'update_at'], 'required'],
             [['status', 'create_at', 'update_at'], 'integer'],
             [['uuid'], 'string', 'max' => 36],
-            [['appkey'], 'string', 'max' => 20],
-            [['appsecret', 'username', 'password'], 'string', 'max' => 100],
+            [['username', 'password'], 'string', 'max' => 100],
             [['uuid'], 'unique'],
         ];
     }
@@ -52,8 +52,6 @@ class Zhumu extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'uuid' => 'Uuid',
-            'appkey' => 'Appkey',
-            'appsecret' => 'Appsecret',
             'username' => 'Username',
             'password' => 'Password',
             'status' => 'Status',

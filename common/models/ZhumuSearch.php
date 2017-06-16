@@ -19,7 +19,7 @@ class ZhumuSearch extends Zhumu
     {
         return [
             [['id', 'status', 'create_at', 'update_at'], 'integer'],
-            [['uuid', 'appkey', 'appsecret', 'username', 'password'], 'safe'],
+            [['uuid', 'username', 'password'], 'safe'],
         ];
     }
 
@@ -66,8 +66,6 @@ class ZhumuSearch extends Zhumu
         ]);
 
         $query->andFilterWhere(['like', 'uuid', $this->uuid])
-            ->andFilterWhere(['like', 'appkey', $this->appkey])
-            ->andFilterWhere(['like', 'appsecret', $this->appsecret])
             ->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'password', $this->password]);
 

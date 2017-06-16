@@ -19,15 +19,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'uuid') ?>
 
-    <?= $form->field($model, 'appkey') ?>
-
-    <?= $form->field($model, 'appsecret') ?>
-
     <?= $form->field($model, 'username') ?>
 
-    <?php // echo $form->field($model, 'password') ?>
+    <?= $form->field($model, 'password') ?>
 
-    <?php // echo $form->field($model, 'status') ?>
+    <?= $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'create_at') ?>
 

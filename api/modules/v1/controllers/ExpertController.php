@@ -55,7 +55,7 @@ class ExpertController extends ActiveController
         $data['extraFields']['currentPage'] = $currentPage;
         $data['extraFields']['totalCount'] = $provider->totalCount;
         $data['extraFields']['totalPage'] = $totalPage;
-        return $data;
+        return Service::sendSucc($data);
     }
 
     public function actionTest(){

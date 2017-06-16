@@ -26,11 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'uuid',
-            'appkey',
-            'appsecret',
             'username',
-            // 'password',
-            // 'status',
+            'password',
+            'status',
             // 'create_at',
             // 'update_at',
 

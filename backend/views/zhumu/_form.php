@@ -14,10 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'uuid')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'appkey')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'appsecret')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>

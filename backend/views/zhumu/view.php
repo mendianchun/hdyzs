@@ -30,8 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'uuid',
-            'appkey',
-            'appsecret',
             'username',
             'password',
             'status',
