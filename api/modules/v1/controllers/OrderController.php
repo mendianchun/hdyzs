@@ -56,17 +56,30 @@ class OrderController extends ActiveController
 
 	public function actionIndex()
     {
-//        $query = Appointment::find();
-//	    $Appointment = new yii\data\ActiveDataProvider(['query' => $query]);
-//        $data = $Appointment->getModels();
-		$where=array(1=>1);
-		$where=array( );
-		$model= new Appointment();
+		$where=$and_where=array( );
 
-		$data = Appointment::findAll($where);
+		$get_params = Yii::$app->request->get();
 
+		if(isset($get_params['expert'])){
+			$expert= $get_params['expert'];
+			$where['expert_uuid']=$expert;
+		}
 
-        return $data;
+		if(isset($get_params['date'])){
+			$date= $get_params['date'];
+			$datetime_start=strtotime("$date 00:00:00");
+			$datetime_end=strtotime("$date 23:59:59");
+			$and_where=['between', 'order_starttime', $datetime_start, $datetime_end];
+		}
+
+		$data =Appointment::find()->where($where)->andWhere($and_where)->all();
+		if($data){
+			$result=$data;
+		}else{
+			$result['code']='20705';
+			$result['message']='没有数据';
+		}
+        return $result;
     }
 
 	/**
