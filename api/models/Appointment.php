@@ -12,4 +12,14 @@ use Yii;
 class Appointment extends \common\models\Appointment
 {
 
+	public function fields()
+	{
+		$fields = parent::fields();
+
+		// 去掉一些包含敏感信息的字段
+		unset($fields['patient_mobile'], $fields['patient_idcard'], $fields['create_at']);
+
+		return $fields;
+	}
+
 }
