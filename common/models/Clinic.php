@@ -52,7 +52,6 @@ class Clinic extends \yii\db\ActiveRecord
             [['idcard'], 'string', 'max' => 18],
             [['user_uuid'], 'string', 'max' => 36],
             [['name'], 'unique'],
-            [['idcard'], 'unique'],
             [['user_uuid'], 'unique'],
             [['user_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_uuid' => 'uuid']],
         ];

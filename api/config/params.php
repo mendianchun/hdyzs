@@ -6,4 +6,5 @@ return [
     'upload.type' => ['avatar','clinic'],
     'upload.imageType' => ['jpg','jpeg','gif','png'],
     'upload.maxsize' => '5', //MB
+    'list.pagesize' => 10,
 ];

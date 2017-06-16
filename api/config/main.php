@@ -121,6 +121,15 @@ return [
                         'message' => $response->data['message'],
                     ];
                 }
+
+                if(isset($response->data['data']['extraFields'])
+                    && is_array($response->data['data']['extraFields'])){
+                    foreach($response->data['data']['extraFields'] as $k => $v){
+                        $response->data[$k] = $v;
+                    }
+
+                    unset($response->data['data']['extraFields']);
+                }
                 $response->statusCode = 200;
                 $response->format = yii\web\Response::FORMAT_JSON;
             },

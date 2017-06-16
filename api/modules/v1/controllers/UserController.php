@@ -160,7 +160,7 @@ class UserController extends ActiveController
         $post = Yii::$app->request->post();
 
         //参数检查
-        if(!$post['mobile'] || !$post['code'] || !$post['password'] || !$post['password_confirm']){
+        if(!isset($post['mobile']) || !isset($post['code']) || !isset($post['password']) || !isset($post['password_confirm'])){
             return Service::sendError(10400,'缺少参数');
         }
 
@@ -206,7 +206,7 @@ class UserController extends ActiveController
         $post = Yii::$app->request->post();
 
         //参数检查
-        if(!$post['username'] && !$post['email']){
+        if(!isset($post['username']) && !isset($post['email'])){
             return Service::sendError(10400,'缺少参数');
         }
 
@@ -248,13 +248,19 @@ class UserController extends ActiveController
         $info['api_token'],$info['type']);
         //诊所获取积分信息
         if($user->type == 2){
-            $clinic = $user->clinicUu->attributes;
-            unset($clinic['id'],$clinic['user_uuid']);
-            $info['clinic'] = $clinic;
+            $clinic = $user->clinicUu;
+            if($clinic){
+                $clinicAttributes = $clinic->attributes;
+                unset($clinicAttributes['id'],$clinicAttributes['user_uuid']);
+                $info['clinic'] = $clinicAttributes;
+            }
         }else if($user->type == 1){
-            $expert = $user->expertUu->attributes;
-            unset($expert['id'],$expert['user_uuid']);
-            $info['expert'] = $expert;
+            $expert = $user->expertUu;
+            if($expert){
+                $expertAttributes = $expert->attributes;
+                unset($expertAttributes['id'],$expertAttributes['user_uuid']);
+                $info['expert'] = $expertAttributes;
+            }
         }
         return Service::sendSucc($info);
     }

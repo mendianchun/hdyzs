@@ -39,7 +39,7 @@ class ExpertSearch extends Expert
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $pageSize = 10)
     {
         $query = Expert::find();
 
@@ -47,6 +47,13 @@ class ExpertSearch extends Expert
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => ['pageSize' => $pageSize],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ],
+                //'attributes'=>['id','title'],
+            ],
         ]);
 
         $this->load($params);
