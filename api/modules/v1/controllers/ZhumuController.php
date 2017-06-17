@@ -22,6 +22,7 @@ class ZhumuController extends ActiveController
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
                 'optional' => [
+                    'getinfo',
                 ],
             ]
         ]);
@@ -40,7 +41,15 @@ class ZhumuController extends ActiveController
         }
 
         //随机选择一个瞩目账号
-        $zhumu = Zhumu::find()->where(["status"=>Zhumu::STATUS_ACTIVE])->all();
-        return $zhumu;
+        $maxId = Zhumu::find()->where(["status"=>Zhumu::STATUS_ACTIVE])->max('id');
+        $randId = rand(0,$maxId);
+
+        $zhumu = Zhumu::find()->where(['>=','id',$randId])->andWhere(['status'=>Zhumu::STATUS_ACTIVE])->one();
+        $zhumuArray = $zhumu->attributes;
+
+        unset($zhumuArray['id'],$zhumuArray['status'],$zhumuArray['create_at'],$zhumuArray['update_at']);
+        $zhumuArray['app_key'] = $app_key;
+        $zhumuArray['app_secret'] = $app_secret;
+        return Service::sendSucc($zhumuArray);
     }
 }  
