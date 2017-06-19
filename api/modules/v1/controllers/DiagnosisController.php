@@ -73,7 +73,11 @@ class DiagnosisController extends ActiveController
 			$and_where_patient=['like','patient_name' ,$get_params['name']];
 		}
 
-		$data =Appointment::find()->where($where_expert)->andWhere($and_where_date)->andWhere($and_where_patient)->all();
+		$data =Appointment::find()
+		->where($where_expert)
+		->andWhere($and_where_date)
+		->andWhere($and_where_patient)
+		->all();
 
 		if($data){
 			$result=$data;
@@ -88,6 +92,9 @@ class DiagnosisController extends ActiveController
 	public function actionDetail(){
 
 		$get_params = Yii::$app->request->get();
+		if(!isset($get_params['appointment_no']) ){
+		    return Service::sendError(20302,'缺少预约单号');
+	    }
 		$appointment_no= $get_params['appointment_no'];
 
 		// $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
@@ -120,6 +127,9 @@ class DiagnosisController extends ActiveController
 	public function actionUpdate(){
 		$order_post = Yii::$app->request->post();
 
+		if(!isset($order_post['appointment_no']) ){
+		    return Service::sendError(20302,'缺少预约单号');
+	    }
 		$appointment_no=$order_post['appointment_no'];
 		$appointment =Appointment::findOne(['appointment_no'=>$appointment_no]);
 
