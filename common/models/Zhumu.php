@@ -16,7 +16,6 @@ use Yii;
  * @property integer $update_at
  *
  * @property AppointmentVideo[] $appointmentVideos
- * @property ZhumuStatus $status0
  */
 class Zhumu extends \yii\db\ActiveRecord
 {
@@ -44,7 +43,6 @@ class Zhumu extends \yii\db\ActiveRecord
             [['username', 'password'], 'string', 'max' => 100],
             [['uuid'], 'unique'],
             [['username'], 'unique'],
-            [['status'], 'exist', 'skipOnError' => true, 'targetClass' => ZhumuStatus::className(), 'targetAttribute' => ['status' => 'status']],
         ];
     }
 
@@ -72,14 +70,6 @@ class Zhumu extends \yii\db\ActiveRecord
         return $this->hasMany(AppointmentVideo::className(), ['zhumu_uuid' => 'uuid']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStatus0()
-    {
-        return $this->hasOne(ZhumuStatus::className(), ['status' => 'status']);
-    }
-
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -92,6 +82,22 @@ class Zhumu extends \yii\db\ActiveRecord
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static function allStatus()
+    {
+        return [self::STATUS_ACTIVE=>'正常',self::STATUS_USED=>'正在用',self::STATUS_DELETED=>'已删除'];
+    }
+
+    public  function getStatusStr()
+    {
+        if($this->status==self::STATUS_ACTIVE){
+            return '正常';
+        }else if($this->status==self::STATUS_USED){
+            return '正在用';
+        }else{
+            return '已删除';
         }
     }
 }

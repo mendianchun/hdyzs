@@ -35,7 +35,6 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        var_dump(Yii::$app->request->queryParams);
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

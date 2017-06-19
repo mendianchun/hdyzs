@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use common\models\ZhumuStatus;
+use common\models\Zhumu;
 
 
 /* @var $this yii\web\View */
@@ -35,12 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'password',
 //            'status',
             ['attribute'=>'status',
-                'value'=>'status0.name',
-                'filter'=>ZhumuStatus::find()
-                    ->select(['name','status'])
-                    ->orderBy('id')
-                    ->indexBy('status')
-                    ->column(),
+                'value'=>'StatusStr',
+                'filter'=>Zhumu::allStatus()
             ],
             // 'create_at',
             // 'update_at',

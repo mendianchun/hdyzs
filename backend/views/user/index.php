@@ -30,8 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
              'email:email',
             // 'status',
             [
-            		'attribute'=>'status',
-            		'value'=>'statusStr',
+                'attribute'=>'status',
+                'value'=>'statusStr',
+                'filter'=>\common\models\User::allStatus(),
     ],
             // 'created_at',
             [
