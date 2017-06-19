@@ -17,7 +17,7 @@ use common\service\Service;
 
 class DiagnosisController extends ActiveController
 {
-
+		//203XX
 	public $modelClass = 'api\models\Appointment';//对应的数据模型处理控制器
 
 	/**

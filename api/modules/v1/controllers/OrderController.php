@@ -11,6 +11,8 @@ use yii;
 use yii\rest\ActiveController;
 use api\models\Appointment;
 use common\models\AppointmentSearch;
+use common\models\Clinic;
+use common\models\Expert;
 
 use yii\helpers\ArrayHelper;
 use common\service\Service;
@@ -18,6 +20,8 @@ use common\service\Service;
 
 class OrderController extends ActiveController
 {
+
+	//202XX
 	public $modelClass = 'api\models\Appointment';//对应的数据模型处理控制器
 
 	/**
@@ -74,12 +78,10 @@ class OrderController extends ActiveController
 
 		$data =Appointment::find()->where($where)->andWhere($and_where)->all();
 		if($data){
-			$result=$data;
+			return Service::sendSucc($data);
 		}else{
-			$result['code']='20705';
-			$result['message']='没有数据';
+			return Service::sendError(20201,'暂无数据');
 		}
-        return $result;
     }
 
 	/**
@@ -89,31 +91,54 @@ class OrderController extends ActiveController
     public function actionCreate(){
 	    $order_post = Yii::$app->request->post();
 	    $appointment = new Appointment();
-
+//	    $user = \yii::$app->user->identity;
+//	    $uid= $user->getId();
 	    $uid=21;
 	    $appointment_no= date('ymdHis').sprintf("%03d",substr($uid,-3)).rand(100,999);
 
 	    $appointment->appointment_no =$appointment_no;
+	    if(!isset($order_post['clinic_uuid']) ||!Clinic::findOne(['user_uuid'=>$order_post['clinic_uuid']])){
+		    return Service::sendError(20202,'缺少诊所数据');
+	    }
 	    $appointment->clinic_uuid=$order_post['clinic_uuid'];
-	    $appointment->expert_uuid=$order_post['expert_uuid'];
+		if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
+
+		}else{
+			return Service::sendError(20203,'缺少专家数据');
+		}
+		$appointment->expert_uuid=$order_post['expert_uuid'];
+
+		if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
+			//检测时间是否允许
+
+		}else{
+			return Service::sendError(20204,'缺少预约时间');
+		}
 	    $appointment->order_starttime=$order_post['order_starttime'];
 	    $appointment->order_endtime=$order_post['order_endtime'];
+	    if(!isset($order_post['patient_name'])||!isset($order_post['patient_age'])||isset($order_post['patient_description'])){
+
+		    return Service::sendError(20205,'患者信息不完整');
+	    }
+
 	    $appointment->patient_name=$order_post['patient_name'];
 	    $appointment->patient_age=$order_post['patient_age'];
 	    $appointment->patient_description=$order_post['patient_description'];
+
+	    if(!isset($order_post['fee_type'])){
+		    return Service::sendError(20206,'缺少计费方式');
+	    }
+
 	    $appointment->fee_type=$order_post['fee_type'];
 	    $appointment->create_at=time();
 	    $appointment->update_at=time();
 
 
 	    if($appointment->save()>0){
-	    	$result['appointment_no'] =$appointment_no;
+		    return Service::sendSucc();
 	    }else{
-	    	$result['code']='20701';
-	    	$result['message']='添加失败';
+		    return Service::sendError(20207,'添加失败');
 	    }
-
-	    return $result;
     }
 
     public function actionUpdate(){
@@ -137,13 +162,10 @@ class OrderController extends ActiveController
 
 
 	    if($op_status>0){
-		    $result['appointment_no'] =$appointment_no;
+		    return Service::sendSucc();
 	    }else{
-		    $result['code']='20703';
-		    $result['message']='修改失败';
+		    return Service::sendError(20207,'添加失败');
 	    }
-
-	    return $result;
     }
 
 	/**
@@ -170,7 +192,7 @@ class OrderController extends ActiveController
 			$result['clinic']=$clinic->attributes;
 			$result['expert']=$expert->attributes;
 		}
-		return $result;
+	    return Service::sendSucc($result);
     }
 
 
@@ -187,13 +209,10 @@ class OrderController extends ActiveController
 
 
 	    if($op_status>0){
-		    $result['appointment_no'] =$appointment_no;
+		    return Service::sendSucc();
 	    }else{
-		    $result['code']='20703';
-		    $result['message']='修改失败';
+		    return Service::sendError(20207,'添加失败');
 	    }
-
-	    return $result;
     }
 
     public function actionCheckpay(){
@@ -203,7 +222,7 @@ class OrderController extends ActiveController
 	    $nums=Appointment::find()->where(['clinic_uuid'=>$clinic_uuid,'pay_status'=>0])->count();
 
 	    $result['nums']=$nums;
-	    return $result;
+	    return Service::sendSucc($result);
     }
 
     public function checkApp(){
