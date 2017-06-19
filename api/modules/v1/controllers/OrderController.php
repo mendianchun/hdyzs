@@ -230,7 +230,20 @@ class OrderController extends ActiveController
     }
 
     private function checktime($expert_uuid,$start_time,$end_time){
-		
+	    $date_start = date('Y-m-d',$start_time);
+	    $hour_start = date('H',$start_time);
+	    $minute_start = date('i',$start_time);
+
+	    $date_end = date('Y-m-d',$end_time);
+	    $hour_end = date('H',$end_time);
+	    $minute_end = date('i',$end_time);
+	    if($date_start!==$date_end){
+		    return Service::sendError(20299,'不可以跨天预约');
+	    }
+
+
+		var_dump($minute_end);
+		exit();
 
     }
 }
