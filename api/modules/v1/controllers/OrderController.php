@@ -225,7 +225,12 @@ class OrderController extends ActiveController
 	    return Service::sendSucc($result);
     }
 
-    public function checkApp(){
+    public function actionTest(){
+		$result = $this->checktime('asda','1497657600','1497663000');
+    }
+
+    private function checktime($expert_uuid,$start_time,$end_time){
+		
 
     }
 }
