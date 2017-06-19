@@ -33,7 +33,7 @@ class AppointmentVideo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appointment_no', 'zhumu_uuid', 'create_at'], 'required'],
+            [['appointment_no', 'zhumu_uuid'], 'required'],
             [['appointment_no', 'meeting_number', 'create_at'], 'integer'],
             [['zhumu_uuid'], 'string', 'max' => 36],
             [['audio_url'], 'string', 'max' => 100],
@@ -71,5 +71,18 @@ class AppointmentVideo extends \yii\db\ActiveRecord
     public function getZhumuUu()
     {
         return $this->hasOne(Zhumu::className(), ['uuid' => 'zhumu_uuid']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->create_at = time();
+            } else {
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
