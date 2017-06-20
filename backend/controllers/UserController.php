@@ -8,6 +8,7 @@ use common\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\UserResetpwdForm;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -104,6 +105,26 @@ class UserController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /*
+     * 重置密码
+     */
+    public function actionResetpwd($id)
+    {
+        $model = new UserResetpwdForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->resetPassword($id))
+            {
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('resetpwd', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
