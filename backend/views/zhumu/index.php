@@ -13,10 +13,6 @@ $this->title = '瞩目管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="zhumu-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('创建瞩目账户', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

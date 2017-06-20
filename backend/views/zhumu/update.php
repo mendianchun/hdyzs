@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->username];
 $this->params['breadcrumbs'][] = '更新';
 ?>
 <div class="zhumu-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

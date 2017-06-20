@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => '系统配置管理', 'url' => ['in
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="system-config-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

@@ -11,10 +11,6 @@ $this->title = '系统配置管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="system-config-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('新增系统配置', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

@@ -121,4 +121,22 @@ class AppointmentController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionApprove($id)
+    {
+        $model = $this->findModel($id);
+        if($model->approve())  //审核
+        {
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionPay($id)
+    {
+        $model = $this->findModel($id);
+        if($model->pay())  //支付
+        {
+            return $this->redirect(['index']);
+        }
+    }
 }

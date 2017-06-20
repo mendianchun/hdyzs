@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => '瞩目管理', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="zhumu-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

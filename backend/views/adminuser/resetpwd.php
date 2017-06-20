@@ -13,10 +13,6 @@ $this->params['breadcrumbs'][] = ['label' => '管理员', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="adminuser-resetpwd">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-
 		<div class="adminuser-form">
 		
 		    <?php $form = ActiveForm::begin(); ?>

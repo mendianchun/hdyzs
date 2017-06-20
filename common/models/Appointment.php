@@ -195,4 +195,22 @@ class Appointment extends \yii\db\ActiveRecord
         return $this->fee_type==self::FEE_TYPE_TIMES?'按次':'按小时';
     }
 
+    public function approve()
+    {
+        if($this->status == self::STATUS_WAITING){
+            $this->status = self::STATUS_SUCC; //设置预约单状态为预约成功
+            return ($this->save()?true:false);
+        }
+        return true;
+    }
+
+    public function pay()
+    {
+        //只有预约成功的才能修改支付状态
+        if($this->status == self::STATUS_SUCC){
+            $this->pay_status = self::PAY_STATUS_PAYED; //设置预约单支付状态为支付成功
+            return ($this->save()?true:false);
+        }
+        return true;
+    }
 }

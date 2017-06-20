@@ -13,9 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="appointment-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -87,6 +84,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'approve'=>function($url,$model,$key)
                     {
+                        if($model->status != Appointment::STATUS_WAITING){
+                            return '';
+                        }
                         $options=[
                             'title'=>Yii::t('yii', '审核'),
                             'aria-label'=>Yii::t('yii','审核'),
@@ -98,6 +98,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'pay'=>function($url,$model,$key)
                     {
+                        if($model->pay_status == Appointment::PAY_STATUS_PAYED){
+                            return '';
+                        }
                         $options=[
                             'title'=>Yii::t('yii', '支付'),
                             'aria-label'=>Yii::t('yii','支付'),

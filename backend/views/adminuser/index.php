@@ -11,11 +11,7 @@ $this->title = '管理员管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="adminuser-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
+	<p>
         <?= Html::a('新增管理员', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([

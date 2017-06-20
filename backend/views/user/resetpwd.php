@@ -13,10 +13,6 @@ $this->params['breadcrumbs'][] = ['label' => '用户管理', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-resetpwd">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-
 		<div class="user-form">
 		
 		    <?php $form = ActiveForm::begin(); ?>

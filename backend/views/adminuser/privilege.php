@@ -18,9 +18,6 @@ $this->params['breadcrumbs'][] = '权限设置';
 
 <div class="adminuser-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-
     <div class="adminuser-privilege-form">
 
     <?php $form = ActiveForm::begin(); ?>
