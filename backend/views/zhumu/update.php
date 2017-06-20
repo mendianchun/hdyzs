@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Zhumu */
 
-$this->title = 'Update Zhumu: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Zhumus', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = '更新瞩目账户: ' . $model->username;
+$this->params['breadcrumbs'][] = ['label' => '瞩目管理', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->username];
+$this->params['breadcrumbs'][] = '更新';
 ?>
 <div class="zhumu-update">
 

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\SystemConfigSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'System Configs';
+$this->title = '系统配置管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="system-config-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create System Config', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('新增系统配置', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,11 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'name',
             'value:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{update} {delete}'
+            ],
         ],
     ]); ?>
 </div>

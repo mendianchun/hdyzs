@@ -8,6 +8,7 @@ use common\models\ZhumuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\service\Service;
 
 /**
  * ZhumuController implements the CRUD actions for Zhumu model.
@@ -64,9 +65,9 @@ class ZhumuController extends Controller
     public function actionCreate()
     {
         $model = new Zhumu();
-
+        $model->uuid = Service::create_uuid();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -85,7 +86,7 @@ class ZhumuController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -101,7 +102,9 @@ class ZhumuController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $zhumu = $this->findModel($id);
+        $zhumu->status = Zhumu::STATUS_DELETED;
+        $zhumu->save();
 
         return $this->redirect(['index']);
     }

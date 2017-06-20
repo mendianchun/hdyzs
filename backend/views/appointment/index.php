@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Appointment;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\AppointmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Appointments';
+$this->title = '预约管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="appointment-index">
@@ -15,9 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Appointment', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,10 +23,47 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'appointment_no',
-            'clinic_uuid',
-            'expert_uuid',
-            'order_starttime:datetime',
-            'order_endtime:datetime',
+//            'clinic_uuid',
+            ['attribute'=>'clinicName',
+                'label'=>'诊所名称',
+                'value'=>'clinicUu.name',
+            ],
+//            'expert_uuid',
+            ['attribute'=>'expertName',
+                'label'=>'专家名称',
+                'value'=>'expertUu.name',
+            ],
+            'patient_name',
+            'order_fee',
+//            'status',
+            ['attribute'=>'status',
+                'value'=>'StatusStr',
+                'filter'=>Appointment::allStatus()
+            ],
+//            'pay_status',
+            ['attribute'=>'pay_status',
+                'value'=>'PayStatusStr',
+                'filter'=>Appointment::allPayStatus()
+            ],
+//            'pay_type',
+            ['attribute'=>'pay_type',
+                'value'=>'PayTypeStatusStr',
+                'filter'=>Appointment::allPayTypeStatus()
+            ],
+//            'order_starttime:datetime',
+//            'order_endtime:datetime',
+
+            [
+                'attribute' => 'order_starttime',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+                'contentOptions'=>['width'=>'150px'],
+            ],
+
+            [
+                'attribute' => 'order_endtime',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+                'contentOptions'=>['width'=>'150px'],
+            ],
             // 'order_fee',
             // 'real_starttime:datetime',
             // 'real_endtime:datetime',
@@ -47,7 +82,35 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'create_at',
             // 'update_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {approve} {pay}',
+                'buttons' => [
+                    'approve'=>function($url,$model,$key)
+                    {
+                        $options=[
+                            'title'=>Yii::t('yii', '审核'),
+                            'aria-label'=>Yii::t('yii','审核'),
+                            'data-confirm'=>Yii::t('yii','你确定通过这次预约吗？'),
+                            'data-method'=>'post',
+                            'data-pjax'=>'0',
+                        ];
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>',$url,$options);
+                    },
+                    'pay'=>function($url,$model,$key)
+                    {
+                        $options=[
+                            'title'=>Yii::t('yii', '支付'),
+                            'aria-label'=>Yii::t('yii','支付'),
+                            'data-confirm'=>Yii::t('yii','确定已经支付了吗？'),
+                            'data-method'=>'post',
+                            'data-pjax'=>'0',
+                        ];
+                        return Html::a('<span class="glyphicon glyphicon-credit-card"></span>',$url,$options);
+
+                    }
+
+                ]
+            ],
         ],
     ]); ?>
 </div>

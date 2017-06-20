@@ -27,7 +27,7 @@ class SystemConfig extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'value'], 'required'],
+            [['name', 'value'], 'required'],
             [['id'], 'integer'],
             [['value'], 'string'],
             [['name'], 'string', 'max' => 50],
@@ -42,8 +42,8 @@ class SystemConfig extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'value' => 'Value',
+            'name' => '配置项名称',
+            'value' => '配置项值',
         ];
     }
 }
