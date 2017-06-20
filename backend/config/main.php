@@ -13,6 +13,15 @@ return [
     'bootstrap' => ['log'],
     'modules' => [],
 	'language'=> 'zh-CN',
+	'modules' => [
+		'admin' => [
+			'class' => 'mdm\admin\Module',
+		],
+		//......
+	],
+	'aliases' => [
+		'@mdm/admin' => '@vendor/mdmsoft/yii2-admin',
+	],
     'components' => [
         'user' => [
             'identityClass' => 'common\models\Adminuser',
@@ -49,6 +58,28 @@ return [
             	'<controller:\w+>/<id:\d+>/<action:(create|update|delete)>'=>'<controller>/<action>',
             ],
         ],
+	    'assetManager' => [
+		    'bundles' => [
+			    'dmstr\web\AdminLteAsset' => [
+				    'skin' => 'skin-blue-light',
+			    ],
+		    ],
+	    ],
+	    //authManager有PhpManager和DbManager两种方式,
+		//PhpManager将权限关系保存在文件里,这里使用的是DbManager方式,将权限关系保存在数据库.
+	    'authManager' => [
+		    'class' => 'yii\rbac\DbManager',
+		    'defaultRoles' => ['guest'],
+	    ],
+	    'as access' => [
+		    'class' => 'mdm\admin\components\AccessControl',
+		    'allowActions' => [
+			    //这里是允许访问的action
+			    //controller/action
+			    "site/*"
+		    ]
+
+	    ],
         
     ],
     'params' => $params,
