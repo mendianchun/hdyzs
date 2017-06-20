@@ -37,6 +37,23 @@ use Yii;
  */
 class Appointment extends \yii\db\ActiveRecord
 {
+    //预约单状态 1:预约中，2：预约成功，0:预约取消
+    const STATUS_CANCLE = 0;
+    const STATUS_WAITING = 1;
+    const STATUS_SUCC = 2;
+
+    //支付状态，0:待支付，1:已支付
+    const PAY_STATUS_UNPAY = 0;
+    const PAY_STATUS_PAYED = 1;
+
+    //支付方式：1:积分支付，2:线下支付，3:线上支付
+    const PAY_TYPE_SCORE = 1;
+    const PAY_TYPE_OFFLINE = 2;
+    const PAY_TYPE_ONLINE = 3;
+
+    //计费方式，1:按次，2:按小时
+    const FEE_TYPE_TIMES = 1;
+    const FEE_TYPE_HOURS = 2;
     /**
      * @inheritdoc
      */
@@ -69,28 +86,28 @@ class Appointment extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'appointment_no' => 'Appointment No',
-            'clinic_uuid' => 'Clinic Uuid',
-            'expert_uuid' => 'Expert Uuid',
-            'order_starttime' => 'Order Starttime',
-            'order_endtime' => 'Order Endtime',
-            'order_fee' => 'Order Fee',
-            'real_starttime' => 'Real Starttime',
-            'real_endtime' => 'Real Endtime',
-            'real_fee' => 'Real Fee',
-            'patient_name' => 'Patient Name',
-            'patient_age' => 'Patient Age',
-            'patient_mobile' => 'Patient Mobile',
-            'patient_idcard' => 'Patient Idcard',
-            'patient_description' => 'Patient Description',
-            'expert_diagnosis' => 'Expert Diagnosis',
-            'pay_type' => 'Pay Type',
-            'status' => 'Status',
-            'pay_status' => 'Pay Status',
-            'is_sms_notify' => 'Is Sms Notify',
-            'fee_type' => 'Fee Type',
-            'create_at' => 'Create At',
-            'update_at' => 'Update At',
+            'appointment_no' => '预约单号',
+            'clinic_uuid' => '诊所uuid',
+            'expert_uuid' => '专家uuid',
+            'order_starttime' => '预约开始时间',
+            'order_endtime' => '预约结束时间',
+            'order_fee' => '价格',
+            'real_starttime' => '实际开始时间',
+            'real_endtime' => '实际结束时间',
+            'real_fee' => '真实价格',
+            'patient_name' => '患者名称',
+            'patient_age' => '患者年龄',
+            'patient_mobile' => '患者手机号',
+            'patient_idcard' => '患者身份证号',
+            'patient_description' => '患者主述',
+            'expert_diagnosis' => '医生诊断',
+            'pay_type' => '支付类型',
+            'status' => '状态',
+            'pay_status' => '支付状态',
+            'is_sms_notify' => '是否短信通知患者',
+            'fee_type' => '付费类型',
+            'create_at' => '创建时间',
+            'update_at' => '更新时间',
         ];
     }
 
@@ -125,4 +142,57 @@ class Appointment extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Pay::className(), ['appointment_no' => 'appointment_no']);
     }
+
+    public static function allStatus()
+    {
+        return [self::STATUS_CANCLE=>'取消',self::STATUS_WAITING=>'预约中',self::STATUS_SUCC=>'预约成功'];
+    }
+
+    public  function getStatusStr()
+    {
+        if($this->status==self::STATUS_CANCLE){
+            return '取消';
+        }else if($this->status==self::STATUS_WAITING){
+            return '预约中';
+        }else{
+            return '预约成功';
+        }
+    }
+
+    public static function allPayStatus()
+    {
+        return [self::PAY_STATUS_UNPAY=>'待支付',self::PAY_STATUS_PAYED=>'已支付'];
+    }
+
+    public  function getPayStatusStr()
+    {
+        return $this->pay_status==self::PAY_STATUS_PAYED?'已支付':'待支付';
+    }
+
+    public static function allPayTypeStatus()
+    {
+        return [self::PAY_TYPE_SCORE=>'积分支付',self::PAY_TYPE_OFFLINE=>'线下支付',self::PAY_TYPE_ONLINE=>'线上支付'];
+    }
+
+    public  function getPayTypeStatusStr()
+    {
+        if($this->pay_type==self::PAY_TYPE_SCORE){
+            return '积分支付';
+        }else if($this->pay_type==self::PAY_TYPE_OFFLINE){
+            return '线下支付';
+        }else{
+            return '线上支付';
+        }
+    }
+
+    public static function allFeeTypeStatus()
+    {
+        return [self::FEE_TYPE_TIMES=>'按次',self::FEE_TYPE_HOURS=>'按小时'];
+    }
+
+    public  function getFeeTypeStatusStr()
+    {
+        return $this->fee_type==self::FEE_TYPE_TIMES?'按次':'按小时';
+    }
+
 }

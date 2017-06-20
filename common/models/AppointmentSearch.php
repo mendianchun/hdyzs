@@ -12,6 +12,10 @@ use common\models\Appointment;
  */
 class AppointmentSearch extends Appointment
 {
+    public function attributes()
+    {
+        return array_merge(parent::attributes(),['clinicName','expertName']);
+    }
     /**
      * @inheritdoc
      */
@@ -19,7 +23,7 @@ class AppointmentSearch extends Appointment
     {
         return [
             [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
-            [['clinic_uuid', 'expert_uuid', 'patient_name', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis'], 'safe'],
+            [['clinic_uuid', 'expert_uuid', 'patient_name', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis', 'clinicName', 'expertName'], 'safe'],
         ];
     }
 
@@ -83,6 +87,24 @@ class AppointmentSearch extends Appointment
             ->andFilterWhere(['like', 'patient_idcard', $this->patient_idcard])
             ->andFilterWhere(['like', 'patient_description', $this->patient_description])
             ->andFilterWhere(['like', 'expert_diagnosis', $this->expert_diagnosis]);
+
+        $query->join('INNER JOIN','clinic','appointment.clinic_uuid = clinic.user_uuid');
+        $query->andFilterWhere(['like','clinic.name',$this->clinicName]);
+
+        $query->join('INNER JOIN','expert','appointment.expert_uuid = expert.user_uuid');
+        $query->andFilterWhere(['like','expert.name',$this->expertName]);
+
+        $dataProvider->sort->attributes['clinicName'] =
+            [
+                'asc'=>['clinic.name'=>SORT_ASC],
+                'desc'=>['clinic.name'=>SORT_DESC],
+            ];
+
+        $dataProvider->sort->attributes['expertName'] =
+            [
+                'asc'=>['expert.name'=>SORT_ASC],
+                'desc'=>['expert.name'=>SORT_DESC],
+            ];
 
         return $dataProvider;
     }
