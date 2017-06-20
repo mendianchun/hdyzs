@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'password_reset_token',
 
             ['class' => 'yii\grid\ActionColumn',
-            		'template'=>'{view} {update} {resetpwd} {privilege}',
+            		'template'=>'{view} {update} {resetpwd}',
             		'buttons'=>[
             				'resetpwd'=>function($url,$model,$key)
             				{
@@ -41,16 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
             							'data-pjax'=>'0',
             							];
             					return Html::a('<span class="glyphicon glyphicon-lock"></span>',$url,$options);
-            				},
-            				
-            				'privilege'=>function($url,$model,$key)
-            				{
-            					$options=[
-            							'title'=>Yii::t('yii','权限'),
-            							'aria-label'=>Yii::t('yii','权限'),
-            							'data-pjax'=>'0',
-            					];
-            					return Html::a('<span class="glyphicon glyphicon-user"></span>',$url,$options);
             				},
             				
     ],

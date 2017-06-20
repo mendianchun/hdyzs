@@ -11,28 +11,41 @@ $this->params['breadcrumbs'][] = ['label' => 'Appointments', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="appointment-view">
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->appointment_no], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->appointment_no], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'appointment_no',
-            'clinic_uuid',
-            'expert_uuid',
-            'order_starttime:datetime',
-            'order_endtime:datetime',
+//            'clinic_uuid',
+            ['attribute'=>'clinicName',
+                'label'=>'诊所名称',
+                'value'=>$model->clinicUu->name,
+            ],
+//            'expert_uuid',
+            ['attribute'=>'expertName',
+                'label'=>'专家名称',
+                'value'=>$model->expertUu->name,
+            ],
+//            'order_starttime:datetime',
+            [
+                'attribute'=>'order_starttime',
+                'format'=>['date','php:Y-m-d H:i:s']
+            ],
+//            'order_endtime:datetime',
+            [
+                'attribute'=>'order_endtime',
+                'format'=>['date','php:Y-m-d H:i:s']
+            ],
             'order_fee',
-            'real_starttime:datetime',
-            'real_endtime:datetime',
+//            'real_starttime:datetime',
+            [
+                'attribute'=>'real_starttime',
+                'format'=>['date','php:Y-m-d H:i:s']
+            ],
+//            'real_endtime:datetime',
+            [
+                'attribute'=>'real_endtime',
+                'format'=>['date','php:Y-m-d H:i:s']
+            ],
             'real_fee',
             'patient_name',
             'patient_age',
@@ -40,13 +53,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'patient_idcard',
             'patient_description:ntext',
             'expert_diagnosis:ntext',
-            'pay_type',
-            'status',
-            'pay_status',
-            'is_sms_notify',
-            'fee_type',
-            'create_at',
-            'update_at',
+            //            'status',
+            ['attribute'=>'status',
+                'value'=>$model->StatusStr,
+            ],
+//            'pay_type',
+            ['attribute'=>'pay_type',
+                'value'=>$model->PayTypeStatusStr,
+            ],
+//            'pay_status',
+            ['attribute'=>'pay_status',
+                'value'=>$model->PayStatusStr,
+            ],
+//            'is_sms_notify',
+//            'fee_type',
+            ['attribute'=>'fee_type',
+                'value'=>$model->FeeTypeStatusStr,
+            ],
+//            'create_at',
+            [
+                'attribute'=>'create_at',
+                'format'=>['date','php:Y-m-d H:i:s']
+            ],
+//            'update_at',
+            [
+                'attribute'=>'update_at',
+                'format'=>['date','php:Y-m-d H:i:s']
+            ],
         ],
     ]) ?>
 

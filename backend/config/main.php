@@ -71,8 +71,6 @@ return [
 		    'class' => 'yii\rbac\DbManager',
 		    'defaultRoles' => ['postAdmin'],
 	    ],
-
-        
     ],
 
 	'as access' => [
@@ -84,5 +82,12 @@ return [
 		]
 
 	],
+
+	'on beforeRequest' => function($event) {
+		\yii\base\Event::on(\yii\db\BaseActiveRecord::className(), \yii\db\BaseActiveRecord::EVENT_AFTER_INSERT, ['backend\components\AdminLog', 'write']);
+		\yii\base\Event::on(\yii\db\BaseActiveRecord::className(), \yii\db\BaseActiveRecord::EVENT_AFTER_UPDATE, ['backend\components\AdminLog', 'write']);
+		\yii\base\Event::on(\yii\db\BaseActiveRecord::className(), \yii\db\BaseActiveRecord::EVENT_AFTER_DELETE, ['backend\components\AdminLog', 'write']);
+	},
+
     'params' => $params,
 ];
