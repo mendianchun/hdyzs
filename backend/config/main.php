@@ -69,18 +69,20 @@ return [
 		//PhpManager将权限关系保存在文件里,这里使用的是DbManager方式,将权限关系保存在数据库.
 	    'authManager' => [
 		    'class' => 'yii\rbac\DbManager',
-		    'defaultRoles' => ['guest'],
+		    'defaultRoles' => ['postAdmin'],
 	    ],
-	    'as access' => [
-		    'class' => 'mdm\admin\components\AccessControl',
-		    'allowActions' => [
-			    //这里是允许访问的action
-			    //controller/action
-			    "site/*"
-		    ]
 
-	    ],
         
     ],
+
+	'as access' => [
+		'class' => 'mdm\admin\components\AccessControl',
+		'allowActions' => [
+			//这里是允许访问的action
+			//controller/action
+			"site/*"
+		]
+
+	],
     'params' => $params,
 ];
