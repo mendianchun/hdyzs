@@ -4,11 +4,6 @@ use yii\helpers\Html;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use backend\assets\AppAsset;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
-use common\widgets\Alert;
 
 if (Yii::$app->controller->action->id === 'login') { 
 /**
@@ -30,8 +25,6 @@ if (Yii::$app->controller->action->id === 'login') {
     dmstr\web\AdminLteAsset::register($this);
 
     $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
-
-
     ?>
     <?php $this->beginPage() ?>
     <!DOCTYPE html>

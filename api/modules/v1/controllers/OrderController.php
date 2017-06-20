@@ -146,6 +146,33 @@ class OrderController extends ActiveController
 	    }
     }
 
+    public function actionUpdatepre(){
+    	$get_params = Yii::$app->request->get();
+	    if(!isset($get_params['appointment_no']) ){
+		    return Service::sendError(20202,'缺少预约单号');
+	    }
+	    $appointment_no= $get_params['appointment_no'];
+
+	   // $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
+	    $appointment = Appointment::findOne(['appointment_no'=>$appointment_no]);
+
+		if(!$appointment){
+			$result['code']='20702';
+			$result['message']='获取失败';
+		}else{
+			$result= $appointment->attributes;
+			if($result->status != 1){
+				return Service::sendError(20220,'目前状态不允许修改');
+			}
+
+			$clinic = $appointment->clinicUu;
+			$expert = $appointment->expertUu;
+			$result['clinic']=$clinic->attributes;
+			$result['expert']=$expert->attributes;
+		}
+	    return Service::sendSucc($result);
+    }
+
     public function actionUpdate(){
 	    $order_post = Yii::$app->request->post();
 
@@ -256,6 +283,19 @@ class OrderController extends ActiveController
 		    return Service::sendError(20202,'缺少预约单号');
 	    }
 	    $clinic_uuid= $get_params['clinic_uuid'];
+
+
+ 		$appointment = Appointment::findOne(['appointment_no'=>$appointment_no]);
+ 		if(!$appointment){
+			$result['code']='20702';
+			$result['message']='获取失败';
+ 		}else{
+ 			$result= $appointment->attributes;
+ 			if($result->status !=1){
+				return Service::sendError(20221,'目前状态不允许取消');
+ 			}
+
+ 		}
 
 	    $appointment_new['status']=0;
 
