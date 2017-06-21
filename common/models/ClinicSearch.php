@@ -74,6 +74,11 @@ class ClinicSearch extends Clinic
             ->andFilterWhere(['like', 'doctor_certificate_img', $this->doctor_certificate_img])
             ->andFilterWhere(['like', 'user_uuid', $this->user_uuid]);
 
+        $dataProvider->sort->defaultOrder =
+            [
+                'verify_status'=>SORT_ASC,
+                'id'=>SORT_DESC,
+            ];
         return $dataProvider;
     }
 }

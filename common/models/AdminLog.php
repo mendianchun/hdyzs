@@ -44,11 +44,19 @@ class AdminLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'route' => 'Route',
-            'description' => 'Description',
-            'create_at' => 'Create At',
-            'user_id' => 'User ID',
-            'ip' => 'Ip',
+            'route' => '路由',
+            'description' => '操作',
+            'create_at' => '时间',
+            'user_id' => '用户ID',
+            'ip' => 'IP',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAdminuser()
+    {
+        return $this->hasOne(Adminuser::className(), ['id' => 'user_id']);
     }
 }

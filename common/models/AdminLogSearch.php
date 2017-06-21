@@ -12,6 +12,11 @@ use common\models\AdminLog;
  */
 class AdminLogSearch extends AdminLog
 {
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['username']);
+    }
+
     /**
      * @inheritdoc
      */
@@ -19,7 +24,7 @@ class AdminLogSearch extends AdminLog
     {
         return [
             [['id', 'create_at', 'user_id', 'ip'], 'integer'],
-            [['route', 'description'], 'safe'],
+            [['route', 'description', 'username'], 'safe'],
         ];
     }
 
@@ -68,6 +73,14 @@ class AdminLogSearch extends AdminLog
         $query->andFilterWhere(['like', 'route', $this->route])
             ->andFilterWhere(['like', 'description', $this->description]);
 
+        $query->join('INNER JOIN','adminuser','admin_log.user_id = adminuser.id');
+        $query->andFilterWhere(['like','adminuser.username',$this->username]);
+
+        $dataProvider->sort->attributes['username'] =
+            [
+                'asc'=>['adminuser.username'=>SORT_ASC],
+                'desc'=>['adminuser.username'=>SORT_DESC],
+            ];
         return $dataProvider;
     }
 }

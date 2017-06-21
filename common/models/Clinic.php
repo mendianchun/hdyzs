@@ -28,6 +28,10 @@ use Yii;
  */
 class Clinic extends \yii\db\ActiveRecord
 {
+    //审核状态，1:待审核，2：审核通过，3：审核不通过
+    const STATUS_WAITING = 1;
+    const STATUS_SUCC = 2;
+    const STATUS_FAILED = 3;
     /**
      * @inheritdoc
      */
@@ -64,18 +68,18 @@ class Clinic extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'address' => 'Address',
-            'tel' => 'Tel',
-            'chief' => 'Chief',
-            'idcard' => 'Idcard',
-            'Business_license_img' => 'Business License Img',
-            'local_img' => 'Local Img',
-            'doctor_certificate_img' => 'Doctor Certificate Img',
-            'score' => 'Score',
-            'verify_status' => 'Verify Status',
-            'user_uuid' => 'User Uuid',
-            'verify_reason' => 'Verify Reason',
+            'name' => '名字',
+            'address' => '地址',
+            'tel' => '联系电话',
+            'chief' => '负责人',
+            'idcard' => '身份证',
+            'Business_license_img' => '营业许可证书',
+            'local_img' => '诊所实景图像',
+            'doctor_certificate_img' => '医师营业证书',
+            'score' => '积分',
+            'verify_status' => '认证状态',
+            'user_uuid' => 'uuid',
+            'verify_reason' => '不通过原因',
         ];
     }
 
@@ -109,5 +113,21 @@ class Clinic extends \yii\db\ActiveRecord
     public function getScoreLogs()
     {
         return $this->hasMany(ScoreLog::className(), ['clinic_uuid' => 'user_uuid']);
+    }
+
+    public static function allStatus()
+    {
+        return [self::STATUS_WAITING=>'待审核',self::STATUS_SUCC=>'审核通过',self::STATUS_FAILED=>'审核不通过'];
+    }
+
+    public  function getStatusStr()
+    {
+        if($this->verify_status==self::STATUS_WAITING){
+            return '待审核';
+        }else if($this->verify_status==self::STATUS_SUCC){
+            return '审核通过';
+        }else{
+            return '审核不通过';
+        }
     }
 }

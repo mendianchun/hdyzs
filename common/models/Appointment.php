@@ -37,10 +37,10 @@ use Yii;
  */
 class Appointment extends \yii\db\ActiveRecord
 {
-    //预约单状态 1:预约中，2：预约成功，0:预约取消
-    const STATUS_CANCLE = 0;
+    //预约单状态 1:预约中，2：预约成功，3:预约取消
     const STATUS_WAITING = 1;
     const STATUS_SUCC = 2;
+    const STATUS_CANCLE = 3;
 
     //支付状态，0:待支付，1:已支付
     const PAY_STATUS_UNPAY = 0;

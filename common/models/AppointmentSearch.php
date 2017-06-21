@@ -95,16 +95,22 @@ class AppointmentSearch extends Appointment
         $query->andFilterWhere(['like','expert.name',$this->expertName]);
 
         $dataProvider->sort->attributes['clinicName'] =
-            [
-                'asc'=>['clinic.name'=>SORT_ASC],
-                'desc'=>['clinic.name'=>SORT_DESC],
-            ];
+        [
+            'asc'=>['clinic.name'=>SORT_ASC],
+            'desc'=>['clinic.name'=>SORT_DESC],
+        ];
 
         $dataProvider->sort->attributes['expertName'] =
-            [
-                'asc'=>['expert.name'=>SORT_ASC],
-                'desc'=>['expert.name'=>SORT_DESC],
-            ];
+        [
+            'asc'=>['expert.name'=>SORT_ASC],
+            'desc'=>['expert.name'=>SORT_DESC],
+        ];
+
+        $dataProvider->sort->defaultOrder =
+        [
+            'status'=>SORT_ASC,
+            'appointment_no'=>SORT_DESC,
+        ];
 
         return $dataProvider;
     }
