@@ -24,8 +24,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'chief',
             'idcard',
             'Business_license_img',
-            'local_img',
-            'doctor_certificate_img',
+            [
+                'attribute'=>'Business_license_img',
+                'format'=>'raw',
+                'value'=> Html::img($model->Business_license_img, ['width' => '300px']),
+            ],
+//            'local_img',
+            [
+                'attribute'=>'local_img',
+                'format'=>'raw',
+                'value'=> Html::img($model->Business_license_img, ['width' => '300px']),
+            ],
+//            'doctor_certificate_img',
+            [
+                'attribute'=>'doctor_certificate_img',
+                'format'=>'raw',
+                'value'=> Html::img($model->Business_license_img, ['width' => '300px']),
+            ],
             'score',
 //            'verify_status',
             [
