@@ -1,23 +1,28 @@
 <?php
+
 namespace console\controllers;
 
+error_reporting(0);
 use yii\console\Controller;
-use common\models\Post;
 
 class HelloController extends Controller
 {
 	public $rev;
 	
-	public function options()
-	{
-		return ['rev'];
+//	public function options()
+//	{
+//		return ['rev'];
+//	}
+//
+//	public function optionAliases()
+//	{
+//		return['r'=>'rev'];
+//	}
+
+	public function actionTest(){
+		echo 'test';
 	}
-	
-	public function optionAliases()
-	{
-		return['r'=>'rev'];
-	}
-	
+
 	public function actionIndex()
 	{
 		if($this->rev == 1)
