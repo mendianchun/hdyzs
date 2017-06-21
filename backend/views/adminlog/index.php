@@ -7,31 +7,57 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\AdminLogSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Admin Logs';
+$this->title = '操作日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="admin-log-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Admin Log', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'route',
-            'description:ntext',
-            'create_at',
-            'user_id',
-            // 'ip',
+//            'user_id',
+            [
+                'attribute'=>'username',
+                'label'=>'用户名',
+                'contentOptions'=>['width'=>'100px'],
+                'value' => 'adminuser.username',
+            ],
+//            'route',
+//            'description:ntext',
+            [
+                'attribute'=>'description',
+//                'contentOptions'=>['width'=>'200px'],
+                'value' => function ($model) {
+                    $pos = strpos($model->description,'的');
+                    return substr($model->description,0,$pos);
+                },
+                'format'=>'ntext',
+            ],
+//            'create_at',
+            [
+                'attribute' => 'create_at',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+                'contentOptions'=>['width'=>'150px'],
+            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+//             'ip',
+            [
+                'attribute' => 'ip',
+//                'format' => ['date', 'php:Y-m-d H:i:s'],
+//                'contentOptions'=>['width'=>'150px'],
+                'value' => function ($model) {
+                    return long2ip($model->ip);
+                },
+                'contentOptions'=>['width'=>'100px'],
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}',
+            ],
         ],
     ]); ?>
 </div>

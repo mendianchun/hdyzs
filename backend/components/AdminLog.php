@@ -15,11 +15,11 @@ class AdminLog
         }
         // 显示详情有待优化,不过基本功能完整齐全
         if ($event->name == \yii\db\ActiveRecord::EVENT_AFTER_INSERT) {
-            $description = "%s新增了表%s %s:%s的%s";
+            $description = "新增了表%s %s:%s的%s";
         } elseif($event->name == \yii\db\ActiveRecord::EVENT_AFTER_UPDATE) {
-            $description = "%s修改了表%s %s:%s的%s";
+            $description = "修改了表%s %s:%s的%s";
         } else {
-            $description = "%s删除了表%s %s:%s%s";
+            $description = "删除了表%s %s:%s的%s";
         }
         if (!empty($event->changedAttributes)) {
             $desc = '';
@@ -30,9 +30,9 @@ class AdminLog
         } else {
             $desc = '';
         }
-        $userName = Yii::$app->user->identity->username;
+//        $userName = Yii::$app->user->identity->username;
         $tableName = $event->sender->tableSchema->name;
-        $description = sprintf($description, $userName, $tableName, $event->sender->primaryKey()[0], $event->sender->getPrimaryKey(), $desc);
+        $description = sprintf($description, $tableName, $event->sender->primaryKey()[0], $event->sender->getPrimaryKey(), $desc);
 
         $route = Url::to();
         $userId = Yii::$app->user->id;

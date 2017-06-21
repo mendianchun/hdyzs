@@ -35,7 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'status',
             ['attribute'=>'status',
                 'value'=>'StatusStr',
-                'filter'=>Appointment::allStatus()
+                'filter'=>Appointment::allStatus(),
+                'contentOptions'=>
+            		function($model)
+                    {
+                        return ($model->status==Appointment::STATUS_WAITING)?['class'=>'bg-danger']:[];
+                    }
             ],
 //            'pay_status',
             ['attribute'=>'pay_status',
@@ -98,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'pay'=>function($url,$model,$key)
                     {
-                        if($model->pay_status == Appointment::PAY_STATUS_PAYED){
+                        if($model->status != Appointment::STATUS_SUCC || $model->pay_status == Appointment::PAY_STATUS_PAYED){
                             return '';
                         }
                         $options=[

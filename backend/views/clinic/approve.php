@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
+use common\models\Clinic;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Clinic */
@@ -30,9 +32,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'verify_status',
                 'value' => $model->StatusStr,
             ],
-            'verify_reason:ntext',
 //            'user_uuid',
         ],
     ]) ?>
+
+</div>
+
+<div class="clinic-form">
+
+    <?php $form = ActiveForm::begin(); ?>
+
+    <?= $form->field($model, 'verify_reason')->textarea(['rows' => 6]) ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('通过', ['class' => 'btn btn-primary','name'=>'submitButton','value'=>Clinic::STATUS_SUCC]) ?>
+        <?= Html::submitButton('不通过', ['class' => 'btn btn-danger','name'=>'submitButton','value'=>Clinic::STATUS_FAILED]) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>
