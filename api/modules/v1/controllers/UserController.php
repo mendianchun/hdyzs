@@ -78,7 +78,7 @@ class UserController extends ActiveController
 
         if($model->save()){
             //发送短信给用户
-            return Service::sendSucc(['smscode'=>$smscode,'mobile'=>$mobile]);
+            return Service::sendSucc();
         }else{
             return Service::sendError(20102,'验证码生成出错');
         }
