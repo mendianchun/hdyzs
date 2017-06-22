@@ -82,7 +82,7 @@ class DiagnosisController extends ActiveController
 		if($data){
 			$result=$data;
 		}else{
-			$result['code']='20705';
+			$result['code']='20301';
 			$result['message']='没有数据';
 		}
 		return $result;
@@ -101,8 +101,8 @@ class DiagnosisController extends ActiveController
 		$appointment = Appointment::findOne(['appointment_no'=>$appointment_no]);
 
 		if(!$appointment){
-			$result['code']='20702';
-			$result['message']='获取失败';
+			$result['code']='20303';
+			$result['message']='获取预约信息失败';
 		}else{
 			$result= $appointment->attributes;
 			$clinic = $appointment->clinicUu;
@@ -137,7 +137,7 @@ class DiagnosisController extends ActiveController
 			$appointment_old = $appointment->attributes;
 			$now =time();
 			if($appointment_old['real_endtime']+3600<$now){
-				$result['code']='20703';
+				$result['code']='20304';
 				$result['message']='超过修改时间';
 			}else{
 				//患者信息
@@ -155,14 +155,14 @@ class DiagnosisController extends ActiveController
 				if($op_status>0){
 					$result['appointment_no'] =$appointment_no;
 				}else{
-					$result['code']='20703';
+					$result['code']='20305';
 					$result['message']='修改失败';
 				}
 			}
 
 
 		}else{
-			$result['code']='20703';
+			$result['code']='20303';
 			$result['message']='诊断号错误';
 		}
 		return $result;
