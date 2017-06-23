@@ -12,6 +12,7 @@ use Yii;
  * @property string $zhumu_uuid
  * @property integer $meeting_number
  * @property string $audio_url
+ * @property integer $status
  * @property integer $create_at
  *
  * @property Appointment $appointmentNo
@@ -19,6 +20,12 @@ use Yii;
  */
 class AppointmentVideo extends \yii\db\ActiveRecord
 {
+    //生成状态：1:未生成，2:生成中，3:生成失败，4:生成完成
+    const STATUS_UNDO = 1;
+    const STATUS_DOING = 2;
+    const STATUS_FAILED = 3;
+    const STATUS_FINISH = 4;
+
     /**
      * @inheritdoc
      */
@@ -33,8 +40,8 @@ class AppointmentVideo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appointment_no', 'zhumu_uuid'], 'required'],
-            [['appointment_no', 'meeting_number', 'create_at'], 'integer'],
+            [['appointment_no', 'zhumu_uuid', 'create_at'], 'required'],
+            [['appointment_no', 'meeting_number', 'status', 'create_at'], 'integer'],
             [['zhumu_uuid'], 'string', 'max' => 36],
             [['audio_url'], 'string', 'max' => 100],
             [['appointment_no'], 'exist', 'skipOnError' => true, 'targetClass' => Appointment::className(), 'targetAttribute' => ['appointment_no' => 'appointment_no']],
@@ -53,6 +60,7 @@ class AppointmentVideo extends \yii\db\ActiveRecord
             'zhumu_uuid' => 'Zhumu Uuid',
             'meeting_number' => 'Meeting Number',
             'audio_url' => 'Audio Url',
+            'status' => 'Status',
             'create_at' => 'Create At',
         ];
     }
