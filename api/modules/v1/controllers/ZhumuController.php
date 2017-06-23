@@ -24,7 +24,7 @@ class ZhumuController extends ActiveController
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
                 'optional' => [
-                    'getinfo',
+                    'getmp3',
                 ],
             ]
         ]);
@@ -36,6 +36,14 @@ class ZhumuController extends ActiveController
      */
     public function actionGetuser()
     {
+        //当前用户
+        $user = \yii::$app->user->identity;
+
+        //只有专家才能发起
+        if ($user->type != 1) {
+            return Service::sendError(20401, '非法请求，只能专家才能发起会议');
+        }
+
         $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
         if (isset($systemConfig)) {
             $app_key = $systemConfig['value'];
@@ -125,21 +133,22 @@ class ZhumuController extends ActiveController
             $retData = $appointmentVideo->attributes;
             unset($retData['id'], $retData['audio_url'], $retData['create_at'], $retData['zhumu_uuid']);
 
-            $zhumu = Zhumu::findOne(['uuid' => $appointmentVideo->zhumu_uuid]);
-            if (!empty($zhumu)) {
-                $retData['username'] = $zhumu->username;
-                $retData['password'] = $zhumu->password;
-
-                $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
-                if (isset($systemConfig)) {
-                    $retData['app_key'] = $systemConfig['value'];
-                }
-
-                $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_secret']);
-                if (isset($systemConfig)) {
-                    $retData['app_secret'] = $systemConfig['value'];
-                }
+            $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
+            if (isset($systemConfig)) {
+                $retData['app_key'] = $systemConfig['value'];
             }
+
+            $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_secret']);
+            if (isset($systemConfig)) {
+                $retData['app_secret'] = $systemConfig['value'];
+            }
+
+            //不需要用户名和密码
+//            $zhumu = Zhumu::findOne(['uuid' => $appointmentVideo->zhumu_uuid]);
+//            if (!empty($zhumu)) {
+//                $retData['username'] = $zhumu->username;
+//                $retData['password'] = $zhumu->password;
+//            }
         }
         return Service::sendSucc($retData);
     }
@@ -239,5 +248,25 @@ class ZhumuController extends ActiveController
             }
         }
         return Service::sendSucc();
+    }
+
+    /*
+    * 接口6:访问mp3资源
+    */
+    public function actionGetmp3($appointment_no,$meeting_number)
+    {
+        $file = "/Users/damen/work/code/hdykt/zhumu/170614173547021730/1234/20170623144751.mp3";
+        header('Content-Type:audio/mpeg');
+        header('Content-Length:'.filesize($file));
+
+        ob_start();
+        $fp = fopen($file, 'r'); //文件
+        while (!feof($fp)) {
+            echo stream_get_line($fp, 65535, "\n");
+        }
+        ob_end_flush();
+        exit;
+
+//        echo file_get_contents($file);
     }
 }  
