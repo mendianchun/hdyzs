@@ -97,8 +97,11 @@ class DiagnosisController extends ActiveController
 	    }
 		$appointment_no= $get_params['appointment_no'];
 
+		$user = \yii::$app->user->identity;
+		$uuid = $user->uuid;
+
 		// $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
-		$appointment = Appointment::findOne(['appointment_no'=>$appointment_no]);
+		$appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 
 		if(!$appointment){
 			$result['code']='20303';
@@ -131,7 +134,11 @@ class DiagnosisController extends ActiveController
 		    return Service::sendError(20302,'缺少预约单号');
 	    }
 		$appointment_no=$order_post['appointment_no'];
-		$appointment =Appointment::findOne(['appointment_no'=>$appointment_no]);
+
+		$user = \yii::$app->user->identity;
+		$uuid = $user->uuid;
+
+		$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 
 		if($appointment){
 			$appointment_old = $appointment->attributes;
