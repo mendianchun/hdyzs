@@ -131,7 +131,7 @@ class ZhumuController extends ActiveController
         $appointmentVideo = AppointmentVideo::findOne(['appointment_no' => $appointment_no]);
         if (!empty($appointmentVideo)) {
             $retData = $appointmentVideo->attributes;
-            unset($retData['id'], $retData['audio_url'], $retData['create_at'], $retData['zhumu_uuid']);
+            unset($retData['id'], $retData['status'], $retData['audio_url'], $retData['create_at'], $retData['zhumu_uuid']);
 
             $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
             if (isset($systemConfig)) {
@@ -240,9 +240,9 @@ class ZhumuController extends ActiveController
 
         //对应的瞩目账号状态改为正常
         $appointmentVideo = AppointmentVideo::findAll(['appointment_no' => $post['appointment_no']]);
-        if(!empty($appointmentVideo)){
-            foreach($appointmentVideo as $k => $v){
-                $zhumu = Zhumu::findOne(['uuid'=>$v->zhumu_uuid]);
+        if (!empty($appointmentVideo)) {
+            foreach ($appointmentVideo as $k => $v) {
+                $zhumu = Zhumu::findOne(['uuid' => $v->zhumu_uuid]);
                 $zhumu->status = Zhumu::STATUS_ACTIVE;
                 $zhumu->save();
             }
@@ -253,11 +253,11 @@ class ZhumuController extends ActiveController
     /*
     * 接口6:访问mp3资源
     */
-    public function actionGetmp3($appointment_no,$meeting_number)
+    public function actionGetmp3($appointment_no, $meeting_number)
     {
         $file = "/Users/damen/work/code/hdykt/zhumu/170614173547021730/1234/20170623144751.mp3";
         header('Content-Type:audio/mpeg');
-        header('Content-Length:'.filesize($file));
+        header('Content-Length:' . filesize($file));
 
         ob_start();
         $fp = fopen($file, 'r'); //文件
