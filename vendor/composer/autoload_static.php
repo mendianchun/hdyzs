@@ -43,13 +43,27 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
         array (
             'cebe\\markdown\\' => 14,
         ),
+        'S' => 
+        array (
+            'Symfony\\Component\\Process\\' => 26,
+            'Symfony\\Component\\Filesystem\\' => 29,
+        ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Pingpp\\' => 7,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
         ),
         'F' => 
         array (
             'Faker\\' => 6,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Cache\\' => 22,
         ),
     );
 
@@ -106,13 +120,33 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
         ),
+        'Symfony\\Component\\Process\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
+        ),
+        'Symfony\\Component\\Filesystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/filesystem',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
         'Pingpp\\' => 
         array (
             0 => __DIR__ . '/..' . '/pingplusplus/pingpp-php/lib',
         ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
         ),
     );
 
@@ -131,6 +165,13 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
                 0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-php/src',
             ),
         ),
+        'N' => 
+        array (
+            'Neutron' => 
+            array (
+                0 => __DIR__ . '/..' . '/neutron/temporary-filesystem/src',
+            ),
+        ),
         'H' => 
         array (
             'HTMLPurifier' => 
@@ -138,11 +179,32 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
             ),
         ),
+        'F' => 
+        array (
+            'FFMpeg' => 
+            array (
+                0 => __DIR__ . '/..' . '/php-ffmpeg/php-ffmpeg/src',
+            ),
+        ),
+        'E' => 
+        array (
+            'Evenement' => 
+            array (
+                0 => __DIR__ . '/..' . '/evenement/evenement/src',
+            ),
+        ),
         'D' => 
         array (
             'Diff' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/php-diff/lib',
+            ),
+        ),
+        'A' => 
+        array (
+            'Alchemy' => 
+            array (
+                0 => __DIR__ . '/..' . '/alchemy/binary-driver/src',
             ),
         ),
     );

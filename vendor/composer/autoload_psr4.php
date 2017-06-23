@@ -19,6 +19,11 @@ return array(
     'filsh\\yii2\\oauth2server\\' => array($vendorDir . '/filsh/yii2-oauth2-server'),
     'dmstr\\' => array($vendorDir . '/dmstr/yii2-adminlte-asset'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
+    'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
+    'Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Pingpp\\' => array($vendorDir . '/pingplusplus/pingpp-php/lib'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
+    'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
 );

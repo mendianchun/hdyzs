@@ -8,6 +8,10 @@ $baseDir = dirname($vendorDir);
 return array(
     'cebe\\gravatar\\' => array($vendorDir . '/cebe/yii2-gravatar'),
     'OAuth2' => array($vendorDir . '/bshaffer/oauth2-server-php/src'),
+    'Neutron' => array($vendorDir . '/neutron/temporary-filesystem/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
+    'FFMpeg' => array($vendorDir . '/php-ffmpeg/php-ffmpeg/src'),
+    'Evenement' => array($vendorDir . '/evenement/evenement/src'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
+    'Alchemy' => array($vendorDir . '/alchemy/binary-driver/src'),
 );
