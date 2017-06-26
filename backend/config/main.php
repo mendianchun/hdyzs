@@ -29,7 +29,8 @@ return [
         ],
     	'session'=>[
     			'name'=>'PHPBACKSESSION',
-    			'savePath'=>sys_get_temp_dir(),
+//    			'savePath'=>sys_get_temp_dir(),
+				'class' => 'yii\web\DbSession',
     	],
     	'request'=>[
     			'cookieValidationKey'=>'sdfjjksloeedf78789judf',
