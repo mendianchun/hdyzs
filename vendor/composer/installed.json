@@ -1939,5 +1939,41 @@
             "video",
             "video processing"
         ]
+    },
+    {
+        "name": "bailangzhan/yii2-webuploader",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bailangzhan/yii2-webuploader.git",
+            "reference": "95ab58c91ec9b29b5fa3f961bea4cdf3490c9ff7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/bailangzhan/yii2-webuploader/95ab58c91ec9b29b5fa3f961bea4cdf3490c9ff7.zip",
+            "reference": "95ab58c91ec9b29b5fa3f961bea4cdf3490c9ff7",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": ">=2.0.4"
+        },
+        "time": "2017-06-23T02:32:32+00:00",
+        "type": "yii2-extension",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "manks\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "yii2-webuploader组件",
+        "keywords": [
+            "webuploader",
+            "yii2"
+        ]
     }
 ]

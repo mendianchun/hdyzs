@@ -103,4 +103,13 @@ return array (
       '@mdm/admin' => $vendorDir . '/mdmsoft/yii2-admin',
     ),
   ),
+  'bailangzhan/yii2-webuploader' => 
+  array (
+    'name' => 'bailangzhan/yii2-webuploader',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@manks' => $vendorDir . '/bailangzhan/yii2-webuploader',
+    ),
+  ),
 );

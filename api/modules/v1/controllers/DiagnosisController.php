@@ -163,7 +163,7 @@ class DiagnosisController extends ActiveController
 					$result['zhumu'][]=$v->attributes;
 				}
 			}
-			
+
 		}
 		return $result;
 	}
