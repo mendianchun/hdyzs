@@ -69,7 +69,7 @@ class DrugCodeSearch extends DrugCode
             'submit_at' => $this->submit_at,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
+        $query->andFilterWhere(['=', 'code', $this->code])
             ->andFilterWhere(['like', 'info', $this->info])
             ->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid]);
 
