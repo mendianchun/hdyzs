@@ -54,38 +54,60 @@ class DiagnosisController extends ActiveController
 
 	public function actionIndex()
 	{
-		$where_expert=$and_where_date=$and_where_patient=array( );
 
-		$get_params = Yii::$app->request->get();
 
-		if(isset($get_params['expert'])){
-			$expert= $get_params['expert'];
-			$where_expert['expert_uuid']=$expert;
-		}
 
-		if(isset($get_params['date'])){
-			$date= $get_params['date'];
+		$queryParam = Yii::$app->request->queryParams;
+		$pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
+
+		$params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
+
+		if(isset($queryParam['date'])){
+			$date= $queryParam['date'];
 			$datetime_start=strtotime("$date 00:00:00");
 			$datetime_end=strtotime("$date 23:59:59");
-			$and_where_date=['between', 'order_starttime', $datetime_start, $datetime_end];
-		}
-		if(isset($get_params['name'])){
-			$and_where_patient=['like','patient_name' ,$get_params['name']];
+			$params['AppointmentSearch']['start_time']=$datetime_start;
+			$params['AppointmentSearch']['end_time']=$datetime_end;
 		}
 
-		$data =Appointment::find()
-		->where($where_expert)
-		->andWhere($and_where_date)
-		->andWhere($and_where_patient)
-		->all();
+		$params['AppointmentSearch']['patient_name'] = isset($queryParam['patient_name']) ? $queryParam['patient_name'] : null;
+
+		$appiontSearch = new AppointmentSearch();
+		$provider = $appiontSearch->search($params,$pageSize);
+		$data = $provider->getModels();
 
 		if($data){
-			$result=$data;
+			$totalPage = ceil($provider->totalCount / $pageSize);
+
+			if(!isset($queryParam['page']) || $queryParam['page'] <= 0){
+				$currentPage = 1;
+			}else{
+				$currentPage = $queryParam['page'] >= $totalPage ? $totalPage : $queryParam['page'];
+			}
+			$result=array();
+			foreach($data as $item){
+				$app=array();
+				$app['appointment_no'] = $item->attributes['appointment_no'];
+				//$app['clinic_uuid'] = $item->attributes['clinic_uuid'];
+
+				$app['order_starttime'] = date('Y-m-d h:i',$item->attributes['order_starttime']);
+				$app['patient_name'] = $item->attributes['patient_name'];
+				$app['patient_description'] = $item->attributes['patient_description'];
+				//$app['status'] = $item->attributes['status'];
+				//专家信息
+				$expert = $item->expertUu;
+				$app['expert_name']= $expert->attributes['name'];
+
+				$result[]=$app;
+			}
+
+			$result['extraFields']['currentPage'] = $currentPage;
+			$result['extraFields']['totalCount'] = $provider->totalCount;
+			$result['extraFields']['totalPage'] = $totalPage;
+			return Service::sendSucc($result);
 		}else{
-			$result['code']='20301';
-			$result['message']='没有数据';
+			return Service::sendError(20301,'暂无数据');
 		}
-		return $result;
 	}
 
 
@@ -97,6 +119,12 @@ class DiagnosisController extends ActiveController
 	    }
 		$appointment_no= $get_params['appointment_no'];
 
+		$op = $get_params['op'];
+		if(!in_array($op,array('update','detail'))){
+			return Service::sendError(20306,'参数错误');
+		}
+
+
 		$user = \yii::$app->user->identity;
 		$uuid = $user->uuid;
 
@@ -107,17 +135,35 @@ class DiagnosisController extends ActiveController
 			$result['code']='20303';
 			$result['message']='获取预约信息失败';
 		}else{
-			$result= $appointment->attributes;
-			$clinic = $appointment->clinicUu;
+			$result=array();
+			$data= $appointment->attributes;
 			$expert = $appointment->expertUu;
 			$zhumu = $appointment->appointmentVideos;
-			$result['clinic']=$clinic->attributes;
-			$result['expert']=$expert->attributes;
+
+			$result['appointment_no']=$data['appointment_no'];
+
+			$result['expert_name']=$expert['name'];
+			$result['real_starttime']=date('Y-m-d h:i',$data['real_starttime']);
+			$result['real_endtime']=date('Y-m-d h:i',$data['real_endtime']);
+			$result['patient_description']=$data['patient_description'];
+
+
+			$result['patient_name']=$data['patient_name'];
+			$result['patient_age']=$data['patient_age'];
+			$result['patient_gender']=$data['patient_gender'];
+			$result['patient_mobile']=$data['patient_mobile'];
+			$result['patient_idcard']=$data['patient_idcard'];
+
+			$result['expert_diagnosis']=$data['expert_diagnosis'];
+
+
+			//$data['expert']=$expert->attributes;
 			if($zhumu){
 				foreach($zhumu as $v){
 					$result['zhumu'][]=$v->attributes;
 				}
 			}
+			
 		}
 		return $result;
 	}
