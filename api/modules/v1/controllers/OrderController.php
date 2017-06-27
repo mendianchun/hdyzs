@@ -60,32 +60,63 @@ class OrderController extends ActiveController
 
 	public function actionIndex()
     {
-	    $user = \yii::$app->user->identity;
+	   // $user = \yii::$app->user->identity;
 
 
-		$where=$and_where=array( );
+	    $queryParam = Yii::$app->request->queryParams;
+	    $pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
 
-		$get_params = Yii::$app->request->get();
+	    $params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
 
-		if(isset($get_params['expert'])){
-			$expert= $get_params['expert'];
-			$where['expert_uuid']=$expert;
-		}
+	    if(isset($queryParam['date'])){
+		    $date= $queryParam['date'];
+		    $datetime_start=strtotime("$date 00:00:00");
+		    $datetime_end=strtotime("$date 23:59:59");
+		    $params['AppointmentSearch']['start_time']=$datetime_start;
+		    $params['AppointmentSearch']['end_time']=$datetime_end;
+	    }
 
-		if(isset($get_params['date'])){
-			$date= $get_params['date'];
-			$datetime_start=strtotime("$date 00:00:00");
-			$datetime_end=strtotime("$date 23:59:59");
-			$and_where=['between', 'order_starttime', $datetime_start, $datetime_end];
-		}
+	    $appiontSearch = new AppointmentSearch();
+	    $provider = $appiontSearch->search($params,$pageSize);
+	    $data = $provider->getModels();
 
-		$data =Appointment::find()->where($where)->andWhere($and_where)->all();
+	    if($data){
+		    $totalPage = ceil($provider->totalCount / $pageSize);
 
-		if($data){
-			return Service::sendSucc($data);
-		}else{
-			return Service::sendError(20201,'暂无数据');
-		}
+		    if(!isset($queryParam['page']) || $queryParam['page'] <= 0){
+			    $currentPage = 1;
+		    }else{
+			    $currentPage = $queryParam['page'] >= $totalPage ? $totalPage : $queryParam['page'];
+		    }
+			$result=array();
+		    foreach($data as $item){
+		    	$app=array();
+			    $app['appointment_no'] = $item->attributes['appointment_no'];
+			    $app['clinic_uuid'] = $item->attributes['clinic_uuid'];
+
+			    $app['order_starttime'] = date('Y-m-d h:i',$item->attributes['order_starttime']);
+			    $app['patient_name'] = $item->attributes['patient_name'];
+			    $app['status'] = $item->attributes['status'];
+			    //专家信息
+			    $expert = $item->expertUu;
+			    $app['expert']['id'] = $expert->attributes['id'];
+			    $app['expert']['name'] = $expert->attributes['name'];
+			    $app['expert']['head_img'] = $expert->attributes['head_img'];
+			    $app['expert']['uuid'] = $item->attributes['expert_uuid'];
+
+			    $result[]=$app;
+		    }
+
+
+
+		    $result['extraFields']['currentPage'] = $currentPage;
+		    $result['extraFields']['totalCount'] = $provider->totalCount;
+		    $result['extraFields']['totalPage'] = $totalPage;
+		    return Service::sendSucc($result);
+	    }else{
+		    return Service::sendError(20201,'暂无数据');
+	    }
+
     }
 
     public function actionSearch(){
@@ -186,10 +217,14 @@ class OrderController extends ActiveController
 	    }
     }
 
-    public function actionUpdatepre(){
+    public function actionDetail(){
     	$get_params = Yii::$app->request->get();
 	    if(!isset($get_params['appointment_no']) ){
 		    return Service::sendError(20208,'缺少预约单号');
+	    }
+	    $op = $get_params['op'];
+	    if(!in_array($op,array('update','detail'))){
+		    return Service::sendError(20209,'参数错误');
 	    }
 	    $appointment_no= $get_params['appointment_no'];
 
@@ -204,14 +239,25 @@ class OrderController extends ActiveController
 			$result['message']='获取预约信息失败';
 		}else{
 			$result= $appointment->attributes;
-			if($result->status != 1){
+			if($result['status'] != 1 && $op=='update'){
 				return Service::sendError(20211,'目前状态不允许修改');
 			}
+			$result['order_starttime'] = date('Y-m-d h:i',$result['order_starttime']);
+			$result['order_endtime'] = date('Y-m-d h:i',$result['order_endtime']);
+			unset($result['real_starttime']);
+			unset($result['real_endtime']);
+			unset($result['real_fee']);
+			unset($result['expert_diagnosis']);
+			unset($result['pay_status']);
+			unset($result['create_at']);
+			unset($result['update_at']);
 
-			$clinic = $appointment->clinicUu;
 			$expert = $appointment->expertUu;
-			$result['clinic']=$clinic->attributes;
-			$result['expert']=$expert->attributes;
+
+			$result['expert']['id']=$expert->attributes['id'];
+			$result['expert']['name']=$expert->attributes['name'];
+			$result['expert']['head_img']=$expert->attributes['head_img'];
+			$result['expert']['user_uuid']=$expert->attributes['user_uuid'];
 		}
 	    return Service::sendSucc($result);
     }
@@ -295,31 +341,31 @@ class OrderController extends ActiveController
 	 *
 	 */
 
-    public function actionDetail(){
-
-	    $get_params = Yii::$app->request->post();
-	    $user = \yii::$app->user->identity;
-	    $uuid = $user->uuid;
-	    if(!isset($get_params['appointment_no']) ){
-		    return Service::sendError(20208,'缺少预约单号');
-	    }
-	    $appointment_no= $get_params['appointment_no'];
-
-	   // $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
-	    $appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
-
-		if(!$appointment){
-			$result['code']='20209';
-			$result['message']='获取失败';
-		}else{
-			$result= $appointment->attributes;
-			$clinic = $appointment->clinicUu;
-			$expert = $appointment->expertUu;
-			$result['clinic']=$clinic->attributes;
-			$result['expert']=$expert->attributes;
-		}
-	    return Service::sendSucc($result);
-    }
+//    public function actionDetail(){
+//
+//	    $get_params = Yii::$app->request->post();
+//	    $user = \yii::$app->user->identity;
+//	    $uuid = $user->uuid;
+//	    if(!isset($get_params['appointment_no']) ){
+//		    return Service::sendError(20208,'缺少预约单号');
+//	    }
+//	    $appointment_no= $get_params['appointment_no'];
+//
+//	   // $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
+//	    $appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
+//
+//		if(!$appointment){
+//			$result['code']='20209';
+//			$result['message']='获取失败';
+//		}else{
+//			$result= $appointment->attributes;
+//			$clinic = $appointment->clinicUu;
+//			$expert = $appointment->expertUu;
+//			$result['clinic']=$clinic->attributes;
+//			$result['expert']=$expert->attributes;
+//		}
+//	    return Service::sendSucc($result);
+//    }
 
 
     public function actionCancel(){

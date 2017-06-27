@@ -30,6 +30,7 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
         'm' => 
         array (
             'mdm\\admin\\' => 10,
+            'manks\\' => 6,
         ),
         'f' => 
         array (
@@ -107,6 +108,10 @@ class ComposerStaticInit97f60f486aee3c9bc14072d1bbd961d8
         'mdm\\admin\\' => 
         array (
             0 => __DIR__ . '/..' . '/mdmsoft/yii2-admin',
+        ),
+        'manks\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bailangzhan/yii2-webuploader',
         ),
         'filsh\\yii2\\oauth2server\\' => 
         array (

@@ -65,14 +65,38 @@ class ExpertController extends Controller
     {
         $model = new Expert();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
+        if(Yii::$app->request->post()){
+
+        }else{
+        	return $this->render('create', [
                 'model' => $model,
             ]);
         }
+
+
     }
+
+	public function actionUpload(){
+		try {
+			$model = new Upload();
+			$info = $model->upImage();
+
+
+			$info && is_array($info) ?
+				exit(Json::htmlEncode($info)) :
+				exit(Json::htmlEncode([
+					'code' => 1,
+					'msg' => 'error'
+				]));
+
+
+		} catch (\Exception $e) {
+			exit(Json::htmlEncode([
+				'code' => 1,
+				'msg' => $e->getMessage()
+			]));
+		}
+	}
 
     /**
      * Updates an existing Expert model.

@@ -46,15 +46,22 @@ class AppointmentSearch extends Appointment
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$pageSize = 10)
     {
         $query = Appointment::find();
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+	    $dataProvider = new ActiveDataProvider([
+		    'query' => $query,
+		    'pagination' => ['pageSize' => $pageSize],
+		    'sort' => [
+			    'defaultOrder' => [
+				    'order_starttime' => SORT_DESC,
+			    ],
+			    //'attributes'=>['id','title'],
+		    ],
+	    ]);
 
         $this->load($params);
 
