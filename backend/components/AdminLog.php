@@ -32,6 +32,10 @@ class AdminLog
         }
 //        $userName = Yii::$app->user->identity->username;
         $tableName = $event->sender->tableSchema->name;
+        //drug_code表的批量导入过滤掉，因为太多了。
+        if($tableName == 'drug_code' && $event->name == \yii\db\ActiveRecord::EVENT_AFTER_INSERT){
+            return;
+        }
         $description = sprintf($description, $tableName, $event->sender->primaryKey()[0], $event->sender->getPrimaryKey(), $desc);
 
         $route = Url::to();

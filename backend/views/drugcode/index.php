@@ -7,16 +7,14 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\DrugCodeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Drug Codes';
+$this->title = '药品监管码管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="drug-code-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Drug Code', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('新增药品监管码', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('导入药品监管码', ['import'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,13 +22,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'code',
-            'info:ntext',
-            'create_at',
-            'clinic_uuid',
+//            'create_at',
+            [
+                'attribute' => 'create_at',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+            ],
+//            'clinic_uuid',
+            ['attribute'=>'clinicName',
+                'label'=>'诊所名称',
+                'value'=>'clinicUu.name',
+            ],
+//            'submit_at',
+            [
+                'attribute' => 'submit_at',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+            ],
         ],
     ]); ?>
 </div>

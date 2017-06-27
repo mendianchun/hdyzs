@@ -8,13 +8,14 @@
 
 namespace common\models;
 
+use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
 /**
  * UploadForm is the model behind the upload form.
  */
-class UploadForm extends Model
+class DrugCodeUploadForm extends Model
 {
     /**
      * @var UploadedFile file attribute
@@ -27,7 +28,7 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            [['file'], 'file', 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png',],
+            [['file'], 'file', 'extensions' => 'txt', 'maxSize' => 1024*1024*Yii::$app->params['upload.maxsize'],],
         ];
     }
 }

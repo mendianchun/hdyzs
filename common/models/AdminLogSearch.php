@@ -81,6 +81,11 @@ class AdminLogSearch extends AdminLog
                 'asc'=>['adminuser.username'=>SORT_ASC],
                 'desc'=>['adminuser.username'=>SORT_DESC],
             ];
+
+        $dataProvider->sort->defaultOrder =
+            [
+                'create_at'=>SORT_DESC,
+            ];
         return $dataProvider;
     }
 }
