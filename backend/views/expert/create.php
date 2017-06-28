@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
 	    'model' => $model,
 	    'time_conf' => $time_conf,
+	    'op'=>'create',
     ]) ?>
 
 </div>
