@@ -12,14 +12,19 @@ use common\models\DrugCode;
  */
 class DrugCodeSearch extends DrugCode
 {
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['clinicName']);
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'create_at'], 'integer'],
-            [['code', 'info', 'clinic_uuid'], 'safe'],
+            [['id', 'create_at', 'submit_at'], 'integer'],
+            [['code', 'info', 'clinic_uuid', 'clinicName'], 'safe'],
         ];
     }
 
@@ -61,11 +66,21 @@ class DrugCodeSearch extends DrugCode
         $query->andFilterWhere([
             'id' => $this->id,
             'create_at' => $this->create_at,
+            'submit_at' => $this->submit_at,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
+        $query->andFilterWhere(['=', 'code', $this->code])
             ->andFilterWhere(['like', 'info', $this->info])
             ->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid]);
+
+        $query->join('LEFT JOIN','clinic','drug_code.clinic_uuid = clinic.user_uuid');
+        $query->andFilterWhere(['like','clinic.name',$this->clinicName]);
+
+        $dataProvider->sort->attributes['clinicName'] =
+            [
+                'asc'=>['clinic.name'=>SORT_ASC],
+                'desc'=>['clinic.name'=>SORT_DESC],
+            ];
 
         return $dataProvider;
     }

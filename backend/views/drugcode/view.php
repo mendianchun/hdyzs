@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'info:ntext',
             'create_at',
             'clinic_uuid',
+            'submit_at',
         ],
     ]) ?>
 
