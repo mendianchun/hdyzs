@@ -32,6 +32,7 @@ class Clinic extends \yii\db\ActiveRecord
     const STATUS_WAITING = 1;
     const STATUS_SUCC = 2;
     const STATUS_FAILED = 3;
+
     /**
      * @inheritdoc
      */
@@ -117,17 +118,40 @@ class Clinic extends \yii\db\ActiveRecord
 
     public static function allStatus()
     {
-        return [self::STATUS_WAITING=>'待审核',self::STATUS_SUCC=>'审核通过',self::STATUS_FAILED=>'审核不通过'];
+        return [self::STATUS_WAITING => '待审核', self::STATUS_SUCC => '审核通过', self::STATUS_FAILED => '审核不通过'];
     }
 
-    public  function getStatusStr()
+    public function getStatusStr()
     {
-        if($this->verify_status==self::STATUS_WAITING){
+        if ($this->verify_status == self::STATUS_WAITING) {
             return '待审核';
-        }else if($this->verify_status==self::STATUS_SUCC){
+        } else if ($this->verify_status == self::STATUS_SUCC) {
             return '审核通过';
-        }else{
+        } else {
             return '审核不通过';
         }
+    }
+
+    public function updateScore($score, $reason = '')
+    {
+        if (empty($score))
+            return false;
+
+        $score = intval($score);
+
+        $oldScore = $this->score;
+        //更新积分
+        Yii::$app->db->createCommand()->update('clinic', ['score' => new \yii\db\Expression("`score` + " . $score)], 'user_uuid = "' . $this->user_uuid . '"')->execute();
+
+        //记录积分日志
+        $scoreLog = new ScoreLog();
+        $scoreLog->clinic_uuid = $this->user_uuid;
+        $scoreLog->old_score = $oldScore;
+        $scoreLog->add_score = $score;
+        $scoreLog->new_score = $oldScore + $score;
+        $scoreLog->reason = $reason;
+        $scoreLog->save();
+
+        return true;
     }
 }

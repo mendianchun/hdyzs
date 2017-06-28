@@ -4,19 +4,16 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\DrugCodeSearch */
+/* @var $searchModel common\models\DrugCodeClinicSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '药品监管码管理';
+$this->title = '诊所提交的监管码';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="drug-code-index">
+<div class="drug-code-clinic-index">
 
-    <p>
-        <?= Html::a('新增药品监管码', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('导入药品监管码', ['import'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('诊所提交的监管码', ['drugcodeclinic/index'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?= Html::a('返回', ['drugcode/index'], ['class' => 'btn btn-success']) ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,15 +22,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'code',
-//            'create_at',
+            //            'clinic_uuid',
+            ['attribute'=>'clinicName',
+                'label'=>'诊所名称',
+                'value'=>'clinicUu.name',
+            ],
             [
                 'attribute' => 'create_at',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
             ],
 
-            ['class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-            ],
+//            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

@@ -9,12 +9,9 @@ use Yii;
  *
  * @property integer $id
  * @property string $code
- * @property string $info
  * @property integer $create_at
- * @property string $clinic_uuid
- * @property integer $submit_at
  *
- * @property Clinic $clinicUu
+ * @property DrugCodeClinic $drugCodeClinic
  */
 class DrugCode extends \yii\db\ActiveRecord
 {
@@ -33,11 +30,8 @@ class DrugCode extends \yii\db\ActiveRecord
     {
         return [
             [['code'], 'required'],
-            [['info'], 'string'],
-            [['create_at', 'submit_at'], 'integer'],
-            [['code'], 'string', 'max' => 50],
-            [['clinic_uuid'], 'string', 'max' => 36],
-            [['clinic_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_uuid' => 'user_uuid']],
+            [['create_at'], 'integer'],
+            [['code'], 'string', 'max' => 20],
         ];
     }
 
@@ -48,20 +42,17 @@ class DrugCode extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => '药品监管码',
-            'info' => '相信信息',
-            'create_at' => '导入时间',
-            'clinic_uuid' => '诊所uuid',
-            'submit_at' => '诊所提交时间',
+            'code' => 'Code',
+            'create_at' => 'Create At',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getClinicUu()
+    public function getDrugCodeClinic()
     {
-        return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
+        return $this->hasOne(DrugCodeClinic::className(), ['code' => 'code']);
     }
 
     public function beforeSave($insert)

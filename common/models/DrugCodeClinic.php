@@ -5,26 +5,24 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "score_log".
+ * This is the model class for table "drug_code_clinic".
  *
  * @property integer $id
+ * @property string $code
  * @property string $clinic_uuid
- * @property integer $old_score
- * @property integer $add_score
- * @property integer $new_score
- * @property string $reason
- * @property integer $created_at
+ * @property integer $create_at
  *
+ * @property DrugCode $code0
  * @property Clinic $clinicUu
  */
-class ScoreLog extends \yii\db\ActiveRecord
+class DrugCodeClinic extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'score_log';
+        return 'drug_code_clinic';
     }
 
     /**
@@ -33,10 +31,12 @@ class ScoreLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clinic_uuid', 'old_score', 'add_score', 'new_score', 'reason'], 'required'],
-            [['old_score', 'add_score', 'new_score', 'created_at'], 'integer'],
-            [['reason'], 'string'],
+            [['code', 'clinic_uuid'], 'required'],
+            [['create_at'], 'integer'],
+            [['code'], 'string', 'max' => 20],
             [['clinic_uuid'], 'string', 'max' => 36],
+            [['code'], 'unique'],
+            [['code'], 'exist', 'skipOnError' => true, 'targetClass' => DrugCode::className(), 'targetAttribute' => ['code' => 'code']],
             [['clinic_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_uuid' => 'user_uuid']],
         ];
     }
@@ -48,13 +48,18 @@ class ScoreLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'code' => '药品监管码',
             'clinic_uuid' => '诊所uuid',
-            'old_score' => '原积分',
-            'add_score' => '新增积分',
-            'new_score' => '新积分',
-            'reason' => '增减原因',
-            'created_at' => '发生时间',
+            'create_at' => '提交时间',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCode0()
+    {
+        return $this->hasOne(DrugCode::className(), ['code' => 'code']);
     }
 
     /**
@@ -68,7 +73,7 @@ class ScoreLog extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $this->created_at = time();
+            $this->create_at = time();
             return true;
         } else {
             return false;

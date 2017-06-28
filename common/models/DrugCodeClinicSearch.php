@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\ScoreLog;
+use common\models\DrugCodeClinic;
 
 /**
- * ScoreLogSearch represents the model behind the search form about `common\models\ScoreLog`.
+ * DrugCodeClinicSearch represents the model behind the search form about `common\models\DrugCodeClinic`.
  */
-class ScoreLogSearch extends ScoreLog
+class DrugCodeClinicSearch extends DrugCodeClinic
 {
     public function attributes()
     {
@@ -23,8 +23,8 @@ class ScoreLogSearch extends ScoreLog
     public function rules()
     {
         return [
-            [['id', 'old_score', 'add_score', 'new_score', 'created_at'], 'integer'],
-            [['clinic_uuid', 'reason', 'clinicName'], 'safe'],
+            [['id', 'create_at'], 'integer'],
+            [['code', 'clinic_uuid', 'clinicName'], 'safe'],
         ];
     }
 
@@ -46,7 +46,7 @@ class ScoreLogSearch extends ScoreLog
      */
     public function search($params)
     {
-        $query = ScoreLog::find();
+        $query = DrugCodeClinic::find();
 
         // add conditions that should always apply here
 
@@ -65,16 +65,12 @@ class ScoreLogSearch extends ScoreLog
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'old_score' => $this->old_score,
-            'add_score' => $this->add_score,
-            'new_score' => $this->new_score,
-            'created_at' => $this->created_at,
+            'create_at' => $this->create_at,
         ]);
 
-        $query->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid])
-            ->andFilterWhere(['like', 'reason', $this->reason]);
+        $query->andFilterWhere(['=', 'code', $this->code]);
 
-        $query->join('INNER JOIN', 'clinic', 'score_log.clinic_uuid = clinic.user_uuid');
+        $query->join('LEFT JOIN', 'clinic', 'drug_code_clinic.clinic_uuid = clinic.user_uuid');
         $query->andFilterWhere(['like', 'clinic.name', $this->clinicName]);
 
         $dataProvider->sort->attributes['clinicName'] =

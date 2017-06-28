@@ -59,10 +59,20 @@ class UserController extends ActiveController
     }
 
 
-    public function actionTest()
+    public function actionTest($score)
     {
+        //当前用户
+        $user = \yii::$app->user->identity;
+
+        $clinic = $user->clinicUu;
+        $old_score = $clinic->score;
+
+        $clinic->updateScore($score);
+
+        $data = ['old_score' => $old_score,'add_score'=>$score];
+
 //        $data = array('123');
-        return Service::sendSucc('234');
+        return Service::sendSucc($data);
         return Service::sendError('20302','data error');
     }
 
