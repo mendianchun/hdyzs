@@ -12,7 +12,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+	<?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+	<?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
+	<?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+	<?= $form->field($model, 'password_repeat')->passwordInput(['maxlength' => true]) ?>
 
 	<?= $form->field($model, 'head_img')->widget('manks\FileInput', [])?>
 

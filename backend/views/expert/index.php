@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'head_img',
-            'free_time:ntext',
+          //  'free_time:ntext',
             'fee_per_times:datetime',
             // 'fee_per_hour',
             // 'skill',

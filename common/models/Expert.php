@@ -55,7 +55,10 @@ class Expert extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+	        'name' => 'Name',
+//	        'loginname' => 'LoginName',
+//	        'pwd' => 'pwd',
+//	        'pwd_repeat' => 'pwd_repeat',
             'head_img' => 'Head Img',
             'free_time' => 'Free Time',
             'fee_per_times' => 'Fee Per Times',
