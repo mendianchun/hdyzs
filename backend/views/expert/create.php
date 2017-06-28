@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="expert-create">
     <?= $this->render('_form', [
-        'model' => $model,
+	    'model' => $model,
+	    'time_conf' => $time_conf,
     ]) ?>
 
 </div>

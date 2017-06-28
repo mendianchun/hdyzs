@@ -22,7 +22,9 @@ use yii\widgets\ActiveForm;
 
 
 
-    <?= $form->field($model, 'free_time')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model,'free_time')->checkboxList($time_conf)?>
+
+
 
     <?= $form->field($model, 'fee_per_times')->textInput() ?>
 
