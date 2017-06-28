@@ -81,8 +81,8 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'pay_status',
             // 'is_sms_notify',
             // 'fee_type',
-            // 'create_at',
-            // 'update_at',
+            // 'created_at',
+            // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {approve} {pay}',

@@ -204,8 +204,8 @@ class OrderController extends ActiveController
 	    }
 
 	    $appointment->fee_type=$order_post['fee_type'];
-	    $appointment->create_at=time();
-	    $appointment->update_at=time();
+	    $appointment->created_at=time();
+	    $appointment->updated_at=time();
 
 	    if($appointment->save()>0){
 
@@ -249,8 +249,8 @@ class OrderController extends ActiveController
 			unset($result['real_fee']);
 			unset($result['expert_diagnosis']);
 			unset($result['pay_status']);
-			unset($result['create_at']);
-			unset($result['update_at']);
+			unset($result['created_at']);
+			unset($result['updated_at']);
 
 			$expert = $appointment->expertUu;
 
@@ -318,7 +318,7 @@ class OrderController extends ActiveController
 	    }
 	    $appointment_new['fee_type']=$order_post['fee_type'];
 
-	    $appointment_new['update_at']=time();
+	    $appointment_new['updated_at']=time();
 
 	    $op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no]);
 
@@ -398,7 +398,7 @@ class OrderController extends ActiveController
 
 	    $appointment_new['status']=3;
 
-	    $appointment_new['update_at']=time();
+	    $appointment_new['updated_at']=time();
 
 	    $op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 

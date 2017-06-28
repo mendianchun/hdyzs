@@ -11,7 +11,7 @@ use Yii;
  * @property integer $appointment_no
  * @property string $type
  * @property integer $pay_time
- * @property integer $create_at
+ * @property integer $created_at
  * @property integer $status
  *
  * @property Appointment $appointmentNo
@@ -32,8 +32,8 @@ class Pay extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pay_no', 'appointment_no', 'type', 'pay_time', 'create_at'], 'required'],
-            [['pay_no', 'appointment_no', 'pay_time', 'create_at', 'status'], 'integer'],
+            [['pay_no', 'appointment_no', 'type', 'pay_time', 'created_at'], 'required'],
+            [['pay_no', 'appointment_no', 'pay_time', 'created_at', 'status'], 'integer'],
             [['type'], 'string', 'max' => 10],
             [['appointment_no'], 'exist', 'skipOnError' => true, 'targetClass' => Appointment::className(), 'targetAttribute' => ['appointment_no' => 'appointment_no']],
         ];
@@ -49,7 +49,7 @@ class Pay extends \yii\db\ActiveRecord
             'appointment_no' => 'Appointment No',
             'type' => 'Type',
             'pay_time' => 'Pay Time',
-            'create_at' => 'Create At',
+            'created_at' => 'Create At',
             'status' => 'Status',
         ];
     }

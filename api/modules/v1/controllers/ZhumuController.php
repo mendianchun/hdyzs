@@ -61,7 +61,7 @@ class ZhumuController extends ActiveController
         $zhumu = Zhumu::find()->where(['>=', 'id', $randId])->andWhere(['status' => Zhumu::STATUS_ACTIVE])->one();
         $zhumuArray = $zhumu->attributes;
 
-        unset($zhumuArray['id'], $zhumuArray['status'], $zhumuArray['create_at'], $zhumuArray['update_at']);
+        unset($zhumuArray['id'], $zhumuArray['status'], $zhumuArray['created_at'], $zhumuArray['updated_at']);
         $zhumuArray['app_key'] = $app_key;
         $zhumuArray['app_secret'] = $app_secret;
         return Service::sendSucc($zhumuArray);
@@ -113,7 +113,7 @@ class ZhumuController extends ActiveController
             $appointmentVideo->appointment_no = $post['appointment_no'];
             $appointmentVideo->zhumu_uuid = $post['uuid'];
             $appointmentVideo->meeting_number = $post['meeting_number'];
-//            $appointmentVideo->create_at = time();
+//            $appointmentVideo->created_at = time();
             if (!$appointmentVideo->save()) {
                 return Service::sendError(20404, '处理失败');
             }
@@ -131,7 +131,7 @@ class ZhumuController extends ActiveController
         $appointmentVideo = AppointmentVideo::findOne(['appointment_no' => $appointment_no]);
         if (!empty($appointmentVideo)) {
             $retData = $appointmentVideo->attributes;
-            unset($retData['id'], $retData['status'], $retData['audio_url'], $retData['create_at'], $retData['zhumu_uuid']);
+            unset($retData['id'], $retData['status'], $retData['audio_url'], $retData['created_at'], $retData['zhumu_uuid']);
 
             $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
             if (isset($systemConfig)) {

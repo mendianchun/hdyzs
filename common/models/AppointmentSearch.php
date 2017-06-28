@@ -25,7 +25,7 @@ class AppointmentSearch extends Appointment
     public function rules()
     {
         return [
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
             [['clinic_uuid', 'expert_uuid', 'patient_name', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis', 'clinicName', 'expertName','start_time','end_time'], 'safe'],
         ];
     }
@@ -86,8 +86,8 @@ class AppointmentSearch extends Appointment
             'pay_status' => $this->pay_status,
             'is_sms_notify' => $this->is_sms_notify,
             'fee_type' => $this->fee_type,
-            'create_at' => $this->create_at,
-            'update_at' => $this->update_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid])

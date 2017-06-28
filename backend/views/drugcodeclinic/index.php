@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'clinicUu.name',
             ],
             [
-                'attribute' => 'create_at',
+                'attribute' => 'created_at',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
             ],
 

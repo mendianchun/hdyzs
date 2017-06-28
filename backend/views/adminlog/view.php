@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
 //            'route',
 //            'description:ntext',
-//            'create_at',
+//            'created_at',
 //            'user_id',
 //            'ip',
 
@@ -31,9 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'route',
             'description:ntext',
 
-//            'create_at',
+//            'created_at',
             [
-                'attribute' => 'create_at',
+                'attribute' => 'created_at',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
             ],
 

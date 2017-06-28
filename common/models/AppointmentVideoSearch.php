@@ -18,7 +18,7 @@ class AppointmentVideoSearch extends AppointmentVideo
     public function rules()
     {
         return [
-            [['id', 'appointment_no', 'meeting_number', 'status', 'create_at'], 'integer'],
+            [['id', 'appointment_no', 'meeting_number', 'status', 'created_at'], 'integer'],
             [['zhumu_uuid', 'audio_url'], 'safe'],
         ];
     }
@@ -63,7 +63,7 @@ class AppointmentVideoSearch extends AppointmentVideo
             'appointment_no' => $this->appointment_no,
             'meeting_number' => $this->meeting_number,
             'status' => $this->status,
-            'create_at' => $this->create_at,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'zhumu_uuid', $this->zhumu_uuid])

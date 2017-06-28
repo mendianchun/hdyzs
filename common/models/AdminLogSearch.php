@@ -23,7 +23,7 @@ class AdminLogSearch extends AdminLog
     public function rules()
     {
         return [
-            [['id', 'create_at', 'user_id', 'ip'], 'integer'],
+            [['id', 'created_at', 'user_id', 'ip'], 'integer'],
             [['route', 'description', 'username'], 'safe'],
         ];
     }
@@ -65,7 +65,7 @@ class AdminLogSearch extends AdminLog
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'create_at' => $this->create_at,
+            'created_at' => $this->created_at,
             'user_id' => $this->user_id,
             'ip' => $this->ip,
         ]);
@@ -84,7 +84,7 @@ class AdminLogSearch extends AdminLog
 
         $dataProvider->sort->defaultOrder =
             [
-                'create_at'=>SORT_DESC,
+                'created_at'=>SORT_DESC,
             ];
         return $dataProvider;
     }

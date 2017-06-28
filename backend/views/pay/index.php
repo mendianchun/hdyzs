@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'appointment_no',
             'type',
             'time:datetime',
-            'create_at',
+            'created_at',
             // 'status',
 
             ['class' => 'yii\grid\ActionColumn'],

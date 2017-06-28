@@ -55,9 +55,9 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'fee_type') ?>
 
-    <?php // echo $form->field($model, 'create_at') ?>
+    <?php // echo $form->field($model, 'created_at') ?>
 
-    <?php // echo $form->field($model, 'update_at') ?>
+    <?php // echo $form->field($model, 'updated_at') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

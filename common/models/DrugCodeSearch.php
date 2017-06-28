@@ -18,7 +18,7 @@ class DrugCodeSearch extends DrugCode
     public function rules()
     {
         return [
-            [['id', 'create_at'], 'integer'],
+            [['id', 'created_at'], 'integer'],
             [['code'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class DrugCodeSearch extends DrugCode
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'create_at' => $this->create_at,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['=', 'code', $this->code]);

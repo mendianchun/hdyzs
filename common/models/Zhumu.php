@@ -12,8 +12,8 @@ use Yii;
  * @property string $username
  * @property string $password
  * @property integer $status
- * @property integer $create_at
- * @property integer $update_at
+ * @property integer $created_at
+ * @property integer $updated_at
  *
  * @property AppointmentVideo[] $appointmentVideos
  */
@@ -38,7 +38,7 @@ class Zhumu extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'password'], 'required'],
-            [['status', 'create_at', 'update_at'], 'integer'],
+            [['status', 'created_at', 'updated_at'], 'integer'],
             [['uuid'], 'string', 'max' => 36],
             [['username', 'password'], 'string', 'max' => 100],
             [['uuid'], 'unique'],
@@ -57,8 +57,8 @@ class Zhumu extends \yii\db\ActiveRecord
             'username' => '用户名',
             'password' => '密码',
             'status' => '状态',
-            'create_at' => '创建时间',
-            'update_at' => '更新时间',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 
@@ -74,10 +74,10 @@ class Zhumu extends \yii\db\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                $this->create_at = time();
-                $this->update_at = time();
+                $this->created_at = time();
+                $this->updated_at = time();
             } else {
-                $this->update_at = time();
+                $this->updated_at = time();
             }
             return true;
         } else {

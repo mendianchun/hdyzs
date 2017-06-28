@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $code
- * @property integer $create_at
+ * @property integer $created_at
  *
  * @property DrugCodeClinic $drugCodeClinic
  */
@@ -30,7 +30,7 @@ class DrugCode extends \yii\db\ActiveRecord
     {
         return [
             [['code'], 'required'],
-            [['create_at'], 'integer'],
+            [['created_at'], 'integer'],
             [['code'], 'string', 'max' => 20],
         ];
     }
@@ -43,7 +43,7 @@ class DrugCode extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'code' => 'Code',
-            'create_at' => 'Create At',
+            'created_at' => 'Create At',
         ];
     }
 
@@ -58,7 +58,7 @@ class DrugCode extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $this->create_at = time();
+            $this->created_at = time();
             return true;
         } else {
             return false;

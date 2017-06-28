@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'meeting_number',
             'audio_url:url',
             'status',
-            'create_at',
+            'created_at',
         ],
     ]) ?>
 

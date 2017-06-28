@@ -166,7 +166,7 @@ class DrugcodeController extends Controller
                 $tableName = DrugCode::tableName();
 
                 //要插入的字段
-                $field = ['code','create_at'];
+                $field = ['code','created_at'];
 
                 //插入的时间
                 $now = time();

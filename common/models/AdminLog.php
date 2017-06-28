@@ -10,7 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $route
  * @property string $description
- * @property integer $create_at
+ * @property integer $created_at
  * @property integer $user_id
  * @property integer $ip
  */
@@ -31,8 +31,8 @@ class AdminLog extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['create_at', 'user_id', 'ip'], 'required'],
-            [['create_at', 'user_id', 'ip'], 'integer'],
+            [['created_at', 'user_id', 'ip'], 'required'],
+            [['created_at', 'user_id', 'ip'], 'integer'],
             [['route'], 'string', 'max' => 255],
         ];
     }
@@ -46,7 +46,7 @@ class AdminLog extends \yii\db\ActiveRecord
             'id' => 'ID',
             'route' => '路由',
             'description' => '操作',
-            'create_at' => '时间',
+            'created_at' => '时间',
             'user_id' => '用户ID',
             'ip' => 'IP',
         ];

@@ -13,7 +13,7 @@ use Yii;
  * @property integer $meeting_number
  * @property string $audio_url
  * @property integer $status
- * @property integer $create_at
+ * @property integer $created_at
  *
  * @property Appointment $appointmentNo
  * @property Zhumu $zhumuUu
@@ -40,8 +40,8 @@ class AppointmentVideo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appointment_no', 'zhumu_uuid', 'create_at'], 'required'],
-            [['appointment_no', 'meeting_number', 'status', 'create_at'], 'integer'],
+            [['appointment_no', 'zhumu_uuid', 'created_at'], 'required'],
+            [['appointment_no', 'meeting_number', 'status', 'created_at'], 'integer'],
             [['zhumu_uuid'], 'string', 'max' => 36],
             [['audio_url'], 'string', 'max' => 100],
             [['appointment_no'], 'exist', 'skipOnError' => true, 'targetClass' => Appointment::className(), 'targetAttribute' => ['appointment_no' => 'appointment_no']],
@@ -61,7 +61,7 @@ class AppointmentVideo extends \yii\db\ActiveRecord
             'meeting_number' => 'Meeting Number',
             'audio_url' => 'Audio Url',
             'status' => 'Status',
-            'create_at' => 'Create At',
+            'created_at' => 'Create At',
         ];
     }
 
@@ -85,7 +85,7 @@ class AppointmentVideo extends \yii\db\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                $this->create_at = time();
+                $this->created_at = time();
             } else {
             }
             return true;

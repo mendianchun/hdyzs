@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'create_at')->textInput() ?>
+    <?= $form->field($model, 'created_at')->textInput() ?>
 
     <?= $form->field($model, 'user_id')->textInput() ?>
 

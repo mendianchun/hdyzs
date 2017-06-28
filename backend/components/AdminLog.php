@@ -45,7 +45,7 @@ class AdminLog
             'route' => $route,
             'description' => $description,
             'user_id' => $userId,
-            'create_at' => time(),
+            'created_at' => time(),
             'ip' => $ip
         ];
         $model = new \common\models\AdminLog();

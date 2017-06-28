@@ -70,14 +70,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=>'fee_type',
                 'value'=>$model->FeeTypeStatusStr,
             ],
-//            'create_at',
+//            'created_at',
             [
-                'attribute'=>'create_at',
+                'attribute'=>'created_at',
                 'format'=>['date','php:Y-m-d H:i:s']
             ],
-//            'update_at',
+//            'updated_at',
             [
-                'attribute'=>'update_at',
+                'attribute'=>'updated_at',
                 'format'=>['date','php:Y-m-d H:i:s']
             ],
         ],

@@ -18,7 +18,7 @@ class ZhumuSearch extends Zhumu
     public function rules()
     {
         return [
-            [['id', 'status', 'create_at', 'update_at'], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['uuid', 'username', 'password'], 'safe'],
         ];
     }
@@ -61,8 +61,8 @@ class ZhumuSearch extends Zhumu
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
-            'create_at' => $this->create_at,
-            'update_at' => $this->update_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'uuid', $this->uuid])

@@ -18,7 +18,7 @@ class PaySearch extends Pay
     public function rules()
     {
         return [
-            [['pay_no', 'appointment_no', 'time', 'create_at', 'status'], 'integer'],
+            [['pay_no', 'appointment_no', 'time', 'created_at', 'status'], 'integer'],
             [['type'], 'safe'],
         ];
     }
@@ -62,7 +62,7 @@ class PaySearch extends Pay
             'pay_no' => $this->pay_no,
             'appointment_no' => $this->appointment_no,
             'time' => $this->time,
-            'create_at' => $this->create_at,
+            'created_at' => $this->created_at,
             'status' => $this->status,
         ]);
 

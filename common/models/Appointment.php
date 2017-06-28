@@ -27,8 +27,8 @@ use Yii;
  * @property integer $pay_status
  * @property integer $is_sms_notify
  * @property integer $fee_type
- * @property integer $create_at
- * @property integer $update_at
+ * @property integer $created_at
+ * @property integer $updated_at
  *
  * @property Clinic $clinicUu
  * @property Expert $expertUu
@@ -68,8 +68,8 @@ class Appointment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_age', 'patient_description', 'create_at', 'update_at'], 'required'],
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'create_at', 'update_at'], 'integer'],
+            [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_age', 'patient_description', 'created_at', 'updated_at'], 'required'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
             [['patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
             [['patient_name'], 'string', 'max' => 10],
@@ -106,8 +106,8 @@ class Appointment extends \yii\db\ActiveRecord
             'pay_status' => '支付状态',
             'is_sms_notify' => '是否短信通知患者',
             'fee_type' => '付费类型',
-            'create_at' => '创建时间',
-            'update_at' => '更新时间',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

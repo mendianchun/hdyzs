@@ -17,7 +17,7 @@ class Appointment extends \common\models\Appointment
 		$fields = parent::fields();
 
 		// 去掉一些包含敏感信息的字段
-		unset($fields['patient_mobile'], $fields['patient_idcard'], $fields['create_at']);
+		unset($fields['patient_mobile'], $fields['patient_idcard'], $fields['created_at']);
 
 		return $fields;
 	}
