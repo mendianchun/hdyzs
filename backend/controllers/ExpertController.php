@@ -3,11 +3,18 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Expert;
+use backend\models\Expert;
 use common\models\ExpertSearch;
+use common\models\User;
+use common\components\Upload;
+
+use backend\models\UploadForm;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\service\Service;
+use yii\helpers\Json;
 
 /**
  * ExpertController implements the CRUD actions for Expert model.
@@ -63,15 +70,50 @@ class ExpertController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Expert();
+        $expert= new Expert();
 
-        if(Yii::$app->request->post()){
+	    if (Yii::$app->request->post()) {
+	    	$post = Yii::$app->request->post();
 
-        }else{
-        	return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+	    	//增加用户
+		    $user = new User();
+		    $user->username = $post['Expert']['username'];
+		    $user->mobile = $post['Expert']['mobile'];
+		    $user->setPassword($post['Expert']['password']);
+		    $user->generateAuthKey();
+
+		    $uuid = Service::create_uuid();
+
+		    $user->uuid = $uuid;
+		    if($user->save()){
+				//增加专家
+			    $expert->name =$post['Expert']['name'];
+			    $expert->head_img =$post['Expert']['head_img'];
+			    $expert->free_time =$post['Expert']['free_time'];
+			    $expert->fee_per_times =$post['Expert']['fee_per_times'];
+			    $expert->fee_per_hour =$post['Expert']['fee_per_hour'];
+			    $expert->skill =$post['Expert']['skill'];
+			    $expert->introduction =$post['Expert']['introduction'];
+			    $expert->user_uuid =$uuid;
+			    if($expert->save()>0){
+				    return $this->redirect(['view', 'id' => $expert->id]);
+			    }
+
+		    }else{
+			    return $this->render('create', [
+				    'model' => $expert,
+			    ]);
+		    }
+
+
+
+	    } else {
+		    return $this->render('create', [
+			    'model' => $expert,
+		    ]);
+	    }
+
+
 
 
     }
