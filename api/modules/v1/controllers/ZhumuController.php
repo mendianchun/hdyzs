@@ -24,7 +24,6 @@ class ZhumuController extends ActiveController
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
                 'optional' => [
-                    'getmp3',
                 ],
             ]
         ]);
@@ -253,25 +252,38 @@ class ZhumuController extends ActiveController
     /*
     * 接口6:访问mp3资源
     */
-    public function actionGetmp3($appointment_no, $meeting_number)
+    public function actionGetmp3($appointment_no)
     {
-        $file = "/Users/damen/work/code/hdykt/zhumu/170614173547021730/1234/20170623144751.mp3";
+        //当前用户
+        $user = \yii::$app->user->identity;
 
-//        $file = "D:\\WNMP\\Nginx\\html\\hdyzs\\zhumu\\2.mp3";
-
-        //首先要判断给定的文件存在与否
-        if (!file_exists($file)) {
-            echo "没有该文件文件";
-            return;
+        if (empty($appointment_no)) {
+            echo "预约单号为空";
+            exit;
         }
 
+        $appointment = Appointment::findOne(['appointment_no' => $appointment_no, 'clinic_uuid' => $user->uuid]);
+        if (!$appointment) {
+            echo "没有此预约单";
+            exit;
+        }
+
+        if (!$appointment->audio_url || !is_file($appointment->audio_url)) {
+            echo "还未生成音频";
+            exit;
+        }
+
+        $file = $appointment->audio_url;
         $file_size = filesize($file);
         $ranges = $this->getRange($file_size);
 
         $fp = fopen($file, "rb");
 
         if ($ranges != null) {
-//            header('HTTP/1.1 206 Partial Content');
+            if ($ranges['start'] > 0 || $ranges['end'] < $file_size) {
+                header('HTTP/1.1 206 Partial Content');
+            }
+
             header("Accept-Ranges: bytes");
             header("Content-Type: audio/mpeg");
             // 剩余长度
@@ -289,64 +301,18 @@ class ZhumuController extends ActiveController
             header("Content-Length: " . $file_size);
         }
 
-
-
         $buffer = 1024;
         $file_count = 0;
-        $fpw = fopen('echo.mp3.log','w');
+//        $fpw = fopen('echo.mp3.log','w');
         //向浏览器返回数据
         while (!feof($fp) && $file_count < $file_size) {
             $file_con = fread($fp, $buffer);
             $file_count += $buffer;
-            fwrite($fpw,ftell($fp)."|".$buffer."|".$file_count."|".$file_size."\n");
+//            fwrite($fpw,ftell($fp)."|".$buffer."|".$file_count."|".$file_size."\n");
             echo $file_con;
         }
         fclose($fp);
         exit;
-
-
-// 获得文件大小, 防止超过2G的文件, 用sprintf来读
-//print "文件地址:".$url."<br>";
-//print "文件大小:".filesize ($url)."<br>";
-        $filesize = sprintf("%u", filesize($file));
-//        echo $filesize;exit;
-//print $filesize;
-        if (!$filesize) {
-            print "找不到文件！";
-            return;
-        }
-//            header ( "Content-type:application/octet-stream\n" ); //application/octet-stream
-
-        if ($range = getenv('HTTP_RANGE')) { // 当有偏移量的时候，采用206的断点续传头
-            $range = explode('=', $range);
-            $range = $range [1];
-            $range = explode('-', $range);
-            $range = $range[0];
-            echo $range;
-            exit;
-//                echo $range;exit;
-            header("HTTP/1.1 206 Partial Content");
-            header("Date: " . gmdate("D, d M Y H:i:s") . " GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s", filemtime($file)) . " GMT");
-            header("Accept-Ranges: bytes");
-            header("Content-Length:" . ($filesize - $range));
-            header("Content-Range: bytes " . $range . ($filesize - 1) . "/" . $filesize);
-            header("Connection: close" . "\n\n");
-        } else {
-            header("Content-type:audio/mpeg;");
-//            header ( "Content-disposition: attachment; filename= \"1.mp3\"" );
-            header('Content-transfer-encoding: binary');
-            header("Content-Length:" . $filesize . "\n\n");
-            $range = 0;
-        }
-        ob_start();
-        $fp = fopen($file, 'r'); //文件
-        while (!feof($fp)) {
-            echo stream_get_line($fp, 65535, "\n");
-        }
-        ob_end_flush();
-        exit;
-
     }
 
     /** 获取header range信息
@@ -372,40 +338,5 @@ class ZhumuController extends ActiveController
             return $range;
         }
         return null;
-    }
-
-
-    private function loadFile($filename, $retbytes = true)
-    {
-        echo $filename;
-        exit;
-//            $buffer = '';
-//            $cnt = 0;
-//            $handle = fopen ( $filename, 'rb' );
-//            if ($handle === false) {
-//                return false;
-//            }
-////            ob_start();
-//            while ( ! feof ( $handle ) ) {
-//                $buffer = fread ( $handle, 1024 * 1024 );
-//                echo $buffer;
-////                ob_flush ();
-////                flush ();
-//                if ($retbytes) {
-//                    $cnt += strlen ( $buffer );
-//                }
-//            }
-//            $status = fclose ( $handle );
-//            if ($retbytes && $status) {
-//                return $cnt; // return num. bytes delivered like readfile() does.
-//            }
-//            return $status;
-
-        ob_start();
-        $fp = fopen($filename, 'r'); //文件
-        while (!feof($fp)) {
-            echo stream_get_line($fp, 65535, "\n");
-        }
-        ob_end_flush();
     }
 }  
