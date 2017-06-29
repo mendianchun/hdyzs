@@ -27,13 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'head_img',
+            array(
+	            'label' => '照片',
+	            'value' =>$model->head_img,
+	            'format' => ['image',['width'=>'30','height'=>'30',]],
+            ),
+            //'head_img',
             'free_time:ntext',
-            'fee_per_times:datetime',
+            'fee_per_times',
             'fee_per_hour',
             'skill',
             'introduction:ntext',
-            'user_uuid',
+           // 'user_uuid',
         ],
     ]) ?>
 
