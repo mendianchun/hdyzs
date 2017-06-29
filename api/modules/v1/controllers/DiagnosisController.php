@@ -138,7 +138,7 @@ class DiagnosisController extends ActiveController
 			$result=array();
 			$data= $appointment->attributes;
 			$expert = $appointment->expertUu;
-			$zhumu = $appointment->appointmentVideos;
+//			$zhumu = $appointment->appointmentVideos;
 
 			$result['appointment_no']=$data['appointment_no'];
 
@@ -156,13 +156,19 @@ class DiagnosisController extends ActiveController
 
 			$result['expert_diagnosis']=$data['expert_diagnosis'];
 
+			if(!empty($data['audio_url'])){
+				$result['audio_url'] = \Yii::$app->urlManager->createAbsoluteUrl(['v1/zhumu/getmp3','appointment_no'=>$appointment_no]);
+			}else{
+				$result['audio_url'] = '';
+			}
+
 
 			//$data['expert']=$expert->attributes;
-			if($zhumu){
-				foreach($zhumu as $v){
-					$result['zhumu'][]=$v->attributes;
-				}
-			}
+//			if($zhumu){
+//				foreach($zhumu as $v){
+//					$result['zhumu'][]=$v->attributes;
+//				}
+//			}
 
 		}
 		return $result;
