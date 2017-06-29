@@ -6,7 +6,10 @@ use Yii;
 use backend\models\Expert;
 use common\models\ExpertSearch;
 use common\models\User;
+use common\models\ExpertTime;
+
 use common\components\Upload;
+
 
 use backend\models\UploadForm;
 use yii\web\Controller;
@@ -27,7 +30,7 @@ class ExpertController extends Controller
 								'4_1'=>'周四上午','4_2'=>'周四下午','4_3'=>'周四晚上',
 								'5_1'=>'周五上午','5_2'=>'周五下午','5_3'=>'周五晚上',
 								'6_1'=>'周六上午','6_2'=>'周六下午','6_3'=>'周六晚上',
-								'7_1'=>'周日上午','7_2'=>'周日下午','7_3'=>'周日晚上',);
+								'0_1'=>'周日上午','0_2'=>'周日下午','0_3'=>'周日晚上',);
 	public $time_range=array(1=>'8:00-12:00',2=>'14:00-17:00',3=>'19:00-21:00');
     /**
      * @inheritdoc
@@ -66,8 +69,20 @@ class ExpertController extends Controller
      */
     public function actionView($id)
     {
+    	$model = $this->findModel($id);
+
+	    $time = $this->freetime($model->free_time);
+	    $free_time_str = '';
+	    if($time){
+	    	foreach($time as $v){
+			    $free_time_str.=$this->time_conf[$v].',';
+
+		    }
+
+	    }
+		$model->free_time= rtrim($free_time_str,',');
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -79,9 +94,6 @@ class ExpertController extends Controller
     public function actionCreate()
     {
         $expert= new Expert();
-
-
-
 	    if (Yii::$app->request->post()) {
 	    	$post = Yii::$app->request->post();
 
@@ -103,7 +115,7 @@ class ExpertController extends Controller
 			    $expert->head_img =$post['Expert']['head_img'];
 
 			    $free_time = array();
-			    $time_range=array(1=>'8:00-12:00',2=>'14:00-17:00',3=>'19:00-21:00');
+			   // $time_range=array(1=>'8:00-12:00',2=>'14:00-17:00',3=>'19:00-21:00');
 			    foreach($post['Expert']['free_time'] as $v){
 				    $keys = explode('_',$v);
 				    $free_time[$keys[0]][]=$this->time_range[$keys[1]];
@@ -112,13 +124,15 @@ class ExpertController extends Controller
 			    $expert->free_time =json_encode($free_time);
 			    //$expert->free_time =serialize($free_time);
 
-
 			    $expert->fee_per_times =$post['Expert']['fee_per_times'];
 			    $expert->fee_per_hour =$post['Expert']['fee_per_hour'];
 			    $expert->skill =$post['Expert']['skill'];
 			    $expert->introduction =$post['Expert']['introduction'];
 			    $expert->user_uuid =$uuid;
 			    if($expert->save()>0){
+
+				    $this->ordertime($uuid,$free_time);
+
 				    return $this->redirect(['view', 'id' => $expert->id]);
 			    }
 
@@ -129,9 +143,6 @@ class ExpertController extends Controller
 				    'time_conf' => $this->time_conf,
 			    ]);
 		    }
-
-
-
 	    } else {
 		    //$expert->free_time=array('1_1','1_2','1_3','2_1','2_2','2_3');
 		    return $this->render('create', [
@@ -200,6 +211,9 @@ class ExpertController extends Controller
 	        $status = Expert::updateAll($model,['id'=>$id]);
 
 	        if($status){
+
+		        $this->ordertime($model->user_uuid,$free_time,'update');
+
 		        return $this->redirect(['view', 'id' => $id]);
 	        }
 
@@ -253,6 +267,65 @@ class ExpertController extends Controller
 		    }
 	    }
 	    return $result;
+    }
+
+	public function actionTest(){
+    	$s = '{"1":["08:00-11:00","13:00-16:00"],"2":["09:00-11:30","13:00-16:00","20:00-22:00"],"3":["08:00-11:00","13:00-16:00"],"4":["08:00-11:00","13:00-16:00"],"5":["08:00-11:00","13:00-16:00"],"6":["08:00-11:00","13:00-16:00"]}';
+    	$uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
+    	$res = $this->ordertime($uuid,json_decode($s,true),'update');
+//    	return $res;
+
+	}
+    private function ordertime($uuid,$times,$op='add'){
+
+		if($op !='add'){
+			$today = date('Y-m-d',time());
+			$res = ExpertTime::find()->andWhere(['expert_uuid'=>$uuid,'is_order'=>1])->andWhere(['>','date',$today])->count('id');
+
+			if($res>0){
+				return false;
+			}else{
+				ExpertTime::deleteAll(['and','expert_uuid =:uuid','`date`>:today'],[':uuid'=>$uuid,':today'=>$today]);
+
+			}
+
+		}
+		$expert_times=array();
+		for($i=1;$i<30;$i++){
+			$week = date("w",strtotime("+$i day"));
+			if(key_exists($week,$times)){
+				$cur_day = date('Y-m-d', strtotime("+$i day"));
+				$range = $times[$week];
+				foreach($range as $v){
+
+					$tmp = explode('-',$v);
+					$start = $tmp[0];
+					$end = $tmp[1];
+
+					$start_time = strtotime($cur_day.' '.$start.':00');
+					$end_time = strtotime($cur_day.' '.$end.':00');
+
+					for($start_time;$start_time<$end_time;$start_time=$start_time+1800){
+						$tmp_time=array();
+						$tmp_time['expert_uuid']=$uuid;
+						$tmp_time['date']=$cur_day;
+						$tmp_time['hour']=(int)date('H',$start_time);
+						if($start_time%3600==0){
+							$tmp_time['zone']=1;
+						}else{
+							$tmp_time['zone']=2;
+						}
+						$tmp_time['is_order']=0;
+						$expert_times[]=$tmp_time;
+					}
+
+				}
+
+			}
+
+		}
+	    $res =  Yii::$app->db->createCommand()->batchInsert(ExpertTime::tableName(),['expert_uuid','date','hour','zone','is_order'],$expert_times)->execute();
+		return $res;
 
     }
 }
