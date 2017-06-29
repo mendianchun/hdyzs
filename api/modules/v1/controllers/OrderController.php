@@ -255,6 +255,8 @@ class OrderController extends ActiveController
 			unset($result['pay_status']);
 			unset($result['created_at']);
 			unset($result['updated_at']);
+			unset($result['audio_url']);
+			unset($result['audio_created_at']);
 
 			$expert = $appointment->expertUu;
 
