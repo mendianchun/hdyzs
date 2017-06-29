@@ -24,6 +24,7 @@ use yii\helpers\Json;
  */
 class ExpertController extends Controller
 {
+	//页面时间定义
 	public $time_conf = array(  '1_1'=>'周一上午','1_2'=>'周一下午','1_3'=>'周一晚上',
 								'2_1'=>'周二上午','2_2'=>'周二下午','2_3'=>'周二晚上',
 								'3_1'=>'周三上午','3_2'=>'周三下午','3_3'=>'周三晚上',
@@ -257,6 +258,11 @@ class ExpertController extends Controller
         }
     }
 
+	/**
+	 * @param $time
+	 * @return array
+	 * 处理预约时间
+	 */
     private function freetime($time){
     	$new_time = json_decode($time);
     	$result =array();
@@ -269,13 +275,20 @@ class ExpertController extends Controller
 	    return $result;
     }
 
-	public function actionTest(){
-    	$s = '{"1":["08:00-11:00","13:00-16:00"],"2":["09:00-11:30","13:00-16:00","20:00-22:00"],"3":["08:00-11:00","13:00-16:00"],"4":["08:00-11:00","13:00-16:00"],"5":["08:00-11:00","13:00-16:00"],"6":["08:00-11:00","13:00-16:00"]}';
-    	$uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
-    	$res = $this->ordertime($uuid,json_decode($s,true),'update');
-//    	return $res;
-
-	}
+//	public function actionTest(){
+//    	$s = '{"1":["08:00-11:00","13:00-16:00"],"2":["09:00-11:30","13:00-16:00","20:00-22:00"],"3":["08:00-11:00","13:00-16:00"],"4":["08:00-11:00","13:00-16:00"],"5":["08:00-11:00","13:00-16:00"],"6":["08:00-11:00","13:00-16:00"]}';
+//    	$uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
+//    	$res = $this->ordertime($uuid,json_decode($s,true),'update');
+////    	return $res;
+//
+//	}
+	/**
+	 * @param $uuid
+	 * @param $times
+	 * @param string $op
+	 * @return bool|int|string
+	 * 处理预约表
+	 */
     private function ordertime($uuid,$times,$op='add'){
 
 		if($op !='add'){

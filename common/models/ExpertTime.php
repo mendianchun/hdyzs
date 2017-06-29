@@ -14,6 +14,8 @@ use Yii;
  * @property integer $is_order
  * @property string $clinic_uuid
  * @property string $order_no
+ * @property integer $status
+ * @property string $reason
  */
 class ExpertTime extends \yii\db\ActiveRecord
 {
