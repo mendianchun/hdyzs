@@ -21,6 +21,14 @@ use yii\helpers\Json;
  */
 class ExpertController extends Controller
 {
+	public $time_conf = array(  '1_1'=>'周一上午','1_2'=>'周一下午','1_3'=>'周一晚上',
+								'2_1'=>'周二上午','2_2'=>'周二下午','2_3'=>'周二晚上',
+								'3_1'=>'周三上午','3_2'=>'周三下午','3_3'=>'周三晚上',
+								'4_1'=>'周四上午','4_2'=>'周四下午','4_3'=>'周四晚上',
+								'5_1'=>'周五上午','5_2'=>'周五下午','5_3'=>'周五晚上',
+								'6_1'=>'周六上午','6_2'=>'周六下午','6_3'=>'周六晚上',
+								'7_1'=>'周日上午','7_2'=>'周日下午','7_3'=>'周日晚上',);
+	public $time_range=array(1=>'8:00-12:00',2=>'14:00-17:00',3=>'19:00-21:00');
     /**
      * @inheritdoc
      */
@@ -72,6 +80,8 @@ class ExpertController extends Controller
     {
         $expert= new Expert();
 
+
+
 	    if (Yii::$app->request->post()) {
 	    	$post = Yii::$app->request->post();
 
@@ -86,10 +96,23 @@ class ExpertController extends Controller
 
 		    $user->uuid = $uuid;
 		    if($user->save()){
+
+
 				//增加专家
 			    $expert->name =$post['Expert']['name'];
 			    $expert->head_img =$post['Expert']['head_img'];
-			    $expert->free_time =$post['Expert']['free_time'];
+
+			    $free_time = array();
+			    $time_range=array(1=>'8:00-12:00',2=>'14:00-17:00',3=>'19:00-21:00');
+			    foreach($post['Expert']['free_time'] as $v){
+				    $keys = explode('_',$v);
+				    $free_time[$keys[0]][]=$this->time_range[$keys[1]];
+
+			    }
+			    $expert->free_time =json_encode($free_time);
+			    //$expert->free_time =serialize($free_time);
+
+
 			    $expert->fee_per_times =$post['Expert']['fee_per_times'];
 			    $expert->fee_per_hour =$post['Expert']['fee_per_hour'];
 			    $expert->skill =$post['Expert']['skill'];
@@ -100,16 +123,20 @@ class ExpertController extends Controller
 			    }
 
 		    }else{
+
 			    return $this->render('create', [
 				    'model' => $expert,
+				    'time_conf' => $this->time_conf,
 			    ]);
 		    }
 
 
 
 	    } else {
+		    //$expert->free_time=array('1_1','1_2','1_3','2_1','2_2','2_3');
 		    return $this->render('create', [
 			    'model' => $expert,
+			    'time_conf' => $this->time_conf,
 		    ]);
 	    }
 
@@ -149,14 +176,42 @@ class ExpertController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if($model->load(Yii::$app->request->post())){
+	        $post = Yii::$app->request->post();
+	        //增加专家
+	        $model->name =$post['Expert']['name'];
+	        $model->head_img =$post['Expert']['head_img'];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+	        $free_time = array();
+
+	        foreach($post['Expert']['free_time'] as $v){
+		        $keys = explode('_',$v);
+		        $free_time[$keys[0]][]=$this->time_range[$keys[1]];
+
+	        }
+	        $model->free_time =json_encode($free_time);
+	        //$expert->free_time =serialize($free_time);
+
+
+	        $model->fee_per_times =$post['Expert']['fee_per_times'];
+	        $model->fee_per_hour =$post['Expert']['fee_per_hour'];
+	        $model->skill =$post['Expert']['skill'];
+	        $model->introduction =$post['Expert']['introduction'];
+	        $status = Expert::updateAll($model,['id'=>$id]);
+
+	        if($status){
+		        return $this->redirect(['view', 'id' => $id]);
+	        }
+
+        }else{
+			$time = $this->freetime($model->free_time);
+	        $model->free_time = $time;
+	        return $this->render('update', [
+		        'model' => $model,
+		        'time_conf' => $this->time_conf,
+	        ]);
         }
+
     }
 
     /**
@@ -186,5 +241,18 @@ class ExpertController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    private function freetime($time){
+    	$new_time = json_decode($time);
+    	$result =array();
+    	foreach($new_time as $k=>$value ){
+    		foreach($value as $v ){
+			    $key = array_search($v, $this->time_range);
+			    $result[]=$k.'_'.$key;
+		    }
+	    }
+	    return $result;
+
     }
 }

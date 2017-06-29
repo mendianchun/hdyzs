@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+//use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Expert */
@@ -13,16 +14,19 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
 	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?php if($op=='create'){?>
 	<?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 	<?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
 	<?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 	<?= $form->field($model, 'password_repeat')->passwordInput(['maxlength' => true]) ?>
-
+    <?php }?>
 	<?= $form->field($model, 'head_img')->widget('manks\FileInput', [])?>
 
 
 
-    <?= $form->field($model, 'free_time')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model,'free_time')->checkboxList($time_conf)?>
+
+
 
     <?= $form->field($model, 'fee_per_times')->textInput() ?>
 

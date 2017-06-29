@@ -13,6 +13,8 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="expert-update">
     <?= $this->render('_form', [
         'model' => $model,
+	    'time_conf' => $time_conf,
+        'op'=>'update',
     ]) ?>
 
 </div>
