@@ -211,7 +211,7 @@ class OrderController extends ActiveController
 		    $fee = $expert->getExpertFee($order_post['expert_uuid']);
 		    $cli->updateScore($fee," add order: $appointment_no");
 			//操作预约表
-		    $this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
+		  //  $this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
 
 		    return Service::sendSucc();
 	    }else{
@@ -340,7 +340,7 @@ class OrderController extends ActiveController
 
 			if($date_change){
 				$this->cancelorder($appointment_no,$order_post['clinic_uuid']);
-				$this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
+			//	$this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
 			}
 
 		    return Service::sendSucc();
@@ -486,19 +486,19 @@ class OrderController extends ActiveController
 		}
 
 
-		if($clinic_uuid){
-			$times = ExpertTime::find()
-				->where(['and',
-						['expert_uuid'=>$expert_uuid,'date'=>$date_end],
-						['or',
-							['is_order'=>0],
-							['clinic_uuid'=>$clinic_uuid]]])
-				->all();
-		}else{
+//		if($clinic_uuid){
+//			$times = ExpertTime::find()
+//				->where(['and',
+//						['expert_uuid'=>$expert_uuid,'date'=>$date_end],
+//						['or',
+//							['is_order'=>0],
+//							['clinic_uuid'=>$clinic_uuid]]])
+//				->all();
+//		}else{
 			$times = ExpertTime::find()
 				->where(['expert_uuid'=>$expert_uuid,'date'=>$date_end,'is_order'=>0])
 				->all();
-		}
+//		}
 
 	    $free_time=array();
 	    if($times){

@@ -14,6 +14,7 @@ use yii\base\Model;
 use yii\web\UploadedFile;
 use yii\base\Exception;
 use yii\helpers\FileHelper;
+use common\service\Service;
 
 
 /**
@@ -62,7 +63,9 @@ class Upload extends Model
 		if ($model->validate()) {
 			$relativePath = Yii::$app->params['imageUploadRelativePath'];
 			$successPath = Yii::$app->params['imageUploadSuccessPath'];
-			$fileName = $model->file->baseName . '.' . $model->file->extension;
+			$img_id = date('Ymd').substr(Service::create_uuid(),0,8);
+			//$fileName = $model->file->baseName . '.' . $model->file->extension;
+			$fileName = $img_id . '.' . $model->file->extension;
 
 
 			if (!is_dir($relativePath)) {

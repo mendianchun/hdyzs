@@ -72,14 +72,13 @@ class ExpertController extends Controller
     {
     	$model = $this->findModel($id);
 
+    	//专家闲时处理
 	    $time = $this->freetime($model->free_time);
 	    $free_time_str = '';
 	    if($time){
 	    	foreach($time as $v){
 			    $free_time_str.=$this->time_conf[$v].',';
-
 		    }
-
 	    }
 		$model->free_time= rtrim($free_time_str,',');
         return $this->render('view', [
@@ -264,24 +263,31 @@ class ExpertController extends Controller
 	 * 处理预约时间
 	 */
     private function freetime($time){
-    	$new_time = json_decode($time);
+    	$new_time = json_decode($time,true);
+
+
     	$result =array();
-    	foreach($new_time as $k=>$value ){
-    		foreach($value as $v ){
-			    $key = array_search($v, $this->time_range);
-			    $result[]=$k.'_'.$key;
+    	if(is_array($new_time)){
+		    foreach($new_time as $k=>$value ){
+			    foreach($value as $v ){
+				    $key = array_search($v, $this->time_range);
+				    $result[]=$k.'_'.$key;
+			    }
 		    }
 	    }
+
 	    return $result;
     }
 
-//	public function actionTest(){
-//    	$s = '{"1":["08:00-11:00","13:00-16:00"],"2":["09:00-11:30","13:00-16:00","20:00-22:00"],"3":["08:00-11:00","13:00-16:00"],"4":["08:00-11:00","13:00-16:00"],"5":["08:00-11:00","13:00-16:00"],"6":["08:00-11:00","13:00-16:00"]}';
-//    	$uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
-//    	$res = $this->ordertime($uuid,json_decode($s,true),'update');
-////    	return $res;
-//
-//	}
+	public function actionTest(){
+
+
+    	$s = '{"1":["08:00-11:00","13:00-16:00"],"2":["09:00-11:30","13:00-16:00","20:00-22:00"],"3":["08:00-11:00","13:00-16:00"],"4":["08:00-11:00","13:00-16:00"],"5":["08:00-11:00","13:00-16:00"],"6":["08:00-11:00","13:00-16:00"]}';
+    	$uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
+    	$res = $this->ordertime($uuid,json_decode($s,true),'update');
+//    	return $res;
+
+	}
 	/**
 	 * @param $uuid
 	 * @param $times
