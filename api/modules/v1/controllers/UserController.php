@@ -108,15 +108,15 @@ class UserController extends ActiveController
             return Service::sendError(10400,'缺少参数');
         }
 
-        //检查验证码是否正确
-        $verfiycode = VerifycodeCache::find()
-            ->where(['mobile' => $post['mobile']])
-            ->andWhere(['code' => $post['code']])
-            ->andWhere(['>=','expire_time',time()])
-            ->one();
-        if(!$verfiycode){
-            return Service::sendError(20103,'验证码错误');
-        }
+        //检查验证码是否正确，上线前需要打开
+//        $verfiycode = VerifycodeCache::find()
+//            ->where(['mobile' => $post['mobile']])
+//            ->andWhere(['code' => $post['code']])
+//            ->andWhere(['>=','expire_time',time()])
+//            ->one();
+//        if(!$verfiycode){
+//            return Service::sendError(20103,'验证码错误');
+//        }
 
         //检查手机号是否存在
         if(User::findOne(['mobile' => $post['mobile']])){
@@ -175,14 +175,14 @@ class UserController extends ActiveController
         }
 
         //检查验证码是否正确
-        $verfiycode = VerifycodeCache::find()
-            ->where(['mobile' => $post['mobile']])
-            ->andWhere(['code' => $post['code']])
-            ->andWhere(['>=','expire_time',time()])
-            ->one();
-        if(!$verfiycode){
-            return Service::sendError(20103,'验证码错误');
-        }
+//        $verfiycode = VerifycodeCache::find()
+//            ->where(['mobile' => $post['mobile']])
+//            ->andWhere(['code' => $post['code']])
+//            ->andWhere(['>=','expire_time',time()])
+//            ->one();
+//        if(!$verfiycode){
+//            return Service::sendError(20103,'验证码错误');
+//        }
 
         //检查密码强度并且检查两次输入的是否一样
         if(strlen($post['password']) < 6){
