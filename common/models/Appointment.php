@@ -115,20 +115,20 @@ class Appointment extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getClinicUu()
-    {
-        return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
-    }
+ * @return \yii\db\ActiveQuery
+ */
+	public function getClinicUu()
+	{
+		return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
+	}
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getExpertUu()
-    {
-        return $this->hasOne(Expert::className(), ['user_uuid' => 'expert_uuid']);
-    }
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getExpertUu()
+	{
+		return $this->hasOne(Expert::className(), ['user_uuid' => 'expert_uuid']);
+	}
 
     /**
      * @return \yii\db\ActiveQuery
