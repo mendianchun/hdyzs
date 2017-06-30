@@ -57,6 +57,7 @@ class Appointment extends \yii\db\ActiveRecord
     //计费方式，1:按次，2:按小时
     const FEE_TYPE_TIMES = 1;
     const FEE_TYPE_HOURS = 2;
+
     /**
      * @inheritdoc
      */
@@ -148,61 +149,61 @@ class Appointment extends \yii\db\ActiveRecord
 
     public static function allStatus()
     {
-        return [self::STATUS_CANCLE=>'取消',self::STATUS_WAITING=>'预约中',self::STATUS_SUCC=>'预约成功'];
+        return [self::STATUS_CANCLE => '取消', self::STATUS_WAITING => '预约中', self::STATUS_SUCC => '预约成功'];
     }
 
-    public  function getStatusStr()
+    public function getStatusStr()
     {
-        if($this->status==self::STATUS_CANCLE){
+        if ($this->status == self::STATUS_CANCLE) {
             return '取消';
-        }else if($this->status==self::STATUS_WAITING){
+        } else if ($this->status == self::STATUS_WAITING) {
             return '预约中';
-        }else{
+        } else {
             return '预约成功';
         }
     }
 
     public static function allPayStatus()
     {
-        return [self::PAY_STATUS_UNPAY=>'待支付',self::PAY_STATUS_PAYED=>'已支付'];
+        return [self::PAY_STATUS_UNPAY => '待支付', self::PAY_STATUS_PAYED => '已支付'];
     }
 
-    public  function getPayStatusStr()
+    public function getPayStatusStr()
     {
-        return $this->pay_status==self::PAY_STATUS_PAYED?'已支付':'待支付';
+        return $this->pay_status == self::PAY_STATUS_PAYED ? '已支付' : '待支付';
     }
 
     public static function allPayTypeStatus()
     {
-        return [self::PAY_TYPE_SCORE=>'积分支付',self::PAY_TYPE_OFFLINE=>'线下支付',self::PAY_TYPE_ONLINE=>'线上支付'];
+        return [self::PAY_TYPE_SCORE => '积分支付', self::PAY_TYPE_OFFLINE => '线下支付', self::PAY_TYPE_ONLINE => '线上支付'];
     }
 
-    public  function getPayTypeStatusStr()
+    public function getPayTypeStatusStr()
     {
-        if($this->pay_type==self::PAY_TYPE_SCORE){
+        if ($this->pay_type == self::PAY_TYPE_SCORE) {
             return '积分支付';
-        }else if($this->pay_type==self::PAY_TYPE_OFFLINE){
+        } else if ($this->pay_type == self::PAY_TYPE_OFFLINE) {
             return '线下支付';
-        }else{
+        } else {
             return '线上支付';
         }
     }
 
     public static function allFeeTypeStatus()
     {
-        return [self::FEE_TYPE_TIMES=>'按次',self::FEE_TYPE_HOURS=>'按小时'];
+        return [self::FEE_TYPE_TIMES => '按次', self::FEE_TYPE_HOURS => '按小时'];
     }
 
-    public  function getFeeTypeStatusStr()
+    public function getFeeTypeStatusStr()
     {
-        return $this->fee_type==self::FEE_TYPE_TIMES?'按次':'按小时';
+        return $this->fee_type == self::FEE_TYPE_TIMES ? '按次' : '按小时';
     }
 
     public function approve()
     {
-        if($this->status == self::STATUS_WAITING){
+        if ($this->status == self::STATUS_WAITING) {
             $this->status = self::STATUS_SUCC; //设置预约单状态为预约成功
-            return ($this->save()?true:false);
+            return ($this->save() ? true : false);
         }
         return true;
     }
@@ -210,10 +211,18 @@ class Appointment extends \yii\db\ActiveRecord
     public function pay()
     {
         //只有预约成功的才能修改支付状态
-        if($this->status == self::STATUS_SUCC){
+        if ($this->status == self::STATUS_SUCC) {
             $this->pay_status = self::PAY_STATUS_PAYED; //设置预约单支付状态为支付成功
-            return ($this->save()?true:false);
+            return ($this->save() ? true : false);
         }
         return true;
+    }
+
+    /*
+     * 获取待处理的数量
+     */
+    public static function getPengdingCount()
+    {
+        return Appointment::find()->where(['status'=>self::STATUS_WAITING])->count();
     }
 }

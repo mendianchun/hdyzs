@@ -126,10 +126,10 @@ class AppointmentController extends Controller
     public function actionApprove($id)
     {
         $model = $this->findModel($id);
-        if($model->approve())  //审核
+        if ($model->approve())  //审核
         {
-	        $model = $this->findModel($id);
-	        $this->ordertime($model->attributes);
+            $model = $this->findModel($id);
+            $this->ordertime($model->attributes);
             return $this->redirect(['index']);
         }
     }
@@ -137,49 +137,61 @@ class AppointmentController extends Controller
     public function actionPay($id)
     {
         $model = $this->findModel($id);
-        if($model->pay())  //支付
+        if ($model->pay())  //支付
         {
             return $this->redirect(['index']);
         }
     }
 
 
-	private function ordertime($model){
-		$expert_uuid =$model['expert_uuid'];
-		$start_time =$model['order_starttime'];
-		$end_time =$model['order_endtime'];
-		$appoint_no =$model['appointment_no'];
-		$clinic_uuid =$model['clinic_uuid'];
-		$date = date('Y-m-d',$start_time);
-		$use_set =array();
+    private function ordertime($model)
+    {
+        $expert_uuid = $model['expert_uuid'];
+        $start_time = $model['order_starttime'];
+        $end_time = $model['order_endtime'];
+        $appoint_no = $model['appointment_no'];
+        $clinic_uuid = $model['clinic_uuid'];
+        $date = date('Y-m-d', $start_time);
+        $use_set = array();
 
-		for($start_time;$start_time<$end_time;$start_time=$start_time+1800){
-			if($start_time%3600==0){
-				$hour = date('h',$start_time);
-				$use_set[(int)$hour][1]=1;
-			}else{
-				$hour = date('h',$start_time);
-				$use_set[(int)$hour][2]=1;
-			}
-		}
-		$cnt =0;
+        for ($start_time; $start_time < $end_time; $start_time = $start_time + 1800) {
+            if ($start_time % 3600 == 0) {
+                $hour = date('h', $start_time);
+                $use_set[(int)$hour][1] = 1;
+            } else {
+                $hour = date('h', $start_time);
+                $use_set[(int)$hour][2] = 1;
+            }
+        }
+        $cnt = 0;
 
-		$new_oredr['is_order']=1;
-		$new_oredr['clinic_uuid']=$clinic_uuid;
-		$new_oredr['order_no']=$appoint_no;
-		foreach($use_set as $k_sets=>$value_sets ){
-			foreach($value_sets as $k=>$v){
-				$op_status=ExpertTime::updateAll($new_oredr,
-					[   'expert_uuid'=>$expert_uuid,
-						'date'=>$date,
-						'hour'=>$k_sets,
-						'zone'=>$k]);
+        $new_oredr['is_order'] = 1;
+        $new_oredr['clinic_uuid'] = $clinic_uuid;
+        $new_oredr['order_no'] = $appoint_no;
+        foreach ($use_set as $k_sets => $value_sets) {
+            foreach ($value_sets as $k => $v) {
+                $op_status = ExpertTime::updateAll($new_oredr,
+                    ['expert_uuid' => $expert_uuid,
+                        'date' => $date,
+                        'hour' => $k_sets,
+                        'zone' => $k]);
 
-				if($op_status>0){
-					$cnt++;
-				}
-			}
-		}
-		return $cnt;
-	}
+                if ($op_status > 0) {
+                    $cnt++;
+                }
+            }
+        }
+        return $cnt;
+    }
+
+    /*
+     * 接口，供前端使用
+     */
+    public function actionGetcount()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $count = Appointment::getPengdingCount();
+
+        return ['count'=>$count];
+    }
 }
