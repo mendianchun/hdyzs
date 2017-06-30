@@ -32,16 +32,6 @@ class OrderController extends ActiveController
 		return ArrayHelper::merge(parent::behaviors(), [
 			'authenticator' => [
 				'optional' => [
-//					'signup-test',
-//					'index',
-//					'view',
-//					'create',
-//					'search',
-//					'update',
-//					'delete',
-//					'test',
-//					'detail',
-//					'checkpay',
 				],
 			]
 		]);
@@ -172,13 +162,15 @@ class OrderController extends ActiveController
 	    }
 
 //	    $appointment->clinic_uuid=$order_post['clinic_uuid'];
-//		if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
-//			return Service::sendError(20203,'缺少专家数据');
-//		}
-		$appointment->expert_uuid=$uuid;
-
+		if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
+			return Service::sendError(20203,'缺少专家数据');
+		}
+		$appointment->expert_uuid=$order_post['expert_uuid'];
 
 		if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
+			if(($order_post['order_starttime']-time())>3600*24*7){
+				return Service::sendError(20217,'只能预约一周内');
+			}
 			//检测时间是否允许
 			$check_order_time = $this->checktime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime']);
 			if($check_order_time){
@@ -199,6 +191,11 @@ class OrderController extends ActiveController
 	    $appointment->patient_age=$order_post['patient_age'];
 	    $appointment->patient_description=$order_post['patient_description'];
 
+	    $appointment->patient_img1=isset($order_post['patient_img1'])?$order_post['patient_img1']:'';
+	    $appointment->patient_img2=isset($order_post['patient_img2'])?$order_post['patient_img2']:'';
+	    $appointment->patient_img3=isset($order_post['patient_img3'])?$order_post['patient_img3']:'';
+
+
 	    if(!isset($order_post['fee_type'])){
 		    return Service::sendError(20206,'缺少计费方式');
 	    }
@@ -208,7 +205,12 @@ class OrderController extends ActiveController
 	    $appointment->updated_at=time();
 
 	    if($appointment->save()>0){
-
+			//积分操作
+		    $cli = new Clinic();
+		    $expert = new Expert();
+		    $fee = $expert->getExpertFee($order_post['expert_uuid']);
+		    $cli->updateScore($fee," add order: $appointment_no");
+			//操作预约表
 		    $this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
 
 		    return Service::sendSucc();
@@ -224,7 +226,7 @@ class OrderController extends ActiveController
 	    }
 	    $op = $get_params['op'];
 	    if(!in_array($op,array('update','detail'))){
-		    return Service::sendError(20209,'参数错误');
+		    return Service::sendError(20216,'参数错误');
 	    }
 	    $appointment_no= $get_params['appointment_no'];
 
@@ -295,6 +297,9 @@ class OrderController extends ActiveController
 	    $date_change=false;
 
 	    if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
+		    if(($order_post['order_starttime']-time())>3600*24*7){
+			    return Service::sendError(20217,'只能预约一周内');
+		    }
 	    	if($appointment_old['order_starttime']!==$order_post['order_starttime'] ||$appointment_old['order_endtime']!==$order_post['order_endtime']){
 			    //检测时间是否允许
 			    $check_order_time = $this->checktime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime']);
@@ -315,6 +320,13 @@ class OrderController extends ActiveController
 	    $appointment_new['patient_name']=$order_post['patient_name'];
 	    $appointment_new['patient_age']=$order_post['patient_age'];
 	    $appointment_new['patient_description']=$order_post['patient_description'];
+
+
+	    $appointment_new['patient_img1']=isset($order_post['patient_img1'])?$order_post['patient_img1']:'';
+	    $appointment_new['patient_img2']=isset($order_post['patient_img2'])?$order_post['patient_img2']:'';
+	    $appointment_new['patient_img3']=isset($order_post['patient_img3'])?$order_post['patient_img3']:'';
+
+
 	    if(!isset($order_post['fee_type'])){
 		    return Service::sendError(20206,'缺少计费方式');
 	    }
@@ -338,37 +350,10 @@ class OrderController extends ActiveController
     }
 
 	/**
-	 * 获取预约详情
-	 * @return array
 	 *
+	 * 取消订单
+	 * @return array
 	 */
-
-//    public function actionDetail(){
-//
-//	    $get_params = Yii::$app->request->post();
-//	    $user = \yii::$app->user->identity;
-//	    $uuid = $user->uuid;
-//	    if(!isset($get_params['appointment_no']) ){
-//		    return Service::sendError(20208,'缺少预约单号');
-//	    }
-//	    $appointment_no= $get_params['appointment_no'];
-//
-//	   // $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
-//	    $appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
-//
-//		if(!$appointment){
-//			$result['code']='20209';
-//			$result['message']='获取失败';
-//		}else{
-//			$result= $appointment->attributes;
-//			$clinic = $appointment->clinicUu;
-//			$expert = $appointment->expertUu;
-//			$result['clinic']=$clinic->attributes;
-//			$result['expert']=$expert->attributes;
-//		}
-//	    return Service::sendSucc($result);
-//    }
-
 
     public function actionCancel(){
 	    $get_params = Yii::$app->request->get();
@@ -379,11 +364,6 @@ class OrderController extends ActiveController
 
 	    $user = \yii::$app->user->identity;
 	    $uuid = $user->uuid;
-
-//	    if(!isset($get_params['clinic_uuid']) ||!Clinic::findOne(['user_uuid'=>$get_params['clinic_uuid']])){
-//		    return Service::sendError(20202,'诊所不存在');
-//	    }
-//	    $clinic_uuid= $uuid;
 
 
  		$appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
@@ -406,6 +386,13 @@ class OrderController extends ActiveController
 
 
 	    if($op_status>0){
+
+		    //积分操作
+		    $cli = new Clinic();
+		    $expert = new Expert();
+		    $fee = $expert->getExpertFee($appointment->attributes['expert_uuid']);
+		    $cli->updateScore(-$fee,"cancel order: $appointment_no");
+
 	    	$this->cancelorder($appointment_no,$uuid);
 		    return Service::sendSucc();
 	    }else{
@@ -426,15 +413,10 @@ class OrderController extends ActiveController
 
     public function actionTest(){
     	$expert_uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
-	    $start_time= '1497657600';
-	    $end_time= '1497662940';
-		$result = $this->checktime($expert_uuid,$start_time,$end_time,$expert_uuid);
-		if($result){
-			echo 111;
-		}else{
-			echo 2222;
-		}
-		exit();
+	    $model = new Expert();
+	    $fee = $model->getExpertFee($expert_uuid);
+	    var_dump($fee);
+	    exit();
     }
 
     private function ordertime($expert_uuid,$start_time,$end_time,$appoint_no,$clinic_uuid){
