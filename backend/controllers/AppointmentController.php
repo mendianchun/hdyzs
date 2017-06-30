@@ -88,10 +88,26 @@ class AppointmentController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->appointment_no]);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionCancel($id)
+    {
+	    $model = $this->findModel($id);
+
+	    if ($model->load(Yii::$app->request->post()) ) {
+	    	$model->status=3;
+		    $model->save();
+		    return $this->redirect(['view', 'id' => $model->appointment_no]);
+	    } else {
+		    return $this->renderAjax('Cancel', [
+			    'model' => $model,
+		    ]);
+	    }
+
     }
 
     /**

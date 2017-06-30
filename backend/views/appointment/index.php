@@ -1,8 +1,30 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use common\models\Appointment;
+
+use yii\bootstrap\Modal;
+// 更新操作
+Modal::begin([
+	'id' => 'cancel-modal',
+	'header' => '<h4 class="modal-title">更新</h4>',
+	'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+]);
+Modal::end();
+
+$requestUpdateUrl = Url::toRoute('cancel');
+$updateJs = <<<JS
+    $('.data-cancel').on('click', function () {
+        $.get('{$requestUpdateUrl}', { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }  
+        );
+    });
+JS;
+$this->registerJs($updateJs);
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\AppointmentSearch */
@@ -85,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {approve} {pay}',
+                'template' => '{view} {approve} {pay}{cancel}',
                 'buttons' => [
                     'approve'=>function($url,$model,$key)
                     {
@@ -115,7 +137,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         return Html::a('<span class="glyphicon glyphicon-credit-card"></span>',$url,$options);
 
-                    }
+                    },
+                    'cancel' => function ($url, $model, $key) {
+
+	                    if($model->status == Appointment::STATUS_CANCLE){
+		                    return '';
+	                    }
+		                return Html::a('取消', '#', [
+			                'data-toggle' => 'modal',
+			                'data-target' => '#cancel-modal',
+			                'class' => 'data-cancel',
+			                'data-id' => $key,
+		                ]);
+	                },
 
                 ]
             ],

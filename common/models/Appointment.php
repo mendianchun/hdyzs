@@ -111,25 +111,26 @@ class Appointment extends \yii\db\ActiveRecord
             'is_sms_notify' => '是否短信通知患者',
             'fee_type' => '付费类型',
             'created_at' => '创建时间',
-            'updated_at' => '更新时间',
+	        'updated_at' => '更新时间',
+	        'cancel_reason' => '预约取消原因',
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getClinicUu()
-    {
-        return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
-    }
+ * @return \yii\db\ActiveQuery
+ */
+	public function getClinicUu()
+	{
+		return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
+	}
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getExpertUu()
-    {
-        return $this->hasOne(Expert::className(), ['user_uuid' => 'expert_uuid']);
-    }
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getExpertUu()
+	{
+		return $this->hasOne(Expert::className(), ['user_uuid' => 'expert_uuid']);
+	}
 
     /**
      * @return \yii\db\ActiveQuery
