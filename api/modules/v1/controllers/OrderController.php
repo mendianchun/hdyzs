@@ -32,16 +32,6 @@ class OrderController extends ActiveController
 		return ArrayHelper::merge(parent::behaviors(), [
 			'authenticator' => [
 				'optional' => [
-//					'signup-test',
-//					'index',
-//					'view',
-//					'create',
-//					'search',
-//					'update',
-//					'delete',
-//					'test',
-//					'detail',
-//					'checkpay',
 				],
 			]
 		]);
@@ -178,6 +168,9 @@ class OrderController extends ActiveController
 		$appointment->expert_uuid=$order_post['expert_uuid'];
 
 		if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
+			if(($order_post['order_starttime']-time())>3600*24*7){
+				return Service::sendError(20217,'只能预约一周内');
+			}
 			//检测时间是否允许
 			$check_order_time = $this->checktime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime']);
 			if($check_order_time){
@@ -197,6 +190,11 @@ class OrderController extends ActiveController
 	    $appointment->patient_name=$order_post['patient_name'];
 	    $appointment->patient_age=$order_post['patient_age'];
 	    $appointment->patient_description=$order_post['patient_description'];
+
+	    $appointment->patient_img1=isset($order_post['patient_img1'])?$order_post['patient_img1']:'';
+	    $appointment->patient_img2=isset($order_post['patient_img2'])?$order_post['patient_img2']:'';
+	    $appointment->patient_img3=isset($order_post['patient_img3'])?$order_post['patient_img3']:'';
+
 
 	    if(!isset($order_post['fee_type'])){
 		    return Service::sendError(20206,'缺少计费方式');
@@ -228,7 +226,7 @@ class OrderController extends ActiveController
 	    }
 	    $op = $get_params['op'];
 	    if(!in_array($op,array('update','detail'))){
-		    return Service::sendError(20209,'参数错误');
+		    return Service::sendError(20216,'参数错误');
 	    }
 	    $appointment_no= $get_params['appointment_no'];
 
@@ -299,6 +297,9 @@ class OrderController extends ActiveController
 	    $date_change=false;
 
 	    if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
+		    if(($order_post['order_starttime']-time())>3600*24*7){
+			    return Service::sendError(20217,'只能预约一周内');
+		    }
 	    	if($appointment_old['order_starttime']!==$order_post['order_starttime'] ||$appointment_old['order_endtime']!==$order_post['order_endtime']){
 			    //检测时间是否允许
 			    $check_order_time = $this->checktime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime']);
@@ -319,6 +320,13 @@ class OrderController extends ActiveController
 	    $appointment_new['patient_name']=$order_post['patient_name'];
 	    $appointment_new['patient_age']=$order_post['patient_age'];
 	    $appointment_new['patient_description']=$order_post['patient_description'];
+
+
+	    $appointment_new['patient_img1']=isset($order_post['patient_img1'])?$order_post['patient_img1']:'';
+	    $appointment_new['patient_img2']=isset($order_post['patient_img2'])?$order_post['patient_img2']:'';
+	    $appointment_new['patient_img3']=isset($order_post['patient_img3'])?$order_post['patient_img3']:'';
+
+
 	    if(!isset($order_post['fee_type'])){
 		    return Service::sendError(20206,'缺少计费方式');
 	    }

@@ -20,6 +20,9 @@ use Yii;
  * @property integer $patient_age
  * @property string $patient_mobile
  * @property string $patient_idcard
+ * @property string $patient_img1
+ * @property string $patient_img2
+ * @property string $patient_img3
  * @property string $patient_description
  * @property string $expert_diagnosis
  * @property integer $pay_type
