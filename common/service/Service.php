@@ -57,4 +57,19 @@ class Service
             return false;
         }
     }
+
+    public static function sendSms($mobile, $content)
+    {
+        if(!$mobile || !$content)
+            return false;
+        //调用短信接口发送短信
+        $status = 0; //发送成功
+
+        $smsLog = new \common\models\SmsLog();
+        $smsLog->mobile = $mobile;
+        $smsLog->content = $content;
+        $smsLog->status = $status;
+        $smsLog->save();
+        return $status;
+    }
 }
