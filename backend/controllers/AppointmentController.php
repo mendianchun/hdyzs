@@ -203,7 +203,7 @@ class AppointmentController extends Controller
     /*
      * 接口，供前端使用
      */
-    public function actionGetcount()
+    public function actionGetpengdingcount()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $count = Appointment::getPengdingCount();

@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-use yii\widgets\Pjax;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -19,34 +18,41 @@ use yii\widgets\Pjax;
         <div class="navbar-custom-menu">
 
             <ul class="nav navbar-nav">
-                <?php
-                $url = Yii::$app->urlManager->createUrl('appointment/getcount');
-                $script = <<< JS
-                    $(document).ready(function() {
-                        setInterval(getCount,60000);
-                    });
 
-                    function getCount(){
-                        $.get("$url",function (data,status) {
-                                if(data.count > 0){
-                                    $('#PengdingCount').text(data.count);
-                                }
-                            });
+            <?php
+                //如果有预约管理的权限，则显示消息提醒。
+                if(Yii::$app->user->can('/appointment/index'))
+                {
+                    $url = Yii::$app->urlManager->createUrl('appointment/getpengdingcount');
+                    $script = <<< JS
+                        $(document).ready(function() {
+                            setInterval(getCount,60000);
+                        });
 
-                        //$('#undo').text(second);
-                    }
+                        function getCount(){
+                            $.get("$url",function (data,status) {
+                                    if(data.count > 0){
+                                        $('#PengdingCount').text(data.count);
+                                    }
+                                });
+
+                            //$('#undo').text(second);
+                        }
 JS;
-                $this->registerJs($script);
-                ?>
-                <li class="dropdown notifications-menu">
-                    <a href="<?php echo Yii::$app->urlManager->createUrl('appointment/index'); ?>"
-                       class="dropdown-toggle">
-                        <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning" id="PengdingCount"></span>
-                    </a>
-                </li>
+                    $this->registerJs($script);
 
+                    $toUrl = Yii::$app->urlManager->createUrl('appointment/index');
+                    echo <<< html
+                        <li class="dropdown notifications-menu">
+                            <a href="$toUrl" class="dropdown-toggle">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning" id="PengdingCount"></span>
+                            </a>
+                        </li>
+html;
 
+                }
+            ?>
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
