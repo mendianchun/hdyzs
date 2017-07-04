@@ -2,7 +2,7 @@
 namespace api\modules\v1\controllers;
 
 use yii;
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use common\models\Clinic;
 
 use yii\helpers\ArrayHelper;
@@ -11,7 +11,7 @@ use common\models\DrugCodeClinic;
 use common\models\DrugCode;
 use common\models\SystemConfig;
 
-class ClinicController extends ActiveController
+class ClinicController extends ApiBaseController
 {
     public $modelClass = 'common\models\Clinic';//对应的数据模型处理控制器
 

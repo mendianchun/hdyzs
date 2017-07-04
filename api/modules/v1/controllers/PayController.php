@@ -9,11 +9,11 @@ namespace api\modules\v1\controllers;
 
 use Yii;
 
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use yii\helpers\ArrayHelper;
 use yii\web\HttpException;
 
-class PayController extends ActiveController{
+class PayController extends ApiBaseController{
 
 
     public $modelClass = 'common\models\User';//对应的数据模型处理控制器

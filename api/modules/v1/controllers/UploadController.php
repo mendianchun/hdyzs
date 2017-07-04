@@ -3,7 +3,7 @@ namespace api\modules\v1\controllers;
 
 use Yii;
 
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use yii\helpers\ArrayHelper;
 use common\service\Service;
 
@@ -12,7 +12,7 @@ use common\service\Service;
 
 use yii\web\HttpException;
 
-class UploadController extends ActiveController{
+class UploadController extends ApiBaseController{
 
 
     public $modelClass = 'common\models\UploadForm';//对应的数据模型处理控制器

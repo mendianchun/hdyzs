@@ -2,7 +2,7 @@
 namespace api\modules\v1\controllers;
 
 use yii;
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use api\models\User;
 use common\models\UserSearch;
 
@@ -21,7 +21,7 @@ use common\models\Clinic;
 //use OAuth2\GrantType\RefreshToken;
 
 
-class UserController extends ActiveController
+class UserController extends ApiBaseController
 {
     public $modelClass = 'api\models\User';//对应的数据模型处理控制器
 

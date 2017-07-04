@@ -8,7 +8,7 @@
 namespace api\modules\v1\controllers;
 
 use yii;
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use api\models\Appointment;
 use common\models\AppointmentSearch;
 use common\models\Clinic;
@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
 use common\service\Service;
 #use api\models\Signup;
 
-class OrderController extends ActiveController
+class OrderController extends ApiBaseController
 {
 
 	public $modelClass = 'api\models\Appointment';//对应的数据模型处理控制器

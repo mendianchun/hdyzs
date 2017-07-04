@@ -2,7 +2,7 @@
 namespace api\modules\v1\controllers;
 
 use yii;
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use common\models\Expert;
 use common\models\ExpertSearch;
 
@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 use common\service\Service;
 
 
-class ExpertController extends ActiveController
+class ExpertController extends ApiBaseController
 {
     public $modelClass = 'common\models\Expert';//对应的数据模型处理控制器
 

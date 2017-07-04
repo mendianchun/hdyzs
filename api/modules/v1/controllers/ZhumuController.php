@@ -2,7 +2,7 @@
 namespace api\modules\v1\controllers;
 
 use yii;
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use common\models\Zhumu;
 use common\models\SystemConfig;
 use common\models\AppointmentVideo;
@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
 use common\service\Service;
 
 
-class ZhumuController extends ActiveController
+class ZhumuController extends ApiBaseController
 {
     public $modelClass = 'common\models\Zhumu';//对应的数据模型处理控制器
 

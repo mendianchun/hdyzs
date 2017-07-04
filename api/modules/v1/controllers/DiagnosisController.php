@@ -8,14 +8,14 @@
 namespace api\modules\v1\controllers;
 
 use yii;
-use yii\rest\ActiveController;
+use api\modules\ApiBaseController;
 use api\models\Appointment;
 use common\models\AppointmentSearch;
 
 use yii\helpers\ArrayHelper;
 use common\service\Service;
 
-class DiagnosisController extends ActiveController
+class DiagnosisController extends ApiBaseController
 {
 		//203XX
 	public $modelClass = 'api\models\Appointment';//对应的数据模型处理控制器
