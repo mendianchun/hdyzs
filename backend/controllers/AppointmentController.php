@@ -104,7 +104,8 @@ class AppointmentController extends Controller
 	    	if($model->save()){
 			    $mobile = $model->patient_mobile;
 			    $name = $model->patient_name;
-			    $msg = "$name 您好，您的会诊因故取消，请知晓";
+
+			    $msg = $name.' '.Yii::$app->params['appointment.cancel_msg'];;
 			    Service::sendSms($mobile,$msg);
 
 		    }

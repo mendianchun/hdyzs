@@ -76,13 +76,16 @@ class CrontabController extends Controller
 			foreach ($appointments as $item){
 				$patient_name = $item->attributes['patient_name'];
 				$patient_mobile = $item->attributes['patient_mobile'];
-				$msg = "$patient_name 您好，您的会诊将于半小时后开始，请您准备";
+				$msg = $patient_name.' '.Yii::$app->params['appointment.start_msg'];;
 				Service::sendSms($patient_mobile,$msg);
 			}
 
 		}
 
 	exit();
+	}
+	public function actionTest(){
+		echo Yii::$app->params['cancel_msg'];
 	}
 
 
