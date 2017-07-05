@@ -237,7 +237,7 @@ class OrderController extends ApiBaseController
 	    $appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 
 		if(!$appointment){
-			$result['code']='20702';
+			$result['code']='20202';
 			$result['message']='获取预约信息失败';
 		}else{
 			$result= $appointment->attributes;
