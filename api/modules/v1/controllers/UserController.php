@@ -4,22 +4,9 @@ namespace api\modules\v1\controllers;
 use yii;
 use api\modules\ApiBaseController;
 use api\models\User;
-use common\models\UserSearch;
-
-//use api\modules\v1\models\LoginForm;
-//use yii\web\IdentityInterface;
-//use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 use common\service\Service;
-use api\models\Signup;
 use common\models\VerifycodeCache;
-use common\models\Clinic;
-
-//use OAuth2\Request;
-//use OAuth2\Response;
-//use OAuth2\Storage\Pdo;
-//use OAuth2\GrantType\RefreshToken;
-
 
 class UserController extends ApiBaseController
 {
@@ -33,12 +20,7 @@ class UserController extends ApiBaseController
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
                 'optional' => [
-                    'signup-test',
-                    'index',
-                    'view',
                     'create',
-                    'search',
-                    'delete',
                     'test',
                     'login',
                     'sendcode',
