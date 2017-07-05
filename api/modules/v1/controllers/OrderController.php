@@ -116,9 +116,10 @@ class OrderController extends ApiBaseController
     public function actionSearch(){
 	    $queryParam = Yii::$app->request->queryParams;
 	    $pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
-
+	    $user = \yii::$app->user->identity;
+	    $uuid = $user->uuid;
 	    $params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
-
+	    $params['AppointmentSearch']['clinic_uuid'] = $uuid;
 	    if(isset($queryParam['date'])){
 		    $date= $queryParam['date'];
 		    $datetime_start=strtotime("$date 00:00:00");
@@ -165,7 +166,7 @@ class OrderController extends ApiBaseController
 		    return Service::sendError(20202,'缺少诊所数据');
 	    }
 
-//	    $appointment->clinic_uuid=$order_post['clinic_uuid'];
+	    $appointment->clinic_uuid=$uuid;
 		if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
 			return Service::sendError(20203,'缺少专家数据');
 		}
