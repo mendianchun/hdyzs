@@ -91,7 +91,7 @@ class OrderController extends ApiBaseController
 			    $expert = $item->expertUu;
 			    $app['expert']['id'] = $expert->attributes['id'];
 			    $app['expert']['name'] = $expert->attributes['name'];
-			    $app['expert']['head_img'] = $expert->attributes['head_img'];
+			    $app['expert']['head_img'] = Yii::$app->params['domain'].$expert->attributes['head_img'];
 			    $app['expert']['uuid'] = $item->attributes['expert_uuid'];
 
 			    $result[]=$app;
@@ -191,9 +191,9 @@ class OrderController extends ApiBaseController
 	    $appointment->patient_age=$order_post['patient_age'];
 	    $appointment->patient_description=$order_post['patient_description'];
 
-	    $appointment->patient_img1=isset($order_post['patient_img1'])?$order_post['patient_img1']:'';
-	    $appointment->patient_img2=isset($order_post['patient_img2'])?$order_post['patient_img2']:'';
-	    $appointment->patient_img3=isset($order_post['patient_img3'])?$order_post['patient_img3']:'';
+	    $appointment->patient_img1=isset($order_post['patient_img1'])? $order_post['patient_img1']:'';
+	    $appointment->patient_img2=isset($order_post['patient_img2'])? $order_post['patient_img2']:'';
+	    $appointment->patient_img3=isset($order_post['patient_img3'])? $order_post['patient_img3']:'';
 
 
 	    if(!isset($order_post['fee_type'])){
@@ -246,6 +246,19 @@ class OrderController extends ApiBaseController
 			}
 			$result['order_starttime'] = date('Y-m-d h:i',$result['order_starttime']);
 			$result['order_endtime'] = date('Y-m-d h:i',$result['order_endtime']);
+
+			if($result['patient_img1']){
+				$result['patient_img1']=Yii::$app->params['domain'].$result['patient_img1'];
+			}
+			if($result['patient_img2']){
+				$result['patient_img2']=Yii::$app->params['domain'].$result['patient_img2'];
+			}
+			if($result['patient_img3']){
+				$result['patient_img3']=Yii::$app->params['domain'].$result['patient_img3'];
+			}
+
+
+
 			unset($result['real_starttime']);
 			unset($result['real_endtime']);
 			unset($result['real_fee']);
@@ -260,7 +273,7 @@ class OrderController extends ApiBaseController
 
 			$result['expert']['id']=$expert->attributes['id'];
 			$result['expert']['name']=$expert->attributes['name'];
-			$result['expert']['head_img']=$expert->attributes['head_img'];
+			$result['expert']['head_img']= Yii::$app->params['domain'].$expert->attributes['head_img'];
 			$result['expert']['user_uuid']=$expert->attributes['user_uuid'];
 		}
 	    return Service::sendSucc($result);
