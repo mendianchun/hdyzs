@@ -146,7 +146,15 @@ class DiagnosisController extends ApiBaseController
 			$result['real_starttime']=date('Y-m-d h:i',$data['real_starttime']);
 			$result['real_endtime']=date('Y-m-d h:i',$data['real_endtime']);
 			$result['patient_description']=$data['patient_description'];
-
+			if($data['patient_img1']){
+				$result['patient_img1']=Yii::$app->params['domain'].$data['patient_img1'];
+			}
+			if($data['patient_img2']){
+				$result['patient_img2']=Yii::$app->params['domain'].$data['patient_img2'];
+			}
+			if($data['patient_img3']){
+				$result['patient_img3']=Yii::$app->params['domain'].$data['patient_img3'];
+			}
 
 			$result['patient_name']=$data['patient_name'];
 			$result['patient_age']=$data['patient_age'];
