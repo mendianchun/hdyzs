@@ -53,11 +53,15 @@ class OrderController extends ApiBaseController
 	   // $user = \yii::$app->user->identity;
 
 
+
+
 	    $queryParam = Yii::$app->request->queryParams;
 	    $pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
 
+	    $user = \yii::$app->user->identity;
+	    $uuid = $user->uuid;
 	    $params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
-
+	    $params['AppointmentSearch']['clinic_uuid'] = $uuid;
 	    if(isset($queryParam['date'])){
 		    $date= $queryParam['date'];
 		    $datetime_start=strtotime("$date 00:00:00");
