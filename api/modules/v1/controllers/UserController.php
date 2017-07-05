@@ -255,6 +255,9 @@ class UserController extends ApiBaseController
                 $expertAttributes = $expert->attributes;
                 unset($expertAttributes['id'],$expertAttributes['user_uuid']);
                 $expertAttributes['head_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$expertAttributes['head_img'];
+                if(!empty($expertAttributes['free_time'])){
+                    $expertAttributes['free_time'] = json_decode($expertAttributes['free_time'],true);
+                }
                 $info['expert'] = $expertAttributes;
             }
         }
