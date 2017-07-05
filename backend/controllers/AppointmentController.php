@@ -6,6 +6,7 @@ use Yii;
 use common\models\Appointment;
 use common\models\AppointmentSearch;
 use common\models\ExpertTime;
+use common\service\Service;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -99,7 +100,15 @@ class AppointmentController extends Controller
 	    $model = $this->findModel($id);
 
 	    if ($model->load(Yii::$app->request->post()) ) {
-	    	$model->status=3;
+	    	$model->status=Appointment::STATUS_EXPERT_CANCLE;
+	    	if($model->save()){
+			    $mobile = $model->patient_mobile;
+			    $name = $model->patient_name;
+
+			    $msg = $name.' '.Yii::$app->params['appointment.cancel_msg'];;
+			    Service::sendSms($mobile,$msg);
+
+		    }
 		    $model->save();
 		    return $this->redirect(['view', 'id' => $model->appointment_no]);
 	    } else {
