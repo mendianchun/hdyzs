@@ -137,7 +137,7 @@ class ZhumuController extends Controller
             return false;
         $basedir = getcwd();
         //音频地址
-        $targetFolder = $basedir . "/zhumu/" . $appointment_no;
+        $targetFolder = $basedir . "/data/zhumu/" . $appointment_no;
         $file = new \yii\helpers\FileHelper();
         $file->createDirectory($targetFolder);
 
