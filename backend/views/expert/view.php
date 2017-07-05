@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             array(
 	            'label' => '照片',
-	            'value' =>$model->head_img,
+	            'value' =>Yii::$app->params['domain'].$model->head_img,
 	            'format' => ['image',['width'=>'30','height'=>'30',]],
             ),
             //'head_img',

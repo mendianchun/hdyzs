@@ -21,6 +21,6 @@ return [
 			],
 		],
 	],
-	'imageUploadRelativePath' => '../../data/img/uploads/experts', // 图片默认上传的目录
-	'imageUploadSuccessPath' => 'uploads/experts', // 图片上传成功后，路径前缀
+	'imageUploadRelativePath' => '../../data/img/uploads/experts/', // 图片默认上传的目录
+	'imageUploadSuccessPath' => 'uploads/experts/', // 图片上传成功后，路径前缀
 ];

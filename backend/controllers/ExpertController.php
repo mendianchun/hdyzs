@@ -101,6 +101,7 @@ class ExpertController extends Controller
 		    $user = new User();
 		    $user->username = $post['Expert']['username'];
 		    $user->mobile = $post['Expert']['mobile'];
+		    $user->type=User::USER_EXPERT;
 		    $user->setPassword($post['Expert']['password']);
 		    $user->generateAuthKey();
 

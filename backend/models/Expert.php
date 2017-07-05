@@ -46,7 +46,7 @@ class Expert extends \common\models\Expert
 			'username' => '登录名',
 			'password' => '密码',
 			'password_repeat'=>'重输密码',
-			'mobile'=>'邮箱',
+			'mobile'=>'手机号',
 		];
 	}
 
