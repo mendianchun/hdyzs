@@ -72,6 +72,10 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'mobile', $this->mobile]);
 
+        $dataProvider->sort->defaultOrder =
+            [
+                'updated_at'=>SORT_DESC,
+            ];
         return $dataProvider;
     }
 }

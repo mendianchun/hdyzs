@@ -25,19 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'Business_license_img',
                 'format'=>'raw',
-                'value'=> Html::img($model->Business_license_img, ['width' => '300px']),
+                'value'=> Html::img(rtrim(Yii::$app->params['domain'],'/').'/'.$model->Business_license_img, ['width' => '300px']),
             ],
 //            'local_img',
             [
                 'attribute'=>'local_img',
                 'format'=>'raw',
-                'value'=> Html::img($model->Business_license_img, ['width' => '300px']),
+                'value'=> Html::img(rtrim(Yii::$app->params['domain'],'/').'/'.$model->Business_license_img, ['width' => '300px']),
             ],
 //            'doctor_certificate_img',
             [
                 'attribute'=>'doctor_certificate_img',
                 'format'=>'raw',
-                'value'=> Html::img($model->Business_license_img, ['width' => '300px']),
+                'value'=> Html::img(rtrim(Yii::$app->params['domain'],'/').'/'.$model->Business_license_img, ['width' => '300px']),
             ],
             'score',
 //            'verify_status',
