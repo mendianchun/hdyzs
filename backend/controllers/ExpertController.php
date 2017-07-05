@@ -96,54 +96,31 @@ class ExpertController extends Controller
         $expert= new Expert();
 	    if (Yii::$app->request->post()) {
 	    	$post = Yii::$app->request->post();
-
-	    	//增加用户
-		    $user = new User();
-		    $user->username = $post['Expert']['username'];
-		    $user->mobile = $post['Expert']['mobile'];
-		    $user->type=User::USER_EXPERT;
-		    $user->setPassword($post['Expert']['password']);
-		    $user->generateAuthKey();
-
-		    $uuid = Service::create_uuid();
-
-		    $user->uuid = $uuid;
-		    if($user->save()){
-
-
-				//增加专家
-			    $expert->name =$post['Expert']['name'];
-			    $expert->head_img =$post['Expert']['head_img'];
-
-			    $free_time = array();
-			   // $time_range=array(1=>'8:00-12:00',2=>'14:00-17:00',3=>'19:00-21:00');
+		    $free_time = array();
+		    if(is_array($post['Expert']['free_time'])){
 			    foreach($post['Expert']['free_time'] as $v){
 				    $keys = explode('_',$v);
 				    $free_time[$keys[0]][]=$this->time_range[$keys[1]];
 
 			    }
-			    $expert->free_time =json_encode($free_time);
-			    //$expert->free_time =serialize($free_time);
-
-			    $expert->fee_per_times =$post['Expert']['fee_per_times'];
-			    $expert->fee_per_hour =$post['Expert']['fee_per_hour'];
-			    $expert->skill =$post['Expert']['skill'];
-			    $expert->introduction =$post['Expert']['introduction'];
-			    $expert->user_uuid =$uuid;
-			    if($expert->save()>0){
-
-				    $this->ordertime($uuid,$free_time);
-
-				    return $this->redirect(['view', 'id' => $expert->id]);
-			    }
-
-		    }else{
-
-			    return $this->render('create', [
-				    'model' => $expert,
-				    'time_conf' => $this->time_conf,
-			    ]);
 		    }
+
+		    $expert->free_time =json_encode($free_time);
+
+
+		    $expert->load(Yii::$app->request->post());
+
+			$res = $expert->newExpert();
+			if($res){
+				$this->ordertime($res['uuid'],$free_time);
+			    return $this->redirect(['view', 'id' => $res['id']]);
+			}else{
+				return $this->render('create', [
+					'model' => $expert,
+					'time_conf' => $this->time_conf,
+				]);
+			}
+
 	    } else {
 		    //$expert->free_time=array('1_1','1_2','1_3','2_1','2_2','2_3');
 		    return $this->render('create', [
@@ -151,8 +128,6 @@ class ExpertController extends Controller
 			    'time_conf' => $this->time_conf,
 		    ]);
 	    }
-
-
 
 
     }
