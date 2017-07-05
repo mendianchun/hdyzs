@@ -423,7 +423,7 @@ class OrderController extends ApiBaseController
 	    $uuid = $user->uuid;
 	    //$clinic_uuid= $get_params['clinic_uuid'];
 
-	    $nums=Appointment::find()->where(['clinic_uuid'=>$uuid,'pay_status'=>0])->count();
+	    $nums=Appointment::find()->where(['clinic_uuid'=>$uuid,'pay_status'=>Appointment::PAY_STATUS_UNPAY,'status'=>Appointment::STATUS_SUCC])->count();
 
 	    $result['nums']=$nums;
 	    return Service::sendSucc($result);

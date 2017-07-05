@@ -171,13 +171,6 @@ class DiagnosisController extends ApiBaseController
 			}
 
 
-			//$data['expert']=$expert->attributes;
-//			if($zhumu){
-//				foreach($zhumu as $v){
-//					$result['zhumu'][]=$v->attributes;
-//				}
-//			}
-
 		}
 		return $result;
 	}
