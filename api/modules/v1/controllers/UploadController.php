@@ -41,7 +41,7 @@ class UploadController extends ApiBaseController{
             return Service::sendError(20801,'类型错误');
         }
 
-        $targetFolder = \Yii::$app->basePath.'/web/uploads/'.$type.'/'.date('Y/md');
+        $targetFolder = \Yii::$app->basePath.'/../data/img/uploads/'.$type.'/'.date('Y/md');
         $file = new \yii\helpers\FileHelper();
         $file->createDirectory($targetFolder);
 //        return Yii::$app->request->post();
@@ -54,8 +54,9 @@ class UploadController extends ApiBaseController{
             $random = time() . rand(1000, 9999);
             $randName = $random . "." . $extension;
             $targetFile = rtrim($targetFolder,'/') . '/' . $randName;
-            $uploadfile_path = Yii::$app->request->hostInfo.'/uploads/'.$type.'/'.date('Y/md').'/'.$randName;
-            $callback['url'] = $uploadfile_path;
+            $uploadfile_path = 'uploads/'.$type.'/'.date('Y/md').'/'.$randName;
+            $callback['path'] = $uploadfile_path;
+            $callback['url'] = rtrim(Yii::$app->params['domain'],'/').'/'.$uploadfile_path;
 //            $callback['filename'] = $fileParts['filename'];
 //            $callback['randName'] = $random;
 

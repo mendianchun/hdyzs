@@ -42,6 +42,7 @@ class ExpertController extends ApiBaseController
             if(!empty($v['free_time'])){
                 $v['free_time'] = json_decode($v['free_time'],true);
             }
+            $v['head_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$v['head_img'];
         }
 
         $totalPage = ceil($provider->totalCount / $pageSize);

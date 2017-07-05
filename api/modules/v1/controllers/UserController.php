@@ -244,6 +244,9 @@ class UserController extends ApiBaseController
             if($clinic){
                 $clinicAttributes = $clinic->attributes;
                 unset($clinicAttributes['id'],$clinicAttributes['user_uuid']);
+                $clinicAttributes['Business_license_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$clinicAttributes['Business_license_img'];
+                $clinicAttributes['local_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$clinicAttributes['local_img'];
+                $clinicAttributes['doctor_certificate_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$clinicAttributes['doctor_certificate_img'];
                 $info['clinic'] = $clinicAttributes;
             }
         }else if($user->type == 1){
@@ -251,6 +254,7 @@ class UserController extends ApiBaseController
             if($expert){
                 $expertAttributes = $expert->attributes;
                 unset($expertAttributes['id'],$expertAttributes['user_uuid']);
+                $expertAttributes['head_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$expertAttributes['head_img'];
                 $info['expert'] = $expertAttributes;
             }
         }
