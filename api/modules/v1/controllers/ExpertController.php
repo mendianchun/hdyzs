@@ -5,6 +5,7 @@ use yii;
 use api\modules\ApiBaseController;
 use common\models\Expert;
 use common\models\ExpertSearch;
+use common\models\ExpertTimeSearch;
 
 use yii\helpers\ArrayHelper;
 use common\service\Service;
@@ -57,6 +58,33 @@ class ExpertController extends ApiBaseController
         $data['extraFields']['totalCount'] = $provider->totalCount;
         $data['extraFields']['totalPage'] = $totalPage;
         return Service::sendSucc($data);
+    }
+
+    public function actionCheck()
+    {
+	    $queryParam = Yii::$app->request->queryParams;
+	    if(!isset($queryParam['expert_uuid']) ||!isset($queryParam['date'])){
+		    return Service::sendError(20901,'缺少参数');
+	    }
+
+	    $params['ExpertTimeSearch']['expert_uuid'] =$queryParam['expert_uuid'];
+	    $params['ExpertTimeSearch']['date'] = $queryParam['date'] ;
+	    $params['ExpertTimeSearch']['is_order'] = 0 ;
+
+	    $timeSearch = new ExpertTimeSearch();
+	    $provider = $timeSearch->search($params,100);
+	    $data = $provider->getModels();
+	    $result = array();
+
+	    foreach($data as $v ){
+		    $hour=$v->attributes['hour'];
+		    $desc = Yii::$app->params['time.'.$hour];
+		    $zone=$v->attributes['zone'];
+
+		    $result[$desc][] = $hour.':'.Yii::$app->params['zone.'.$zone];
+
+	    }
+	    return Service::sendSucc($result);
     }
 
     public function actionTest(){

@@ -71,16 +71,19 @@ class ExpertTimeSearch extends ExpertTime
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+	        'id' => $this->id,
+	        'expert_time.expert_uuid' => $this->expert_uuid,
+	        'date' => $this->date,
             'hour' => $this->hour,
             'zone' => $this->zone,
             'is_order' => $this->is_order,
             'expert_time.status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'expert_uuid', $this->expert_uuid])
-            ->andFilterWhere(['like', 'date', $this->date])
-            ->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid])
+	    //$query->andFilterWhere(['like', 'expert_uuid', $this->expert_uuid])
+	    //$query->andFilterWhere(['like', 'expert_uuid', $this->expert_uuid])
+           // ->andFilterWhere(['like', 'date', $this->date])
+	    $query->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid])
             ->andFilterWhere(['like', 'order_no', $this->order_no])
             ->andFilterWhere(['like', 'reason', $this->reason]);
 
@@ -98,7 +101,7 @@ class ExpertTimeSearch extends ExpertTime
 	    $query->join('left JOIN','expert','expert_time.expert_uuid = expert.user_uuid');
 	    $query->andFilterWhere(['like','expert.name',$this->expertName]);
 
-	    $query->andFilterWhere(['>', 'date', date("Y-m-d",strtotime("-1 day") )]);
+	   // $query->andFilterWhere(['>', 'date', date("Y-m-d",strtotime("-1 day") )]);
 
 	    $dataProvider->sort->attributes['patientName'] =
 		    [
@@ -113,7 +116,7 @@ class ExpertTimeSearch extends ExpertTime
 		    ];
 
 	  //	    $posts = $dataProvider->getModels();
-//	echo    $query->createCommand()->getRawSql();
+	//echo    $query->createCommand()->getRawSql();
 //	    echo '<pre>';
 //	    var_dump($query);
 //exit();
