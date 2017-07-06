@@ -23,6 +23,7 @@ class ExpertController extends ApiBaseController
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
                 'optional' => [
+                	'check',
                 ],
             ]
         ]);
@@ -81,7 +82,7 @@ class ExpertController extends ApiBaseController
 		    $desc = Yii::$app->params['time.'.$hour];
 		    $zone=$v->attributes['zone'];
 
-		    $result[$desc][] = $hour.':'.Yii::$app->params['zone.'.$zone];
+		    $result[$desc][] = $hour.':'.Yii::$app->params['zone.'.$zone.'.start'].'-'.$hour.':'.Yii::$app->params['zone.'.$zone.'.end'];
 
 	    }
 	    return Service::sendSucc($result);

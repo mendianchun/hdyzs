@@ -55,7 +55,7 @@ class ExpertTimeSearch extends ExpertTime
 	        'pagination' => ['pageSize' => $pageSize],
 	        'sort' => [
 		        'defaultOrder' => [
-			        'id' => SORT_DESC,
+			        'id' => SORT_ASC,
 		        ],
 		        //'attributes'=>['id','title'],
 	        ],

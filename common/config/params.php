@@ -26,6 +26,8 @@ return [
 	'time.20'=>'evening',
 	'time.21'=>'evening',
 
-	'zone.1'=>'00-29',
-	'zone.2'=>'30-59',
+	'zone.1.start'=>'00',
+	'zone.1.end'=>'29',
+	'zone.2.start'=>'30',
+	'zone.2.end'=>'59',
 ];
