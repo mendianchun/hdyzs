@@ -162,9 +162,9 @@ class OrderController extends ApiBaseController
 	    $appointment_no= date('ymdHis').sprintf("%03d",substr($uid,-3)).rand(100,999);
 
 	    $appointment->appointment_no =$appointment_no;
-	    if(!isset($order_post['clinic_uuid']) ||!Clinic::findOne(['user_uuid'=>$order_post['clinic_uuid']])){
-		    return Service::sendError(20202,'缺少诊所数据');
-	    }
+//	    if(!isset($order_post['clinic_uuid']) ||!Clinic::findOne(['user_uuid'=>$order_post['clinic_uuid']])){
+//		    return Service::sendError(20202,'缺少诊所数据');
+//	    }
 
 	    $appointment->clinic_uuid=$uuid;
 		if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
