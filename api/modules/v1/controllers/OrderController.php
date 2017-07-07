@@ -187,13 +187,12 @@ class OrderController extends ApiBaseController
 		}
 	    $appointment->order_starttime=$order_post['order_starttime'];
 	    $appointment->order_endtime=$order_post['order_endtime'];
-	    if(!isset($order_post['patient_name'])||!isset($order_post['patient_age'])||isset($order_post['patient_description'])){
+	    if(!isset($order_post['patient_name'])||isset($order_post['patient_description'])){
 
 		    return Service::sendError(20205,'患者信息不完整');
 	    }
 
 	    $appointment->patient_name=$order_post['patient_name'];
-	    $appointment->patient_age=$order_post['patient_age'];
 	    $appointment->patient_description=$order_post['patient_description'];
 
 	    $appointment->patient_img1=isset($order_post['patient_img1'])? $order_post['patient_img1']:'';
@@ -201,7 +200,7 @@ class OrderController extends ApiBaseController
 	    $appointment->patient_img3=isset($order_post['patient_img3'])? $order_post['patient_img3']:'';
 
 
-	    if(!isset($order_post['fee_type'])){
+	    if(!isset($order_post['pay_type'])){
 		    return Service::sendError(20206,'缺少计费方式');
 	    }
 
