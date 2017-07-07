@@ -47,13 +47,14 @@ class ExpertController extends ApiBaseController
 		$fee2score = $conf->attributes['value'];
 
         foreach($data as $k => &$v){
+	        $v = $v->attributes;
             if(!empty($v['free_time'])){
                 $v['free_time'] = json_decode($v['free_time'],true);
             }
             $v['head_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$v['head_img'];
+
 	        $v['fee_by_score'] = $v['fee_per_times'] * $fee2score;
 	        $v['fee_by_money'] = $v['fee_per_times'] * $fee2score;
-
 
         }
 
