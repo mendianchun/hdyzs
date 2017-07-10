@@ -167,6 +167,8 @@ class OrderController extends ApiBaseController
 //	    }
 
 	    $appointment->clinic_uuid=$uuid;
+
+
 		if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
 			return Service::sendError(20203,'缺少专家数据');
 		}
@@ -208,16 +210,22 @@ class OrderController extends ApiBaseController
 		    return Service::sendError(20206,'缺少计费方式');
 	    }
 
+
+
 	    $appointment->pay_type=$order_post['pay_type'];
+
+	    $expert = new Expert();
+	    $fee = $expert->getExpertFee($order_post['expert_uuid']);
+	    $appointment->order_fee=$fee;
 	    $appointment->created_at=time();
 	    $appointment->updated_at=time();
 
 	    if($appointment->save()>0){
 			//积分操作
 		    $cli = new Clinic();
-		    $expert = new Expert();
-		    $fee = $expert->getExpertFee($order_post['expert_uuid']);
-		    $cli->updateScore($fee," add order: $appointment_no");
+//		    $expert = new Expert();
+//		    $fee = $expert->getExpertFee($order_post['expert_uuid']);
+		    $cli->updateScore(-$fee," add order: $appointment_no");
 			//操作预约表
 		  //  $this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
 
@@ -351,16 +359,32 @@ class OrderController extends ApiBaseController
 	    $appointment_new['patient_img3']=isset($order_post['patient_img3'])?$order_post['patient_img3']:'';
 
 
-	    if(!isset($order_post['fee_type'])){
+	    if(!isset($order_post['pay_type'])){
 		    return Service::sendError(20206,'缺少计费方式');
 	    }
-	    $appointment_new['fee_type']=$order_post['fee_type'];
+
+	    if($appointment_old['pay_type'] != $order_post['pay_type']){
+		    $appointment_new['pay_type']=$order_post['pay_type'];
+	    }
+
 
 	    $appointment_new['updated_at']=time();
+
+	    $expert = new Expert();
+	    $fee = $expert->getExpertFee($order_post['expert_uuid']);
+
+
 
 	    $op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no]);
 
 	    if($op_status>0){
+
+		    if($fee != $appointment_old['order_fee'] ){
+			    $cli = new Clinic();
+			    $cli->updateScore($appointment_old['order_fee']," update order: $appointment_no");
+			    $cli->updateScore(-$fee," update order: $appointment_no");
+		    }
+
 
 			if($date_change){
 				$this->cancelorder($appointment_no,$order_post['clinic_uuid']);
@@ -415,7 +439,7 @@ class OrderController extends ApiBaseController
 		    $cli = new Clinic();
 		    $expert = new Expert();
 		    $fee = $expert->getExpertFee($appointment->attributes['expert_uuid']);
-		    $cli->updateScore(-$fee,"cancel order: $appointment_no");
+		    $cli->updateScore($fee,"cancel order: $appointment_no");
 
 	    	$this->cancelorder($appointment_no,$uuid);
 		    return Service::sendSucc();
