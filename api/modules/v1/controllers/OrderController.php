@@ -407,7 +407,7 @@ class OrderController extends ApiBaseController
 	 */
 
     public function actionCancel(){
-	    $get_params = Yii::$app->request->get();
+	    $get_params = Yii::$app->request->post();
 	    if(!isset($get_params['appointment_no']) ){
 		    return Service::sendError(20208,'缺少预约单号');
 	    }
