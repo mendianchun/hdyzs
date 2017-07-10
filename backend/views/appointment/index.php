@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'expertUu.name',
             ],
             'patient_name',
-            'order_fee',
+//            'order_fee',
 //            'status',
             ['attribute'=>'status',
                 'value'=>'StatusStr',

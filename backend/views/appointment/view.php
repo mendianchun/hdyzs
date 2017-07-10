@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>['date','php:Y-m-d H:i:s']
             ],
             'order_fee',
+            'order_score',
 //            'real_starttime:datetime',
             [
                 'attribute'=>'real_starttime',
@@ -47,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>['date','php:Y-m-d H:i:s']
             ],
             'real_fee',
+            'real_score',
             'patient_name',
             'patient_age',
             'patient_mobile',

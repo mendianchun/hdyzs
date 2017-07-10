@@ -212,7 +212,7 @@ class ZhumuController extends ApiBaseController
             return Service::sendError(10400, '缺少参数');
         }
 
-        //只有诊所才能发起
+        //只有专家才能发起
         if ($user->type != 1) {
             return Service::sendError(20401, '非法请求，只能专家才能发起会议');
         }
@@ -233,6 +233,15 @@ class ZhumuController extends ApiBaseController
         }
 
         $appointment->real_endtime = time();
+
+        //按次收费的，真实价格与预约价格相等，积分也与预约积分相等
+        if($appointment->fee_type == Appointment::FEE_TYPE_TIMES){
+            $appointment->real_fee = $appointment->order_fee;
+            $appointment->real_score = $appointment->order_score;
+        }else{
+            //按次计费的需要重新计算 toDO
+        }
+
         if (!$appointment->save()) {
             return Service::sendError(20411, '预约单结束失败');
         }
