@@ -173,11 +173,15 @@ class OrderController extends ApiBaseController
 		$appointment->expert_uuid=$order_post['expert_uuid'];
 
 		if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
-			if(($order_post['order_starttime']-time())>3600*24*7){
+
+			$start_time = strtotime($order_post['order_starttime']);
+			$end_time = strtotime($order_post['order_endtime']);
+			if(($start_time-time())>3600*24*7){
 				return Service::sendError(20217,'只能预约一周内');
 			}
+
 			//检测时间是否允许
-			$check_order_time = $this->checktime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime']);
+			$check_order_time = $this->checktime($order_post['expert_uuid'],$start_time,$end_time);
 			if($check_order_time){
 				return Service::sendError(20210,'专家预约时间冲突');
 			}
@@ -185,9 +189,9 @@ class OrderController extends ApiBaseController
 		}else{
 			return Service::sendError(20204,'缺少预约时间');
 		}
-	    $appointment->order_starttime=$order_post['order_starttime'];
-	    $appointment->order_endtime=$order_post['order_endtime'];
-	    if(!isset($order_post['patient_name'])||isset($order_post['patient_description'])){
+	    $appointment->order_starttime=$start_time;
+	    $appointment->order_endtime=$end_time;
+	    if(!isset($order_post['patient_name'])||!isset($order_post['patient_description'])){
 
 		    return Service::sendError(20205,'患者信息不完整');
 	    }
@@ -204,7 +208,7 @@ class OrderController extends ApiBaseController
 		    return Service::sendError(20206,'缺少计费方式');
 	    }
 
-	    $appointment->fee_type=$order_post['fee_type'];
+	    $appointment->pay_type=$order_post['pay_type'];
 	    $appointment->created_at=time();
 	    $appointment->updated_at=time();
 
@@ -314,12 +318,15 @@ class OrderController extends ApiBaseController
 	    $date_change=false;
 
 	    if(isset($order_post['order_starttime'])&&isset($order_post['order_endtime'])){
-		    if(($order_post['order_starttime']-time())>3600*24*7){
+
+		    $start_time = strtotime($order_post['order_starttime']);
+		    $end_time = strtotime($order_post['order_endtime']);
+		    if(($start_time-time())>3600*24*7){
 			    return Service::sendError(20217,'只能预约一周内');
 		    }
-	    	if($appointment_old['order_starttime']!==$order_post['order_starttime'] ||$appointment_old['order_endtime']!==$order_post['order_endtime']){
+	    	if($appointment_old['order_starttime']!==$start_time ||$appointment_old['order_endtime']!==$end_time){
 			    //检测时间是否允许
-			    $check_order_time = $this->checktime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime']);
+			    $check_order_time = $this->checktime($order_post['expert_uuid'],$start_time,$end_time);
 			    if($check_order_time){
 				    return Service::sendError(20210,'专家预约时间冲突');
 			    }
@@ -328,8 +335,8 @@ class OrderController extends ApiBaseController
 		}else{
 			return Service::sendError(20204,'缺少预约时间');
 		}
-	    $appointment_new['order_starttime']=$order_post['order_starttime'];
-	    $appointment_new['order_endtime']=$order_post['order_endtime'];
+	    $appointment_new['order_starttime']=$start_time;
+	    $appointment_new['order_endtime']=$end_time;
 	    if(!isset($order_post['patient_name'])||!isset($order_post['patient_age'])||isset($order_post['patient_description'])){
 
 		    return Service::sendError(20205,'患者信息不完整');

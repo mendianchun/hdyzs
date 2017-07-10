@@ -92,7 +92,7 @@ class ExpertController extends ApiBaseController
 				$hour=$v->attributes['hour'];
 				$desc = Yii::$app->params['time.'.$hour];
 				$zone=$v->attributes['zone'];
-
+				$hour=str_pad($hour,2,"0",STR_PAD_LEFT);
 				$result[$desc][] = $hour.':'.Yii::$app->params['zone.'.$zone.'.start'].'-'.$hour.':'.Yii::$app->params['zone.'.$zone.'.end'];
 
 			}
