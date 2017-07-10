@@ -85,10 +85,12 @@ class Expert extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['uuid' => 'user_uuid']);
     }
 
-    public function getExpertFee($expert_uuid)
+    public function getExpertCost($expert_uuid)
     {
     	$expert =  self::findOne(['user_uuid' => $expert_uuid]);
     	$con = SystemConfig::findOne(['name'=>'fee2score']);
-	    return $expert->attributes['fee_per_times']*$con->attributes['value'];
+	    $result['score'] = $expert->attributes['fee_per_times']*$con->attributes['value'];
+	    $result['fee'] = $expert->attributes['fee_per_times'];
+	    return $result;
     }
 }

@@ -13,6 +13,7 @@ use Yii;
  * @property integer $order_starttime
  * @property integer $order_endtime
  * @property integer $order_fee
+ * @property integer $order_score
  * @property integer $real_starttime
  * @property integer $real_endtime
  * @property integer $real_fee
