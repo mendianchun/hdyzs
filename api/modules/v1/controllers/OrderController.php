@@ -349,12 +349,12 @@ class OrderController extends ApiBaseController
 		}
 	    $appointment_new['order_starttime']=$start_time;
 	    $appointment_new['order_endtime']=$end_time;
-	    if(!isset($order_post['patient_name'])||!isset($order_post['patient_age'])||isset($order_post['patient_description'])){
+	    if(!isset($order_post['patient_name'])||isset($order_post['patient_description'])){
 
 		    return Service::sendError(20205,'患者信息不完整');
 	    }
 	    $appointment_new['patient_name']=$order_post['patient_name'];
-	    $appointment_new['patient_age']=$order_post['patient_age'];
+	   // $appointment_new['patient_age']=$order_post['patient_age'];
 	    $appointment_new['patient_description']=$order_post['patient_description'];
 
 
@@ -389,10 +389,10 @@ class OrderController extends ApiBaseController
 			    $cli->updateScore(-$cost['score']," update order: $appointment_no");
 		    }
 
-			if($date_change){
-				$this->cancelorder($appointment_no,$order_post['clinic_uuid']);
-			//	$this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
-			}
+//			if($date_change){
+//				$this->cancelorder($appointment_no,$order_post['clinic_uuid']);
+//			//	$this->ordertime($order_post['expert_uuid'],$order_post['order_starttime'],$order_post['order_endtime'],$appointment_no,$order_post['expert_uuid']);
+//			}
 
 		    return Service::sendSucc();
 	    }else{
@@ -433,8 +433,8 @@ class OrderController extends ApiBaseController
 
 	    $appointment_new['updated_at']=time();
 
-	    $op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 
+	    $op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 
 	    if($op_status>0){
 
@@ -446,7 +446,7 @@ class OrderController extends ApiBaseController
 			    $cli->updateScore($fee['score'],"cancel order: $appointment_no");
 		    }
 
-	    	$this->cancelorder($appointment_no,$uuid);
+	    	//$this->cancelorder($appointment_no,$uuid);
 		    return Service::sendSucc();
 	    }else{
 		    return Service::sendError(20215,'取消失败');
