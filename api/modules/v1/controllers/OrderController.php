@@ -14,7 +14,7 @@ use common\models\AppointmentSearch;
 use common\models\Clinic;
 use common\models\Expert;
 use common\models\ExpertTime;
-
+use common\models\ExpertTimeSearch;
 use yii\helpers\ArrayHelper;
 use common\service\Service;
 #use api\models\Signup;
@@ -304,7 +304,6 @@ class OrderController extends ApiBaseController
 
 	    $user = \yii::$app->user->identity;
 	    $uuid = $user->uuid;
-
 		if(!isset($order_post['appointment_no']) ){
 		    return Service::sendError(20208,'缺少预约单号');
 	    }
@@ -312,14 +311,14 @@ class OrderController extends ApiBaseController
 
 	    $appointment_new['appointment_no'] =$appointment_no;
 
-//	    if(!isset($order_post['clinic_uuid']) ||!Clinic::findOne(['user_uuid'=>$order_post['clinic_uuid']])){
-//		    return Service::sendError(20202,'缺少诊所数据');
-//	    }
 	    $appointment_new['clinic_uuid']=$uuid;
-	    $appointment_old = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid])->attributes;
-	    if(!$appointment_old){
+	    $appointment_old = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
+	    if($appointment_old){
+		    $appointment_old = $appointment_old->attributes;
+	    }else{
 			return Service::sendError(20212,'预约单不存在');
 	    }
+
 
 	    if(!isset($order_post['expert_uuid']) ||!Expert::findOne(['user_uuid'=>$order_post['expert_uuid']])){
 			return Service::sendError(20203,'缺少专家数据');
@@ -339,6 +338,7 @@ class OrderController extends ApiBaseController
 	    	if($appointment_old['order_starttime']!==$start_time ||$appointment_old['order_endtime']!==$end_time){
 			    //检测时间是否允许
 			    $check_order_time = $this->checktime($order_post['expert_uuid'],$start_time,$end_time);
+
 			    if($check_order_time){
 				    return Service::sendError(20210,'专家预约时间冲突');
 			    }
@@ -349,7 +349,7 @@ class OrderController extends ApiBaseController
 		}
 	    $appointment_new['order_starttime']=$start_time;
 	    $appointment_new['order_endtime']=$end_time;
-	    if(!isset($order_post['patient_name'])||isset($order_post['patient_description'])){
+	    if(!isset($order_post['patient_name'])||!isset($order_post['patient_description'])){
 
 		    return Service::sendError(20205,'患者信息不完整');
 	    }
@@ -465,10 +465,32 @@ class OrderController extends ApiBaseController
     }
 
     public function actionTest(){
-    	$expert_uuid = 'ebc3199a-f2a2-40a7-8167-7dc755106fce';
-	    $model = new Expert();
-	    $fee = $model->getExpertFee($expert_uuid);
-	    var_dump($fee);
+    	$expert_uuid = '6c7ba7de-e5ab-460a-aaf6-da9c6f067fa4';
+	    $queryParam = Yii::$app->request->queryParams;
+
+
+	    $params['ExpertTimeSearch']['expert_uuid'] =$expert_uuid;
+	    $params['ExpertTimeSearch']['date'] = '2017-07-11';
+	    $params['ExpertTimeSearch']['is_order'] = 0 ;
+
+	    $timeSearch = new ExpertTimeSearch();
+	    $provider = $timeSearch->search($params,100);
+	    $data = $provider->getModels();
+	    $result = array();
+	    if (count($data)>0){
+		    foreach($data as $v ){
+			    $hour=$v->attributes['hour'];
+			    $desc = Yii::$app->params['time.'.$hour];
+			    $zone=$v->attributes['zone'];
+			    $hour=str_pad($hour,2,"0",STR_PAD_LEFT);
+			    $result[$desc][] = $hour.':'.Yii::$app->params['zone.'.$zone.'.start'].'-'.$hour.':'.Yii::$app->params['zone.'.$zone.'.end'];
+
+		    }
+	    }else{
+		    return Service::sendError(20902,'无空闲时间');
+	    }
+
+	    var_dump($result);
 	    exit();
     }
 
@@ -530,10 +552,10 @@ class OrderController extends ApiBaseController
 
 		for($start_time;$start_time<$end_time;$start_time=$start_time+1800){
 			if($start_time%3600==0){
-				$hour = date('h',$start_time);
+				$hour = date('H',$start_time);
 				$use_set[(int)$hour][1]=1;
 			}else{
-				$hour = date('h',$start_time);
+				$hour = date('H',$start_time);
 				$use_set[(int)$hour][2]=1;
 			}
 		}
