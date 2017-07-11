@@ -61,6 +61,7 @@ class OrderController extends ApiBaseController
 	    $user = \yii::$app->user->identity;
 	    $uuid = $user->uuid;
 	    $params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
+	    $params['AppointmentSearch']['status'] = isset($queryParam['status']) ? $queryParam['status'] : null;
 	    $params['AppointmentSearch']['clinic_uuid'] = $uuid;
 	    if(isset($queryParam['date'])){
 		    $date= $queryParam['date'];
@@ -264,8 +265,8 @@ class OrderController extends ApiBaseController
 			if($result['status'] != 1 && $op=='update'){
 				return Service::sendError(20211,'目前状态不允许修改');
 			}
-			$result['order_starttime'] = date('Y-m-d h:i',$result['order_starttime']);
-			$result['order_endtime'] = date('Y-m-d h:i',$result['order_endtime']);
+			$result['order_starttime'] = date('Y-m-d H:i:s',$result['order_starttime']);
+			$result['order_endtime'] = date('Y-m-d H:i:s',$result['order_endtime']);
 
 			if($result['patient_img1']){
 				$result['patient_img1']=Yii::$app->params['domain'].$result['patient_img1'];
@@ -460,7 +461,7 @@ class OrderController extends ApiBaseController
 
 	    $nums=Appointment::find()->where(['clinic_uuid'=>$uuid,'pay_status'=>Appointment::PAY_STATUS_UNPAY,'status'=>Appointment::STATUS_SUCC])->count();
 
-	    $result['nums']=$nums;
+	    $result['nums']=(int)$nums;
 	    return Service::sendSucc($result);
     }
 
