@@ -184,6 +184,11 @@ class DiagnosisController extends ApiBaseController
 		if(!isset($order_post['appointment_no']) ){
 		    return Service::sendError(20302,'缺少预约单号');
 	    }
+
+		if(!isset($order_post['expert_diagnosis']) ){
+			return Service::sendError(20307,'专家诊断');
+		}
+
 		$appointment_no=$order_post['appointment_no'];
 
 		$user = \yii::$app->user->identity;
@@ -199,10 +204,20 @@ class DiagnosisController extends ApiBaseController
 				$result['message']='超过修改时间';
 			}else{
 				//患者信息
-				$appointment_new['patient_gender']=$order_post['patient_gender'];
-				$appointment_new['patient_mobile']=$order_post['patient_mobile'];
-				$appointment_new['patient_idcard']=$order_post['patient_idcard'];
-				$appointment_new['patient_age']=$order_post['patient_age'];
+				if(isset($order_post['patient_gender'])){
+					$appointment_new['patient_gender']=$order_post['patient_gender'];
+				}
+
+				if(isset($order_post['patient_mobile'])){
+					$appointment_new['patient_mobile']=$order_post['patient_mobile'];
+				}
+				if(isset($order_post['patient_idcard'])){
+					$appointment_new['patient_idcard']=$order_post['patient_idcard'];
+				}
+				if(isset($order_post['patient_age'])){
+					$appointment_new['patient_age']=$order_post['patient_age'];
+				}
+				
 
 				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
 
