@@ -67,8 +67,8 @@ class OrderController extends ApiBaseController
 		    $date= $queryParam['date'];
 		    $datetime_start=strtotime("$date 00:00:00");
 		    $datetime_end=strtotime("$date 23:59:59");
-		    $params['AppointmentSearch']['start_time']=$datetime_start;
-		    $params['AppointmentSearch']['end_time']=$datetime_end;
+		    $params['AppointmentSearch']['order_starttime']=$datetime_start;
+		    $params['AppointmentSearch']['order_endtime']=$datetime_end;
 	    }
 
 	    $appiontSearch = new AppointmentSearch();
@@ -125,8 +125,8 @@ class OrderController extends ApiBaseController
 		    $date= $queryParam['date'];
 		    $datetime_start=strtotime("$date 00:00:00");
 		    $datetime_end=strtotime("$date 23:59:59");
-		    $params['AppointmentSearch']['start_time']=$datetime_start;
-		    $params['AppointmentSearch']['end_time']=$datetime_end;
+		    $params['AppointmentSearch']['order_starttime']=$datetime_start;
+		    $params['AppointmentSearch']['order_endtime']=$datetime_end;
 	    }
 
 	    $appiontSearch = new AppointmentSearch();

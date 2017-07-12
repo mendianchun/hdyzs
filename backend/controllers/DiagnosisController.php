@@ -42,7 +42,7 @@ class DiagnosisController extends Controller
 	{
 		$searchModel = new AppointmentSearch();
 		$params = Yii::$app->request->queryParams;
-		$params['AppointmentSearch']['real_end_time']=0;
+		$params['AppointmentSearch']['real_endtime']=0;
 		$dataProvider = $searchModel->search($params);
 
 		return $this->render('index', [
