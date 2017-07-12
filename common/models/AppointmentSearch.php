@@ -22,7 +22,7 @@ class AppointmentSearch extends Appointment
     public function rules()
     {
         return [
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status','dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
             [['clinic_uuid', 'expert_uuid', 'patient_name', 'patient_mobile', 'patient_idcard', 'patient_description', 'expert_diagnosis', 'clinicName', 'expertName'], 'safe'],
         ];
     }
@@ -80,7 +80,8 @@ class AppointmentSearch extends Appointment
             'patient_age' => $this->patient_age,
             'pay_type' => $this->pay_type,
             'status' => $this->status,
-            'pay_status' => $this->pay_status,
+	        'pay_status' => $this->pay_status,
+	        'dx_status' => $this->dx_status,
             'is_sms_notify' => $this->is_sms_notify,
             'fee_type' => $this->fee_type,
             'created_at' => $this->created_at,

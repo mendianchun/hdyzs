@@ -217,7 +217,7 @@ class DiagnosisController extends ApiBaseController
 				if(isset($order_post['patient_age'])){
 					$appointment_new['patient_age']=$order_post['patient_age'];
 				}
-				
+
 
 				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
 
