@@ -127,7 +127,7 @@ class ZhumuController extends ApiBaseController
     public function actionGetmeetingnumber($appointment_no)
     {
         $retData = [];
-        $appointmentVideo = AppointmentVideo::findOne(['appointment_no' => $appointment_no]);
+        $appointmentVideo = AppointmentVideo::find()->where(['appointment_no' => $appointment_no])->orderBy('id DESC')->one();
         if (!empty($appointmentVideo)) {
             $retData = $appointmentVideo->attributes;
             unset($retData['id'], $retData['status'], $retData['audio_url'], $retData['created_at'], $retData['zhumu_uuid']);
