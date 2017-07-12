@@ -42,9 +42,13 @@ class DiagnosisController extends Controller
 	{
 		$searchModel = new AppointmentSearch();
 		$params = Yii::$app->request->queryParams;
-		$params['AppointmentSearch']['dx_status']=Appointment::DX_STATUS_UN;
+		$params['AppointmentSearch']['status']= Appointment::STATUS_SUCC;
 		$dataProvider = $searchModel->search($params);
 
+
+//		echo '<pre>';
+//		var_dump($dataProvider->models);
+//		exit();
 		return $this->render('index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
@@ -79,6 +83,65 @@ class DiagnosisController extends Controller
 //				'model' => $model,
 //			]);
 //		}
+	}
+
+	public function actionMp3($appointment_no){
+		if (empty($appointment_no)) {
+			echo "预约单号为空";
+			exit;
+		}
+
+		$appointment = Appointment::findOne(['appointment_no' => $appointment_no]);
+		if (!$appointment) {
+			echo "没有此预约单";
+			exit;
+		}
+	//	$appointment->audio_url = '/Users/alex/Documents/alex/e.mp3';
+		if (!$appointment->audio_url || !is_file($appointment->audio_url)) {
+			echo "还未生成音频";
+			exit;
+		}
+
+		$file = $appointment->audio_url;
+		$file_size = filesize($file);
+		$ranges = $this->getRange($file_size);
+
+		$fp = fopen($file, "rb");
+
+		if ($ranges != null) {
+			if ($ranges['start'] > 0 || $ranges['end'] < $file_size) {
+				header('HTTP/1.1 206 Partial Content');
+			}
+
+			header("Accept-Ranges: bytes");
+			header("Content-Type: audio/mpeg");
+			// 剩余长度
+			header(sprintf('Content-Length: %u', $ranges['end'] - $ranges['start']));
+
+			// range信息
+			header(sprintf('Content-Range: bytes %s-%s/%s', $ranges['start'], $ranges['end'], $file_size));
+
+			// fp指针跳到断点位置
+			fseek($fp, sprintf('%u', $ranges['start']));
+		} else {
+			//下载文件需要用到的头
+			header("Accept-Ranges: bytes");
+			header("Content-Type: audio/mpeg");
+			header("Content-Length: " . $file_size);
+		}
+
+		$buffer = 1024;
+		$file_count = 0;
+//        $fpw = fopen('echo.mp3.log','w');
+		//向浏览器返回数据
+		while (!feof($fp) && $file_count < $file_size) {
+			$file_con = fread($fp, $buffer);
+			$file_count += $buffer;
+//            fwrite($fpw,ftell($fp)."|".$buffer."|".$file_count."|".$file_size."\n");
+			echo $file_con;
+		}
+		fclose($fp);
+		exit;
 	}
 
 	/**
@@ -145,5 +208,31 @@ class DiagnosisController extends Controller
 //		{
 //			return $this->redirect(['index']);
 //		}
+	}
+
+
+	/** 获取header range信息
+	 * @param  int $file_size 文件大小
+	 * @return Array
+	 */
+	private function getRange($file_size)
+	{
+		if (isset($_SERVER['HTTP_RANGE']) && !empty($_SERVER['HTTP_RANGE'])) {
+			$range = $_SERVER['HTTP_RANGE'];
+			$range = preg_replace('/[\s|,].*/', '', $range);
+			$range = explode('-', substr($range, 6));
+			if (count($range) < 2) {
+				$range[1] = $file_size;
+			}
+			$range = array_combine(array('start', 'end'), $range);
+			if (empty($range['start'])) {
+				$range['start'] = 0;
+			}
+			if (empty($range['end'])) {
+				$range['end'] = $file_size;
+			}
+			return $range;
+		}
+		return null;
 	}
 }
