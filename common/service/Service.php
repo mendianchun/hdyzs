@@ -60,7 +60,7 @@ class Service
 
     public static function sendSms($mobile, $content)
     {
-        if(!$mobile || !$content)
+        if (!$mobile || !$content)
             return false;
         //调用短信接口发送短信
         $status = 0; //发送成功
@@ -71,5 +71,37 @@ class Service
         $smsLog->status = $status;
         $smsLog->save();
         return $status;
+    }
+
+    public function curl_post($curlPost, $url)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_NOBODY, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        if (is_array($curlPost)) {
+            $curlPost = http_build_query($curlPost);
+        }
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $curlPost);
+        $return_str = curl_exec($curl);
+        curl_close($curl);
+        return $return_str;
+    }
+
+    public function curl_get($url)
+    {
+        $curl = curl_init();
+        //设置选项，包括URL
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        //执行并获取HTML文档内容
+        $output = curl_exec($curl);
+        //释放curl句柄
+        curl_close($curl);
+        //打印获得的数据
+        return $output;
     }
 }

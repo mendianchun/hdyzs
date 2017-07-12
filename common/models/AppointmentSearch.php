@@ -99,11 +99,8 @@ class AppointmentSearch extends Appointment
         $query->andFilterWhere(['>=','order_starttime',$this->order_starttime]);
         $query->andFilterWhere(['<','order_starttime',$this->order_endtime]);
 
-        if($this->real_endtime == 0){
-            $query->andFilterWhere(['>','real_endtime',$this->real_endtime]);
-        }else{
-            $query->andFilterWhere(['<','real_endtime',$this->real_endtime]);
-        }
+        $query->andFilterWhere(['>=','real_starttime',$this->real_starttime]);
+        $query->andFilterWhere(['<','real_endtime',$this->real_endtime]);
 
         $query->join('INNER JOIN','clinic','appointment.clinic_uuid = clinic.user_uuid');
         $query->andFilterWhere(['like','clinic.name',$this->clinicName]);

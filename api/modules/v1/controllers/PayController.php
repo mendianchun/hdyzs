@@ -108,7 +108,7 @@ class PayController extends ApiBaseController
         }
         $params['AppointmentSearch']['clinic_uuid'] = $uuid;
         $params['AppointmentSearch']['status'] = Appointment::STATUS_SUCC;
-        $params['AppointmentSearch']['real_endtime'] = 0;
+        $params['AppointmentSearch']['dx_status'] = Appointment::DX_STATUS_DO;
 
         $appiontSearch = new AppointmentSearch();
         $provider = $appiontSearch->search($params, $pageSize);
