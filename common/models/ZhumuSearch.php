@@ -19,7 +19,7 @@ class ZhumuSearch extends Zhumu
     {
         return [
             [['id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['uuid', 'username', 'password'], 'safe'],
+            [['uuid', 'username', 'password', 'zcode'], 'safe'],
         ];
     }
 
@@ -67,7 +67,8 @@ class ZhumuSearch extends Zhumu
 
         $query->andFilterWhere(['like', 'uuid', $this->uuid])
             ->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'password', $this->password]);
+            ->andFilterWhere(['like', 'password', $this->password])
+            ->andFilterWhere(['like', 'zcode', $this->zcode]);
 
         return $dataProvider;
     }

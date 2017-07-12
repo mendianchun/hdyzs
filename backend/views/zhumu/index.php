@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'uuid',
             'username',
             'password',
+            'zcode',
 //            'status',
             ['attribute'=>'status',
                 'value'=>'StatusStr',

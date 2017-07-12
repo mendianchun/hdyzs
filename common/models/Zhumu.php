@@ -11,6 +11,7 @@ use Yii;
  * @property string $uuid
  * @property string $username
  * @property string $password
+ * @property string $zcode
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -37,10 +38,11 @@ class Zhumu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'password'], 'required'],
+            [['username', 'password', 'zcode'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['uuid'], 'string', 'max' => 36],
             [['username', 'password'], 'string', 'max' => 100],
+            [['zcode'], 'string', 'max' => 20],
             [['uuid'], 'unique'],
             [['username'], 'unique'],
         ];
@@ -56,6 +58,7 @@ class Zhumu extends \yii\db\ActiveRecord
             'uuid' => 'Uuid',
             'username' => '用户名',
             'password' => '密码',
+            'zcode' => 'zcode',
             'status' => '状态',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
