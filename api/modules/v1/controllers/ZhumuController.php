@@ -1,6 +1,7 @@
 <?php
 namespace api\modules\v1\controllers;
 
+use Composer\Downloader\ZipDownloader;
 use yii;
 use api\modules\ApiBaseController;
 use common\models\Zhumu;
@@ -224,15 +225,16 @@ class ZhumuController extends ApiBaseController
         }
 
         //检查预约单状态，只有预约成功的才可以记录开始时间，并且只能记录一次。
-        if ($appointment->status != 2 || $appointment->real_starttime == 0) {
+        if ($appointment->status != Appointment::STATUS_SUCC || $appointment->real_starttime == 0) {
             return Service::sendError(20409, '只有预约成功并且已经开始的才可以结束');
         }
 
-        if ($appointment->real_endtime != 0) {
+        if ($appointment->dx_status == Appointment::DX_STATUS_DO) {
             return Service::sendError(20410, '预约单已经结束了');
         }
 
         $appointment->real_endtime = time();
+        $appointment->dx_status = Appointment::DX_STATUS_DO;
 
         //按次收费的，真实价格与预约价格相等，积分也与预约积分相等
         if($appointment->fee_type == Appointment::FEE_TYPE_TIMES){

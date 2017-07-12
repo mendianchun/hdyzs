@@ -57,13 +57,13 @@ class Appointment extends \yii\db\ActiveRecord
     const PAY_TYPE_OFFLINE = 2;
     const PAY_TYPE_ONLINE = 3;
 
-	//计费方式，1:按次，2:按小时
-	const FEE_TYPE_TIMES = 1;
-	const FEE_TYPE_HOURS = 2;
+    //计费方式，1:按次，2:按小时
+    const FEE_TYPE_TIMES = 1;
+    const FEE_TYPE_HOURS = 2;
 
-	//诊断状态，1:未诊断，2:已诊断
-	const DX_STATUS_UN = 1;
-	const DX_STATUS_DO = 2;
+    //诊断状态，1:未诊断，2:已诊断
+    const DX_STATUS_UN = 1;
+    const DX_STATUS_DO = 2;
 
     /**
      * @inheritdoc
@@ -80,7 +80,7 @@ class Appointment extends \yii\db\ActiveRecord
     {
         return [
             [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_description', 'created_at', 'updated_at'], 'required'],
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status','dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
             [['patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
             [['patient_name'], 'string', 'max' => 10],
@@ -116,8 +116,8 @@ class Appointment extends \yii\db\ActiveRecord
             'expert_diagnosis' => '医生诊断',
             'pay_type' => '支付类型',
             'status' => '状态',
-	        'pay_status' => '支付状态',
-	        'dx_status' => '诊断状态',
+            'pay_status' => '支付状态',
+            'dx_status' => '诊断状态',
             'is_sms_notify' => '是否短信通知患者',
             'fee_type' => '付费类型',
             'created_at' => '创建时间',
@@ -239,13 +239,11 @@ class Appointment extends \yii\db\ActiveRecord
 
     public static function getUnpayAmount($clinic_uuid)
     {
-        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_UNPAY])
-            ->andWhere(['>','real_endtime','0'])->sum('real_fee');
+        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_UNPAY, 'dx_status' => self::DX_STATUS_DO])->sum('real_fee');
     }
 
     public static function getPayedAmount($clinic_uuid)
     {
-        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_PAYED])
-            ->andWhere(['>','real_endtime','0'])->sum('real_fee');
+        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_PAYED, 'dx_status' => self::DX_STATUS_DO])->sum('real_fee');
     }
 }

@@ -106,8 +106,7 @@ class ZhumuController extends Controller
         echo "---------------------run begin---------------------\n";
         //拿出所有未生成音频的预约单 有实际结束时间但没有生成音频地址的
         $appoinments = Appointment::find()
-            ->where(['>', 'real_endtime', 0])
-            ->andWhere(['audio_url' => ''])
+            ->where(['dx_status', Appointment::DX_STATUS_DO,'audio_url' => ''])
             ->all();
 //        var_dump($appoinments);exit;
         if (!empty($appoinments) && is_array($appoinments)) {
