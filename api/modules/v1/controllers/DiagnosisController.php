@@ -61,7 +61,7 @@ class DiagnosisController extends ApiBaseController
 		$pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
 
 		$params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
-
+		$params['AppointmentSearch']['status'] = Appointment::STATUS_SUCC;
 		if(isset($queryParam['date'])){
 			$date= $queryParam['date'];
 			$datetime_start=strtotime("$date 00:00:00");
