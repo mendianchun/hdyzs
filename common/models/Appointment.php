@@ -44,8 +44,8 @@ class Appointment extends \yii\db\ActiveRecord
     //预约单状态 1:预约中，2：预约成功，3:预约取消 4:平台取消
     const STATUS_WAITING = 1;
     const STATUS_SUCC = 2;
-	const STATUS_CANCLE = 3;
-	const STATUS_EXPERT_CANCLE = 4;
+    const STATUS_CANCLE = 3;
+    const STATUS_EXPERT_CANCLE = 4;
 
     //支付状态，0:待支付，1:已支付
     const PAY_STATUS_UNPAY = 0;
@@ -74,7 +74,7 @@ class Appointment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name',  'patient_description', 'created_at', 'updated_at'], 'required'],
+            [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_description', 'created_at', 'updated_at'], 'required'],
             [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
             [['patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
@@ -115,26 +115,26 @@ class Appointment extends \yii\db\ActiveRecord
             'is_sms_notify' => '是否短信通知患者',
             'fee_type' => '付费类型',
             'created_at' => '创建时间',
-	        'updated_at' => '更新时间',
-	        'cancel_reason' => '预约取消原因',
+            'updated_at' => '更新时间',
+            'cancel_reason' => '预约取消原因',
         ];
     }
 
     /**
- * @return \yii\db\ActiveQuery
- */
-	public function getClinicUu()
-	{
-		return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
-	}
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClinicUu()
+    {
+        return $this->hasOne(Clinic::className(), ['user_uuid' => 'clinic_uuid']);
+    }
 
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getExpertUu()
-	{
-		return $this->hasOne(Expert::className(), ['user_uuid' => 'expert_uuid']);
-	}
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExpertUu()
+    {
+        return $this->hasOne(Expert::className(), ['user_uuid' => 'expert_uuid']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -228,6 +228,18 @@ class Appointment extends \yii\db\ActiveRecord
      */
     public static function getPengdingCount()
     {
-        return Appointment::find()->where(['status'=>self::STATUS_WAITING])->count();
+        return Appointment::find()->where(['status' => self::STATUS_WAITING])->count();
+    }
+
+    public static function getUnpayAmount($clinic_uuid)
+    {
+        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_UNPAY])
+            ->andWhere(['>','real_endtime','0'])->sum('real_fee');
+    }
+
+    public static function getPayedAmount($clinic_uuid)
+    {
+        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_PAYED])
+            ->andWhere(['>','real_endtime','0'])->sum('real_fee');
     }
 }
