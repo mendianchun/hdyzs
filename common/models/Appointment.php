@@ -17,8 +17,10 @@ use Yii;
  * @property integer $real_starttime
  * @property integer $real_endtime
  * @property integer $real_fee
+ * @property integer $real_score
  * @property string $patient_name
  * @property integer $patient_age
+ * @property integer $patient_gender
  * @property string $patient_mobile
  * @property string $patient_idcard
  * @property string $patient_img1
@@ -28,12 +30,16 @@ use Yii;
  * @property string $expert_diagnosis
  * @property integer $pay_type
  * @property integer $status
+ * @property string $cancel_reason
  * @property integer $pay_status
  * @property integer $dx_status
  * @property integer $is_sms_notify
  * @property integer $fee_type
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $audio_url
+ * @property integer $audio_created_at
+ * @property integer $audio_status
  *
  * @property Clinic $clinicUu
  * @property Expert $expertUu
@@ -65,6 +71,12 @@ class Appointment extends \yii\db\ActiveRecord
     const DX_STATUS_UN = 1;
     const DX_STATUS_DO = 2;
 
+    //音频生成状态
+    const AUDIO_STATUS_UNDO = 1;
+    const AUDIO_STATUS_DONING = 2;
+    const AUDIO_STATUS_FAILED = 3;
+    const AUDIO_STATUS_SUCC = 4;
+
     /**
      * @inheritdoc
      */
@@ -80,12 +92,18 @@ class Appointment extends \yii\db\ActiveRecord
     {
         return [
             [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_description', 'created_at', 'updated_at'], 'required'],
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'real_starttime', 'real_endtime', 'real_fee', 'patient_age', 'pay_type', 'status', 'pay_status', 'dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at'], 'integer'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'order_score', 'real_starttime', 'real_endtime', 'real_fee', 'real_score', 'patient_age', 'patient_gender', 'pay_type', 'status', 'pay_status', 'dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at', 'audio_created_at', 'audio_status'], 'integer'],
+
             [['patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
             [['patient_name'], 'string', 'max' => 10],
             [['patient_mobile'], 'string', 'max' => 11],
             [['patient_idcard'], 'string', 'max' => 18],
+
+            [['patient_img1', 'patient_img2', 'patient_img3'], 'string', 'max' => 255],
+            [['cancel_reason'], 'string', 'max' => 40],
+            [['audio_url'], 'string', 'max' => 100],
+
             [['clinic_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_uuid' => 'user_uuid']],
             [['expert_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Expert::className(), 'targetAttribute' => ['expert_uuid' => 'user_uuid']],
         ];
