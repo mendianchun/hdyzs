@@ -107,9 +107,7 @@ class ExpertController extends Controller
 
 		    $expert->free_time =json_encode($free_time);
 
-
 		    $expert->load(Yii::$app->request->post());
-
 			$res = $expert->newExpert();
 			if($res){
 				$this->ordertime($res['uuid'],$free_time);
