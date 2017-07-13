@@ -233,6 +233,18 @@ class Appointment extends \yii\db\ActiveRecord
         }
     }
 
+    public function getAudioStatusStr(){
+    	if($this->audio_status==self::AUDIO_STATUS_UNDO){
+		    return '未生成';
+	    }elseif($this->audio_status==self::AUDIO_STATUS_DONING){
+		    return '生成中';
+	    }elseif($this->audio_status==self::AUDIO_STATUS_FAILED){
+		    return '生成失败';
+	    }else{
+		    return '已生成';
+	    }
+    }
+
     public static function allFeeTypeStatus()
     {
         return [self::FEE_TYPE_TIMES => '按次', self::FEE_TYPE_HOURS => '按小时'];

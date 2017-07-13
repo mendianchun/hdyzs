@@ -18,20 +18,33 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+           // ['class' => 'yii\grid\SerialColumn'],
 
-            'appointment_no',
+	        ['attribute'=>'appointment_no',
+		        //'label'=>'诊所名称',
+		        'value'=>'appointment_no',
+		        'contentOptions'=>['width'=>'80px'],
+	        ],
+           // 'appointment_no',
 //            'clinic_uuid',
             ['attribute'=>'clinicName',
                 'label'=>'诊所名称',
                 'value'=>'clinicUu.name',
+	            'contentOptions'=>['width'=>'80px'],
             ],
 //            'expert_uuid',
-            ['attribute'=>'expertName',
-                'label'=>'专家名称',
-                'value'=>'expertUu.name',
-            ],
-            'patient_name',
+	        ['attribute'=>'expertName',
+		        'label'=>'专家名称',
+		        'value'=>'expertUu.name',
+		        'contentOptions'=>['width'=>'80px'],
+	        ],
+
+	        ['attribute'=>'patient_name',
+		        'label'=>'患者名称',
+		        'value'=>'patient_name',
+		        'contentOptions'=>['width'=>'80px'],
+	        ],
+           // 'patient_name',
           //  'order_fee',
 //            'status',
             ['attribute'=>'dx_status',
@@ -76,23 +89,26 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'patient_mobile',
             // 'patient_idcard',
             // 'patient_description:ntext',
-	        'expert_diagnosis:ntext',
+	        //'expert_diagnosis:ntext',
 
 
 	        [
                 'attribute'=>'audio_url',
                 'format'=>'html',
-                'content'=>
-                    function($model)
-                    {
-                        if($model->audio_status==Appointment::AUDIO_STATUS_SUCC){
-	                        return $model->audio_url?'<div><audio style="width: 32px" controls=""><source src="'. Url::toRoute(['diagnosis/mp3', 'appointment_no' => $model->appointment_no]).'" type="audio/mp3"></audio></div>':'';
-                        }else{
-                            return '';
-                        }
-
-	                }
+		        'value'=>'AudioStatusStr',
+//                'content'=>
+//                    function($model)
+//                    {
+//                        if($model->audio_status==Appointment::AUDIO_STATUS_SUCC){
+//	                        return $model->audio_url?'<div><audio style="width: 60px" controls=""><source src="'. Url::toRoute(['diagnosis/mp3', 'appointment_no' => $model->appointment_no]).'" type="audio/mp3"></audio></div>':'';
+//                        }else{
+//                            return '';
+//                        }
+//
+//	                }
 	        ],
+
+
             // 'pay_type',
             // 'status',
             // 'pay_status',
