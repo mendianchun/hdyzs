@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use common\models\Appointment;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\AppointmentSearch */
@@ -33,13 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'patient_name',
           //  'order_fee',
 //            'status',
-            ['attribute'=>'status',
-                'value'=>'StatusStr',
-                'filter'=>Appointment::allStatus(),
+            ['attribute'=>'dx_status',
+                'value'=>'DxStatusStr',
+                'filter'=>Appointment::allDxStatus(),
                 'contentOptions'=>
             		function($model)
                     {
-                        return ($model->status==Appointment::STATUS_WAITING)?['class'=>'bg-danger']:[];
+                        return ($model->dx_status==Appointment::DX_STATUS_DO)?['class'=>'bg-danger','width'=>'80px']:['width'=>'80px'];
                     }
             ],
 //            'pay_status',
@@ -57,14 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'order_starttime',
-                'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'format' => ['date', 'php:Y-m-d H:i'],
+                'contentOptions'=>['width'=>'120px'],
             ],
 
             [
                 'attribute' => 'order_endtime',
-                'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'format' => ['date', 'php:Y-m-d H:i'],
+                'contentOptions'=>['width'=>'120px'],
             ],
             // 'order_fee',
             // 'real_starttime:datetime',
@@ -75,7 +76,18 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'patient_mobile',
             // 'patient_idcard',
             // 'patient_description:ntext',
-             'expert_diagnosis:ntext',
+	        'expert_diagnosis:ntext',
+
+
+	        [
+                'attribute'=>'audio_url',
+                'format'=>'html',
+                'content'=>
+                    function($model)
+                    {
+	                    return $model->audio_url?'<div><audio style="width: 32px" controls=""><source src="'. Url::toRoute(['diagnosis/mp3', 'appointment_no' => $model->appointment_no]).'" type="audio/mp3"></audio></div>':'';
+	                }
+	        ],
             // 'pay_type',
             // 'status',
             // 'pay_status',

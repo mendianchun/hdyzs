@@ -140,7 +140,8 @@ class Appointment extends \yii\db\ActiveRecord
             'fee_type' => '付费类型',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
-            'cancel_reason' => '预约取消原因',
+	        'cancel_reason' => '预约取消原因',
+	        'audio_url' => '诊断音频',
         ];
     }
 
@@ -176,21 +177,35 @@ class Appointment extends \yii\db\ActiveRecord
         return $this->hasMany(Pay::className(), ['appointment_no' => 'appointment_no']);
     }
 
-    public static function allStatus()
-    {
-        return [self::STATUS_CANCLE => '取消', self::STATUS_WAITING => '预约中', self::STATUS_SUCC => '预约成功'];
-    }
+	public static function allStatus()
+	{
+		return [self::STATUS_CANCLE => '取消', self::STATUS_WAITING => '预约中', self::STATUS_SUCC => '预约成功'];
+	}
 
-    public function getStatusStr()
-    {
-        if ($this->status == self::STATUS_CANCLE) {
-            return '取消';
-        } else if ($this->status == self::STATUS_WAITING) {
-            return '预约中';
-        } else {
-            return '预约成功';
-        }
-    }
+	public function getStatusStr()
+	{
+		if ($this->status == self::STATUS_CANCLE) {
+			return '取消';
+		} else if ($this->status == self::STATUS_WAITING) {
+			return '预约中';
+		} else {
+			return '预约成功';
+		}
+	}
+
+
+	public static function allDxStatus()
+	{
+		return [self::DX_STATUS_UN => '未诊断', self::DX_STATUS_DO => '已诊断'];
+	}
+	public function getDxStatusStr()
+	{
+		if ($this->dx_status == self::DX_STATUS_UN) {
+			return '未诊断';
+		} else if ($this->dx_status == self::DX_STATUS_DO) {
+			return '已诊断';
+		}
+	}
 
     public static function allPayStatus()
     {

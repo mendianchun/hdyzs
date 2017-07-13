@@ -89,7 +89,7 @@ class OrderController extends ApiBaseController
 			    $app['appointment_no'] = $item->attributes['appointment_no'];
 			    $app['clinic_uuid'] = $item->attributes['clinic_uuid'];
 
-			    $app['order_starttime'] = date('Y-m-d h:i',$item->attributes['order_starttime']);
+			    $app['order_starttime'] = date('Y-m-d H:i:s',$item->attributes['order_starttime']);
 			    $app['patient_name'] = $item->attributes['patient_name'];
 			    $app['status'] = $item->attributes['status'];
 			    //专家信息
