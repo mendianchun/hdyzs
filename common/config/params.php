@@ -30,4 +30,7 @@ return [
 	'zone.1.end'=>'29',
 	'zone.2.start'=>'30',
 	'zone.2.end'=>'59',
+
+	'zhumu.getuser' => 'https://api.zhumu.me/v3/user/get',
+	'zhumu.mcrecording' => 'https://api.zhumu.me/v3/meeting/mcrecording',
 ];

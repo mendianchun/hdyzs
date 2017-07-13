@@ -73,7 +73,7 @@ class Service
         return $status;
     }
 
-    public function curl_post($curlPost, $url)
+    public static function curl_post($curlPost, $url)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -90,7 +90,7 @@ class Service
         return $return_str;
     }
 
-    public function curl_get($url)
+    public static function curl_get($url)
     {
         $curl = curl_init();
         //设置选项，包括URL
@@ -105,14 +105,17 @@ class Service
         return $output;
     }
 
-    public function download($url, $file)
+    public static function download($url, $file, $fileszie=0)
     {
+        $download_size = 0;
         if (empty($url) || empty($file))
             return false;
         if ($fp = fopen($url, 'r')) {
             if ($myfile = fopen($file, "w")) {
                 while (!feof($fp)) {
-                    fwrite($myfile, fgets($fp) . "");
+                    $content = fgets($fp);
+                    $download_size += strlen($content);
+                    fwrite($myfile, $content . "");
                 }
                 fclose($fp);
                 fclose($myfile);
@@ -120,6 +123,10 @@ class Service
                 return false;
             }
         } else {
+            return false;
+        }
+
+        if($fileszie > 0 && $download_size != $fileszie){
             return false;
         }
 

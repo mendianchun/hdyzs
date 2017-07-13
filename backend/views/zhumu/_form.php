@@ -17,11 +17,7 @@ use common\models\Zhumu;
 
     <?= $form->field($model, 'password')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'zcode')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'status')->dropDownList(Zhumu::allStatus(),
-        ['prompt'=>'请选择状态']);
-    ?>
+    <?= $form->field($model, 'status')->dropDownList(Zhumu::allStatus()); ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

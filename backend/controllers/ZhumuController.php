@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\service\Service;
+use common\models\SystemConfig;
 
 /**
  * ZhumuController implements the CRUD actions for Zhumu model.
@@ -66,8 +67,40 @@ class ZhumuController extends Controller
     {
         $model = new Zhumu();
         $model->uuid = Service::create_uuid();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+
+        if ($model->load(Yii::$app->request->post())){
+            //获取瞩目zcode
+            $url = Yii::$app->params['zhumu.getuser'];
+
+            $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+            if (isset($systemConfig)) {
+                $api_key = $systemConfig['value'];
+            }
+
+            $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+            if (isset($systemConfig)) {
+                $api_secret = $systemConfig['value'];
+            }
+
+            $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'logintype'=>3,'loginname'=>$model->username];
+
+            $zhumu_ret = Service::curl_post($postData,$url);
+            if(is_string($zhumu_ret)){
+                $zhumu_ret_array = json_decode($zhumu_ret,true);
+                if(isset($zhumu_ret_array['zcode'])){
+                    $model->zcode = ''.$zhumu_ret_array['zcode'].'';
+                }else{
+                    $model->zcode = '111111';
+                }
+            }
+
+            if($model->save()) {
+                return $this->redirect(['index']);
+            }else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -85,8 +118,39 @@ class ZhumuController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())){
+            //获取瞩目zcode
+            $url = Yii::$app->params['zhumu.getuser'];
+
+            $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+            if (isset($systemConfig)) {
+                $api_key = $systemConfig['value'];
+            }
+
+            $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+            if (isset($systemConfig)) {
+                $api_secret = $systemConfig['value'];
+            }
+
+            $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'logintype'=>3,'loginname'=>$model->username];
+
+            $zhumu_ret = Service::curl_post($postData,$url);
+            if(is_string($zhumu_ret)){
+                $zhumu_ret_array = json_decode($zhumu_ret,true);
+                if(isset($zhumu_ret_array['zcode'])){
+                    $model->zcode = ''.$zhumu_ret_array['zcode'].'';
+                }else{
+                    $model->zcode = '111111';
+                }
+            }
+
+            if($model->save()) {
+                return $this->redirect(['index']);
+            }else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,

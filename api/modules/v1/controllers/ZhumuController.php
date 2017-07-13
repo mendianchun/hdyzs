@@ -296,7 +296,8 @@ class ZhumuController extends ApiBaseController
             }
 
             header("Accept-Ranges: bytes");
-            header("Content-Type: audio/mpeg");
+//            header("Content-Type: audio/mpeg");
+            header("Content-Type: audio/mp4a-latm");
             // 剩余长度
             header(sprintf('Content-Length: %u', $ranges['end'] - $ranges['start']));
 
@@ -308,7 +309,8 @@ class ZhumuController extends ApiBaseController
         } else {
             //下载文件需要用到的头
             header("Accept-Ranges: bytes");
-            header("Content-Type: audio/mpeg");
+//            header("Content-Type: audio/mpeg");
+            header("Content-Type: audio/mp4a-latm");
             header("Content-Length: " . $file_size);
         }
 
@@ -350,4 +352,48 @@ class ZhumuController extends ApiBaseController
         }
         return null;
     }
+
+//    public function actionMetrics(){
+//
+//        $url = 'https://api.zhumu.me/v3/meeting/metrics';
+//
+//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+//        if (isset($systemConfig)) {
+//            $api_key = $systemConfig['value'];
+//        }
+//
+//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+//        if (isset($systemConfig)) {
+//            $api_secret = $systemConfig['value'];
+//        }
+//
+//        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'type'=>2,'from'=>date("Y/m/d",strtotime('-1 month')),'to'=>date("Y/m/d")];
+//
+//        $ret = Service::curl_post($postData,$url);
+//
+//        echo $ret;
+//        exit;
+//    }
+//
+//    public function actionRecord($id)
+//    {
+//        $url = 'https://api.zhumu.me/v3/meeting/mcrecording';
+//
+//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+//        if (isset($systemConfig)) {
+//            $api_key = $systemConfig['value'];
+//        }
+//
+//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+//        if (isset($systemConfig)) {
+//            $api_secret = $systemConfig['value'];
+//        }
+//
+//        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'meeting_id'=>$id,'zcode'=>9496495821,'from'=>date("Y/m/d"),'to'=>date("Y/m/d")];
+//
+//        $ret = Service::curl_post($postData,$url);
+//        echo $ret;exit;
+//
+//    }
+
 }  
