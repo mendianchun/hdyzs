@@ -144,6 +144,15 @@ class DiagnosisController extends Controller
 		exit;
 	}
 
+
+	public function actionRebuild($id)
+	{
+
+		$command = "php yii zhumu -a=$id";
+		exec($command);
+		$this->redirect(['diagnosis/index']);
+	}
+
 	/**
 	 * Updates an existing Appointment model.
 	 * If update is successful, the browser will be redirected to the 'view' page.

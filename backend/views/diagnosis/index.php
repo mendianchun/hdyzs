@@ -85,7 +85,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'content'=>
                     function($model)
                     {
-	                    return $model->audio_url?'<div><audio style="width: 32px" controls=""><source src="'. Url::toRoute(['diagnosis/mp3', 'appointment_no' => $model->appointment_no]).'" type="audio/mp3"></audio></div>':'';
+                        if($model->audio_status==Appointment::AUDIO_STATUS_SUCC){
+	                        return $model->audio_url?'<div><audio style="width: 32px" controls=""><source src="'. Url::toRoute(['diagnosis/mp3', 'appointment_no' => $model->appointment_no]).'" type="audio/mp3"></audio></div>':'';
+                        }else{
+                            return '';
+                        }
+
 	                }
 	        ],
             // 'pay_type',
@@ -97,8 +102,24 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {approve} {pay}',
+                'template' => '{view} {approve} {pay} {rebuild}',
                 'buttons' => [
+                    'rebuild'=>function($url,$model,$key)
+                    {
+                        if($model->audio_status != Appointment::AUDIO_STATUS_FAILED){
+                            return '';
+                        }
+                        $options=[
+                            'title'=>Yii::t('yii', '重新生成'),
+                            'aria-label'=>Yii::t('yii','重新生成'),
+                            'data-confirm'=>Yii::t('yii','你确定重新生成音频吗？'),
+                            'data-method'=>'post',
+                            'data-pjax'=>'0',
+                        ];
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>',$url,$options);
+                    },
+
+
 //                    'approve'=>function($url,$model,$key)
 //                    {
 //                        if($model->status != Appointment::STATUS_WAITING){

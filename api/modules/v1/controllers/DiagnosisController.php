@@ -91,6 +91,11 @@ class DiagnosisController extends ApiBaseController
 				$app['order_starttime'] = date('Y-m-d h:i',$item->attributes['order_starttime']);
 				$app['patient_name'] = $item->attributes['patient_name'];
 				$app['patient_description'] = $item->attributes['patient_description'];
+				if(time()-$item->attributes['real_endtime']>3600*24){
+					$app['change_status']=0;
+				}else{
+					$app['change_status']=1;
+				}
 				//$app['status'] = $item->attributes['status'];
 				//专家信息
 				$expert = $item->expertUu;
