@@ -88,7 +88,7 @@ class DiagnosisController extends ApiBaseController
 				$app['appointment_no'] = $item->attributes['appointment_no'];
 				//$app['clinic_uuid'] = $item->attributes['clinic_uuid'];
 
-				$app['order_starttime'] = date('Y-m-d h:i',$item->attributes['order_starttime']);
+				$app['order_starttime'] = date('Y-m-d H:i',$item->attributes['order_starttime']);
 				$app['patient_name'] = $item->attributes['patient_name'];
 				$app['patient_description'] = $item->attributes['patient_description'];
 				if(time()-$item->attributes['real_endtime']>3600*24){
