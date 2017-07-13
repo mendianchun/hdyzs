@@ -102,7 +102,7 @@ class Appointment extends \yii\db\ActiveRecord
 
             [['patient_img1', 'patient_img2', 'patient_img3'], 'string', 'max' => 255],
             [['cancel_reason'], 'string', 'max' => 40],
-            [['audio_url'], 'string', 'max' => 100],
+            [['audio_url'], 'string', 'max' => 255],
 
             [['clinic_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_uuid' => 'user_uuid']],
             [['expert_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => Expert::className(), 'targetAttribute' => ['expert_uuid' => 'user_uuid']],

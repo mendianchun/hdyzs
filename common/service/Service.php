@@ -104,4 +104,26 @@ class Service
         //打印获得的数据
         return $output;
     }
+
+    public function download($url, $file)
+    {
+        if (empty($url) || empty($file))
+            return false;
+        if ($fp = fopen($url, 'r')) {
+            if ($myfile = fopen($file, "w")) {
+                while (!feof($fp)) {
+                    fwrite($myfile, fgets($fp) . "");
+                }
+                fclose($fp);
+                fclose($myfile);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
 }
