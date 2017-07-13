@@ -185,6 +185,7 @@ class DiagnosisController extends ApiBaseController
 	 */
 	public function actionUpdate(){
 		$order_post = Yii::$app->request->post();
+		$now =time();
 
 		if(!isset($order_post['appointment_no']) ){
 		    return Service::sendError(20302,'缺少预约单号');
@@ -203,45 +204,50 @@ class DiagnosisController extends ApiBaseController
 
 		if($appointment){
 			$appointment_old = $appointment->attributes;
-			$now =time();
-			if($appointment_old['real_endtime']+3600<$now){
-				$result['code']='20304';
-				$result['message']='超过修改时间';
-			}else{
-				//患者信息
-				if(isset($order_post['patient_gender'])){
-					$appointment_new['patient_gender']=$order_post['patient_gender'];
-				}
 
-				if(isset($order_post['patient_mobile'])){
-					$appointment_new['patient_mobile']=$order_post['patient_mobile'];
-				}
-				if(isset($order_post['patient_idcard'])){
-					$appointment_new['patient_idcard']=$order_post['patient_idcard'];
-				}
-				if(isset($order_post['patient_age'])){
-					$appointment_new['patient_age']=$order_post['patient_age'];
-				}
-
-
-				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
-
-				$appointment_new['real_endtime']=$now ;
-
-				$op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no]);
-
-				if($op_status>0){
-					$result['appointment_no'] =$appointment_no;
-				}else{
-					$result['code']='20305';
-					$result['message']='修改失败';
+			if($appointment_old['dx_status'] ==2 ){
+				if($appointment_old['real_endtime']+3600<$now){
+					return Service::sendError(20304,'超过修改时间');
 				}
 			}
 
+//			if($appointment_old['real_starttime'] < $now ){
+//				return Service::sendError(20304,'诊断未开始');
+//			}
+
+
+
+			//患者信息
+			if(isset($order_post['patient_gender'])){
+				$appointment_new['patient_gender']=$order_post['patient_gender'];
+			}
+
+			if(isset($order_post['patient_mobile'])){
+				$appointment_new['patient_mobile']=$order_post['patient_mobile'];
+			}
+			if(isset($order_post['patient_idcard'])){
+				$appointment_new['patient_idcard']=$order_post['patient_idcard'];
+			}
+			if(isset($order_post['patient_age'])){
+				$appointment_new['patient_age']=$order_post['patient_age'];
+			}
+
+
+			$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
+
+			$appointment_new['real_endtime']=$now ;
+
+			$op_status=Appointment::updateAll($appointment_new,['appointment_no'=>$appointment_no]);
+
+			if($op_status>0){
+				$result['appointment_no'] =$appointment_no;
+			}else{
+
+				return Service::sendError(20305,'修改失败');
+			}
 
 		}else{
-			$result['code']='20303';
-			$result['message']='诊断号错误';
+			return Service::sendError(20303,'诊断号错误');
 		}
 		return $result;
 	}

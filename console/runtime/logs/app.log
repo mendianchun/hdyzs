@@ -2219,3 +2219,93 @@ Stack trace:
     ]
     'argc' => 3
 ]
+2017-07-13 10:44:04 [-][-][-][error][yii\console\Exception] exception 'yii\console\Exception' with message '未知的别名: -a' in /Users/alex/Documents/code/php/handian/vendor/yiisoft/yii2/console/Controller.php:101
+Stack trace:
+#0 /Users/alex/Documents/code/php/handian/vendor/yiisoft/yii2/base/Module.php(523): yii\console\Controller->runAction('', Array)
+#1 /Users/alex/Documents/code/php/handian/vendor/yiisoft/yii2/console/Application.php(180): yii\base\Module->runAction('zhumu', Array)
+#2 /Users/alex/Documents/code/php/handian/vendor/yiisoft/yii2/console/Application.php(147): yii\console\Application->runAction('zhumu', Array)
+#3 /Users/alex/Documents/code/php/handian/vendor/yiisoft/yii2/base/Application.php(380): yii\console\Application->handleRequest(Object(yii\console\Request))
+#4 /Users/alex/Documents/code/php/handian/yii(27): yii\base\Application->run()
+#5 {main}
+2017-07-13 10:44:04 [-][-][-][info][application] $_SERVER = [
+    'TERM_SESSION_ID' => 'w0t0p0:2167B23C-8D37-4B5A-B0B4-0013E5A091D4'
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.E6znsdadIB/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.J2TdHuZOam/Render'
+    'COLORFGBG' => '12;8'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/alex/Documents/code/php/handian'
+    'SHELL' => '/bin/zsh'
+    'TERM_PROGRAM_VERSION' => '3.1.beta.5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/Users/alex/.rvm/gems/ruby-2.2.2/bin:/Users/alex/.rvm/gems/ruby-2.2.2@global/bin:/Users/alex/.rvm/rubies/ruby-2.2.2/bin:/usr/local/Cellar/php56/5.6.30_6/sbin:/usr/local/Cellar/php56/5.6.30_6/bin:/usr/local/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alex/.rvm/bin:/usr/local/mysql/bin'
+    'COLORTERM' => 'truecolor'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/alex'
+    'TMPDIR' => '/var/folders/h_/86769l7d1nvcfj28lwps48680000gn/T/'
+    'USER' => 'alex'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'alex'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0:2167B23C-8D37-4B5A-B0B4-0013E5A091D4'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/alex'
+    'ZSH' => '/Users/alex/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/alex/Library/autojump/errors.log'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'PHPRC' => ''
+    'MANPATH' => '/usr/local/Cellar/php56/5.6.30_6/share/man:'
+    'rvm_prefix' => '/Users/alex'
+    'rvm_path' => '/Users/alex/.rvm'
+    'rvm_bin_path' => '/Users/alex/.rvm/bin'
+    '_system_type' => 'Darwin'
+    '_system_name' => 'OSX'
+    '_system_version' => '10.12'
+    '_system_arch' => 'x86_64'
+    'rvm_version' => '1.27.0 (latest)'
+    'GEM_HOME' => '/Users/alex/.rvm/gems/ruby-2.2.2'
+    'GEM_PATH' => '/Users/alex/.rvm/gems/ruby-2.2.2:/Users/alex/.rvm/gems/ruby-2.2.2@global'
+    'MY_RUBY_HOME' => '/Users/alex/.rvm/rubies/ruby-2.2.2'
+    'IRBRC' => '/Users/alex/.rvm/rubies/ruby-2.2.2/.irbrc'
+    'RUBY_VERSION' => 'ruby-2.2.2'
+    'rvm_alias_expanded' => ''
+    'rvm_bin_flag' => ''
+    'rvm_docs_type' => ''
+    'rvm_gemstone_package_file' => ''
+    'rvm_gemstone_url' => ''
+    'rvm_niceness' => ''
+    'rvm_nightly_flag' => ''
+    'rvm_only_path_flag' => ''
+    'rvm_proxy' => ''
+    'rvm_quiet_flag' => ''
+    'rvm_ruby_bits' => ''
+    'rvm_ruby_file' => ''
+    'rvm_ruby_make' => ''
+    'rvm_ruby_make_install' => ''
+    'rvm_ruby_mode' => ''
+    'rvm_script_name' => ''
+    'rvm_sdk' => ''
+    'rvm_silent_flag' => ''
+    'rvm_use_flag' => ''
+    'rvm_wrapper_name' => ''
+    'rvm_hook' => ''
+    '_' => '/usr/local/Cellar/php56/5.6.30_6/bin/php'
+    'PHP_SELF' => 'yii'
+    'SCRIPT_NAME' => 'yii'
+    'SCRIPT_FILENAME' => 'yii'
+    'PATH_TRANSLATED' => 'yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1499913844.8436
+    'REQUEST_TIME' => 1499913844
+    'argv' => [
+        0 => 'yii'
+        1 => 'zhumu'
+        2 => '-a=170710152144018189'
+    ]
+    'argc' => 3
+]

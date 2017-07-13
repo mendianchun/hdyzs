@@ -148,7 +148,7 @@ class DiagnosisController extends Controller
 	public function actionRebuild($id)
 	{
 
-		$command = "php yii zhumu -a=$id";
+		$command = "php yii zhumu -a=$id & ";
 		exec($command);
 		$this->redirect(['diagnosis/index']);
 	}

@@ -11,21 +11,27 @@ namespace backend\models;
 use yii\base\Model;
 use yii\helpers\VarDumper;
 use common\models\User;
+use common\service\Service;
 
 class Expert extends \common\models\Expert
 {
 
 	public $username;
 	public $password;
+	public $head_img;
 	public $password_repeat;
 	public $mobile;
 
+//	public $fee_per_times;
+//	public $fee_per_hour;
+//	public $skill;
+//	public $introduction;
 //	public function fields()
 //	{
 //		$fields = parent::fields();
 //
 //		// 去掉一些包含敏感信息的字段
-//		unset($fields['patient_mobile'], $fields['patient_idcard'], $fields['created_at']);
+//		//unset($fields['patient_mobile'], $fields['patient_idcard'], $fields['created_at']);
 //
 //		return $fields;
 //	}
@@ -48,6 +54,9 @@ class Expert extends \common\models\Expert
 			['password', 'string', 'min' => 6],
 
 			['password_repeat','compare','compareAttribute'=>'password','message'=>'两次输入的密码不一致！'],
+
+			[['name', 'username', 'mobile', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction'], 'string'],
+
 		];
 	}
 
@@ -64,41 +73,38 @@ class Expert extends \common\models\Expert
 
 	public function newExpert()
 	{
+
 		if (!$this->validate()) {
 			return null;
 		}
-
-
 		$user = new User();
 		$user->username = $this->username;
-	    $user->mobile = $this->mobile;
-	    $user->type=User::USER_EXPERT;
+		$user->mobile = $this->mobile;
+		$user->type=User::USER_EXPERT;
 
-	    $user->setPassword($this->password);
-	    $user->generateAuthKey();
+		$user->setPassword($this->password);
+		$user->generateAuthKey();
 
-	    $uuid = Service::create_uuid();
-	    $user->uuid = $uuid;
+		$uuid = Service::create_uuid();
+		$user->uuid = $uuid;
 		if($user->save()){
-
 			$expert=new \common\models\Expert();
 
-
 			$expert->name =$this->name;
-		    $expert->head_img =$this->head_img;
+			$expert->head_img =$this->head_img;
 
-		    $expert->free_time =$this->free_time;
+			$expert->free_time =$this->free_time;
 
-		    $expert->fee_per_times = $this->fee_per_times;;
-		    $expert->fee_per_hour =$this->fee_per_hour;
-		    $expert->skill =$this->skill;
-		    $expert->introduction =$this->introduction;
-		    $expert->user_uuid =$uuid;
-		    if($expert->save()>0){
-		    	return array('uuid'=>$uuid,'id'=>$this->id);
-		    }else{
-			    return null;
-		    }
+			$expert->fee_per_times = $this->fee_per_times;;
+			$expert->fee_per_hour =$this->fee_per_hour;
+			$expert->skill =$this->skill;
+			$expert->introduction =$this->introduction;
+			$expert->user_uuid =$uuid;
+			if($expert->save()>0){
+				return array('uuid'=>$uuid,'id'=>$this->id);
+			}else{
+				return null;
+			}
 		}else{
 			return null;
 		}
