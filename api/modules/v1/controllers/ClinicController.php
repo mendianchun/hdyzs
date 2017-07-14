@@ -10,7 +10,7 @@ use common\service\Service;
 use common\models\DrugCodeClinic;
 use common\models\DrugCode;
 use common\models\SystemConfig;
-
+use common\models\Appointment;
 class ClinicController extends ApiBaseController
 {
     public $modelClass = 'common\models\Clinic';//对应的数据模型处理控制器
@@ -86,6 +86,12 @@ class ClinicController extends ApiBaseController
 
     public function actionUpdate()
     {
+		//判断用户是否存在未处理的预约
+    	$num = $this->getUnfinishNum();
+    	if($num >0){
+		    return Service::sendError(20712, '存在未处理的预约，无法修改');
+	    }
+
         $post = Yii::$app->request->post();
 
         //参数检查
@@ -203,5 +209,38 @@ class ClinicController extends ApiBaseController
         }else{
             return Service::sendError(20711, '处理失败');
         }
+    }
+
+	/**
+	 *
+	 * 检查用户是否可修改
+	 * @return array
+	 *
+	 */
+
+    public function actionCheckdx()
+    {
+		$num = $this->getUnfinishNum();
+		if($num==0){
+			return Service::sendSucc();
+		}else{
+			return Service::sendError(20712, '存在未处理的预约，无法修改');
+		}
+    }
+
+	/**
+	 *
+	 * 检测当前用户下是否存在未处理的预约
+	 * @return int|string
+	 */
+    private function getUnfinishNum()
+    {
+	    $user = \yii::$app->user->identity;
+	    $uuid = $user->uuid;
+		$num = Appointment::find()
+				->where(['and', 'dx_status='.Appointment::DX_STATUS_UN, ['or', 'status='.Appointment::STATUS_WAITING, 'status='.Appointment::STATUS_SUCC]] )
+				->andWhere(['clinic_uuid'=>$uuid])
+			->count();
+		return $num;
     }
 }  
