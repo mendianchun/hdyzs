@@ -63,6 +63,19 @@ class Service
         if (!$mobile || !$content)
             return false;
         //调用短信接口发送短信
+
+//        $post_data = [
+//            'un' => Yii::$app->params['sms_user'],
+//            'pw' => Yii::$app->params['sms_pwd'],
+//            'da' => $result['tel'],
+//            'sm' => bin2hex(iconv("UTf-8", "GBK", $result['message'])),
+//            'dc' => 15,
+//            'rd' => 0
+//        ];
+//
+//
+//        //密码可以使用明文密码或使用32位MD5加密
+//        $gets                   =   self::curl_post($post_data,Yii::$app->params['sms_host']);
         $status = 0; //发送成功
 
         $smsLog = new \common\models\SmsLog();
