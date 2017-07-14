@@ -125,7 +125,8 @@ class ZhumuController extends Controller
                     $ret = $this->downloadResource($appointmentVideo->zhumuUu->zcode, $appointmentVideo->meeting_number, $targetFolder);
                     //下载资源失败，直接返回，标名此次获取音频失败。
                     if($ret['code'] == 0){
-                        $appointmentVideo->video_url = $ret['data'];
+//                        $appointmentVideo->video_url = $ret['data'];
+                        $appointmentVideo->video_url = $this->resource2Audio($ret['data'],$targetFolder."/".$appointmentVideo->meeting_number);
                         $appointmentVideo->save();
                     }elseif($ret['code'] == -100){
                         echo "-100:会议号：".$appointmentVideo->meeting_number."下载资源失败\n";
@@ -148,8 +149,6 @@ class ZhumuController extends Controller
 
         //从瞩目下载视频
         $meetingFolder = $targetFolder . "/" . $meeting_number;
-        $time = date("YmdHis");
-        $m4a = $meetingFolder . "/" . $time . ".m4a";
 
         $file = new \yii\helpers\FileHelper();
         $file->createDirectory($meetingFolder, 0777);
@@ -177,14 +176,19 @@ class ZhumuController extends Controller
             $retArr = json_decode($ret, true);
 //            print_r($retArr);exit;
             if (isset($retArr['Data']['meetings'][0]['recording_files']) && is_array($retArr['Data']['meetings'][0]['recording_files'])) {
+                $resoureArray = array();
                 foreach ($retArr['Data']['meetings'][0]['recording_files'] as $file) {
                     if (strtoupper($file['file_type']) == 'M4A') {
+                        $m4a = $meetingFolder . "/" . date("YmdHis")."_".rand(1000,9999) . ".m4a";
                         if (Service::download($file['file_path'], $m4a, $file['file_size'])) {
-                            return ['code'=>0,'data'=>$m4a];
+                            $resoureArray[]=$m4a;
                         } else {
                             return ['code'=>-100,'data'=>null];
                         }
                     }
+                }
+                if(!empty($resoureArray)){
+                    return ['code'=>0,'data'=>$resoureArray];
                 }
             }
         }
@@ -201,8 +205,7 @@ class ZhumuController extends Controller
         if (!is_array($resources) || empty($resources))
             return false;
 
-        $time = date("YmdHis");
-        $m4a = $targetFolder . "/" . $time . ".m4a";
+        $m4a = $targetFolder . "/" . date("YmdHis")."_".rand(1000,9999) . ".m4a";
         $list = $targetFolder . "/list.txt";
 
         //生成list文件
