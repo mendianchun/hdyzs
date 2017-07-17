@@ -43,7 +43,7 @@ class ZhumuController extends Controller
 
     public function actionIndex()
     {
-        echo "---------------------run begin---------------------\n";
+        echo "--------------------" . date("Y-m-d H:i:s") . "-run begin---------------------\n";
         if (!empty($this->appointment_no)) {
             //生成失败的，手动生成
             $appoinments = Appointment::find()
@@ -81,7 +81,7 @@ class ZhumuController extends Controller
             echo "没有需要处理的预约单\n";
         }
 
-        echo "---------------------run end---------------------\n";
+        echo "--------------------" . date("Y-m-d H:i:s") . "-run end---------------------\n";
     }
 
     private function getAudio($appointment_no)
@@ -89,9 +89,10 @@ class ZhumuController extends Controller
         if (empty($appointment_no))
             return false;
 //        $basedir = getcwd();
-        $basedir = dirname(__FILE__);
+//        $basedir = dirname(__FILE__);
+        $basedir = Yii::getAlias('@yii');
         //音频地址
-        $targetFolder = $basedir . "/../../data/zhumu/" . $appointment_no;
+        $targetFolder = $basedir . "/data/zhumu/" . $appointment_no;
         $file = new \yii\helpers\FileHelper();
         $file->createDirectory($targetFolder, 0777);
 
@@ -103,7 +104,7 @@ class ZhumuController extends Controller
 
         //先要获取会议的m4a资源
         $resources = $this->getResource($appointment_no, $targetFolder);
-        if($resources === false || empty($resources))
+        if ($resources === false || empty($resources))
             return false;
 //        var_dump($videos);
 
@@ -124,15 +125,15 @@ class ZhumuController extends Controller
                 if (empty($appointmentVideo->video_url) || !is_file($appointmentVideo->video_url)) {
                     $ret = $this->downloadResource($appointmentVideo->zhumuUu->zcode, $appointmentVideo->meeting_number, $targetFolder);
                     //下载资源失败，直接返回，标名此次获取音频失败。
-                    if($ret['code'] == 0){
+                    if ($ret['code'] == 0) {
 //                        $appointmentVideo->video_url = $ret['data'];
-                        $appointmentVideo->video_url = $this->resource2Audio($ret['data'],$targetFolder."/".$appointmentVideo->meeting_number);
+                        $appointmentVideo->video_url = $this->resource2Audio($ret['data'], $targetFolder . "/" . $appointmentVideo->meeting_number);
                         $appointmentVideo->save();
-                    }elseif($ret['code'] == -100){
-                        echo "-100:会议号：".$appointmentVideo->meeting_number."下载资源失败\n";
+                    } elseif ($ret['code'] == -100) {
+                        echo "-100:会议号：" . $appointmentVideo->meeting_number . "下载资源失败\n";
                         return false;
-                    }else{
-                        echo "-200:会议号：".$appointmentVideo->meeting_number."资源为空\n";
+                    } else {
+                        echo "-200:会议号：" . $appointmentVideo->meeting_number . "资源为空\n";
                         continue;
                     }
                 }
@@ -179,25 +180,21 @@ class ZhumuController extends Controller
                 $resoureArray = array();
                 foreach ($retArr['Data']['meetings'][0]['recording_files'] as $file) {
                     if (strtoupper($file['file_type']) == 'M4A') {
-                        $m4a = $meetingFolder . "/" . date("YmdHis")."_".rand(1000,9999) . ".m4a";
+                        $m4a = $meetingFolder . "/" . date("YmdHis") . "_" . rand(1000, 9999) . ".m4a";
                         if (Service::download($file['file_path'], $m4a, $file['file_size'])) {
-                            $resoureArray[]=$m4a;
+                            $resoureArray[] = $m4a;
                         } else {
-                            return ['code'=>-100,'data'=>null];
+                            return ['code' => -100, 'data' => null];
                         }
                     }
                 }
-                if(!empty($resoureArray)){
-                    return ['code'=>0,'data'=>$resoureArray];
+                if (!empty($resoureArray)) {
+                    return ['code' => 0, 'data' => $resoureArray];
                 }
             }
         }
 
-
-//        $filePrefix = rand(1, 2);
-//        copy($targetFolder . "/../" . $filePrefix . ".m4a", $m4a);
-
-        return ['code'=>-200,'data'=>null];
+        return ['code' => -200, 'data' => null];
     }
 
     private function resource2Audio($resources, $targetFolder)
@@ -205,7 +202,7 @@ class ZhumuController extends Controller
         if (!is_array($resources) || empty($resources))
             return false;
 
-        $m4a = $targetFolder . "/" . date("YmdHis")."_".rand(1000,9999) . ".m4a";
+        $m4a = $targetFolder . "/" . date("YmdHis") . "_" . rand(1000, 9999) . ".m4a";
         $list = $targetFolder . "/list.txt";
 
         //生成list文件
@@ -224,6 +221,7 @@ class ZhumuController extends Controller
 
     }
 
+    //----------------------------------------disable-------------------------------------------------//
     private function getVideo($appointment_no, $targetFolder)
     {
         $videoArray = array();
