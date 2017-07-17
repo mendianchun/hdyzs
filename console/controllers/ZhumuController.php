@@ -90,7 +90,7 @@ class ZhumuController extends Controller
             return false;
 //        $basedir = getcwd();
 //        $basedir = dirname(__FILE__);
-        $basedir = Yii::getAlias('@yii');
+        $basedir = Yii::getAlias('@yii_base');
         //音频地址
         $targetFolder = $basedir . "/data/zhumu/" . $appointment_no;
         $file = new \yii\helpers\FileHelper();
