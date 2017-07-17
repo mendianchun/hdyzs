@@ -298,6 +298,9 @@ class OrderController extends ApiBaseController
         }
     }
 
+    /*
+     * 诊所端获取详情
+     */
     public function actionDetail()
     {
         $get_params = Yii::$app->request->get();
@@ -354,6 +357,61 @@ class OrderController extends ApiBaseController
             $result['expert']['name'] = $expert->attributes['name'];
             $result['expert']['head_img'] = Yii::$app->params['domain'] . $expert->attributes['head_img'];
             $result['expert']['user_uuid'] = $expert->attributes['user_uuid'];
+        }
+        return Service::sendSucc($result);
+    }
+
+    /*
+     * 专家端获取详情
+     */
+    public function actionDetail2expert()
+    {
+        $get_params = Yii::$app->request->get();
+        if (!isset($get_params['appointment_no'])) {
+            return Service::sendError(20208, '缺少预约单号');
+        }
+
+        $appointment_no = $get_params['appointment_no'];
+
+        $user = \yii::$app->user->identity;
+        $uuid = $user->uuid;
+
+        $appointment = Appointment::findOne(['appointment_no' => $appointment_no, 'expert_uuid' => $uuid]);
+
+        if (!$appointment) {
+            $result['code'] = '20202';
+            $result['message'] = '获取预约信息失败';
+        } else {
+            $result = $appointment->attributes;
+            $result['order_starttime'] = date('Y-m-d H:i:s', $result['order_starttime']);
+            $result['order_endtime'] = date('Y-m-d H:i:s', $result['order_endtime']);
+
+            if ($result['patient_img1']) {
+                $result['patient_img1'] = Yii::$app->params['domain'] . $result['patient_img1'];
+            }
+            if ($result['patient_img2']) {
+                $result['patient_img2'] = Yii::$app->params['domain'] . $result['patient_img2'];
+            }
+            if ($result['patient_img3']) {
+                $result['patient_img3'] = Yii::$app->params['domain'] . $result['patient_img3'];
+            }
+
+
+            unset($result['real_starttime']);
+            unset($result['real_endtime']);
+            unset($result['real_fee']);
+            unset($result['expert_diagnosis']);
+            unset($result['pay_status']);
+            unset($result['created_at']);
+            unset($result['updated_at']);
+            unset($result['audio_url']);
+            unset($result['audio_created_at']);
+
+            $clinic = $appointment->clinicUu;
+
+            $result['clinic']['id'] = $clinic->attributes['id'];
+            $result['clinic']['name'] = $clinic->attributes['name'];
+            $result['clinic']['user_uuid'] = $clinic->attributes['user_uuid'];
         }
         return Service::sendSucc($result);
     }
