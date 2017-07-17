@@ -40,7 +40,7 @@ class AppointmentVideo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['appointment_no', 'zhumu_uuid', 'created_at'], 'required'],
+            [['appointment_no', 'zhumu_uuid'], 'required'],
             [['appointment_no', 'meeting_number', 'status', 'created_at'], 'integer'],
             [['zhumu_uuid'], 'string', 'max' => 36],
             [['audio_url'], 'string', 'max' => 100],
