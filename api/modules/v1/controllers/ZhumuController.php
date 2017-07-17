@@ -11,6 +11,7 @@ use common\models\Appointment;
 
 use yii\helpers\ArrayHelper;
 use common\service\Service;
+use common\models\User;
 
 
 class ZhumuController extends ApiBaseController
@@ -40,7 +41,7 @@ class ZhumuController extends ApiBaseController
         $user = \yii::$app->user->identity;
 
         //只有专家才能发起
-        if ($user->type != 1) {
+        if ($user->type != User::USER_EXPERT) {
             return Service::sendError(20401, '非法请求，只能专家才能发起会议');
         }
 
@@ -83,7 +84,7 @@ class ZhumuController extends ApiBaseController
         }
 
         //只有专家才能发起
-        if ($user->type != 1) {
+        if ($user->type != User::USER_EXPERT) {
             return Service::sendError(20401, '非法请求，只能专家才能发起会议');
         }
 
@@ -170,7 +171,7 @@ class ZhumuController extends ApiBaseController
         }
 
         //只有诊所才能发起
-        if ($user->type != 2) {
+        if ($user->type != User::USER_CLINIC) {
             return Service::sendError(20405, '非法请求，只能诊所才能调用');
         }
 
@@ -181,7 +182,7 @@ class ZhumuController extends ApiBaseController
         }
 
         //检查预约单状态，只有预约成功的才可以记录开始时间，并且只能记录一次。
-        if ($appointment->status != 2) {
+        if ($appointment->status != Appointment::STATUS_SUCC) {
             return Service::sendError(20406, '只有预约成功的才可以开始');
         }
 
@@ -214,7 +215,7 @@ class ZhumuController extends ApiBaseController
         }
 
         //只有专家才能发起
-        if ($user->type != 1) {
+        if ($user->type != User::USER_EXPERT) {
             return Service::sendError(20401, '非法请求，只能专家才能发起会议');
         }
 
@@ -352,48 +353,4 @@ class ZhumuController extends ApiBaseController
         }
         return null;
     }
-
-//    public function actionMetrics(){
-//
-//        $url = 'https://api.zhumu.me/v3/meeting/metrics';
-//
-//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
-//        if (isset($systemConfig)) {
-//            $api_key = $systemConfig['value'];
-//        }
-//
-//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
-//        if (isset($systemConfig)) {
-//            $api_secret = $systemConfig['value'];
-//        }
-//
-//        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'type'=>2,'from'=>date("Y/m/d",strtotime('-1 month')),'to'=>date("Y/m/d")];
-//
-//        $ret = Service::curl_post($postData,$url);
-//
-//        echo $ret;
-//        exit;
-//    }
-//
-//    public function actionRecord($id)
-//    {
-//        $url = 'https://api.zhumu.me/v3/meeting/mcrecording';
-//
-//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
-//        if (isset($systemConfig)) {
-//            $api_key = $systemConfig['value'];
-//        }
-//
-//        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
-//        if (isset($systemConfig)) {
-//            $api_secret = $systemConfig['value'];
-//        }
-//
-//        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'meeting_id'=>$id,'zcode'=>9496495821,'from'=>date("Y/m/d"),'to'=>date("Y/m/d")];
-//
-//        $ret = Service::curl_post($postData,$url);
-//        echo $ret;exit;
-//
-//    }
-
 }  

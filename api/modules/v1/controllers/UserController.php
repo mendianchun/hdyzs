@@ -239,7 +239,7 @@ class UserController extends ApiBaseController
         unset($info['id'],$info['auth_key'],$info['password_hash'],$info['password_reset_token'],$info['status'],
         $info['api_token'],$info['type']);
         //诊所获取积分信息
-        if($user->type == 2){
+        if($user->type == User::USER_CLINIC){
             $clinic = $user->clinicUu;
             if($clinic){
                 $clinicAttributes = $clinic->attributes;
@@ -249,7 +249,7 @@ class UserController extends ApiBaseController
                 $clinicAttributes['doctor_certificate_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$clinicAttributes['doctor_certificate_img'];
                 $info['clinic'] = $clinicAttributes;
             }
-        }else if($user->type == 1){
+        }else if($user->type == User::USER_EXPERT){
             $expert = $user->expertUu;
             if($expert){
                 $expertAttributes = $expert->attributes;

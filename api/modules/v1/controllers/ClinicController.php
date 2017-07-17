@@ -11,6 +11,8 @@ use common\models\DrugCodeClinic;
 use common\models\DrugCode;
 use common\models\SystemConfig;
 use common\models\Appointment;
+use common\models\User;
+
 class ClinicController extends ApiBaseController
 {
     public $modelClass = 'common\models\Clinic';//对应的数据模型处理控制器
@@ -54,7 +56,7 @@ class ClinicController extends ApiBaseController
         $user = \yii::$app->user->identity;
 
         //判断当前用户类型，只有诊所(type=2)才可以注册，并且之前没有注册过
-        if ($user->type != 2) {
+        if ($user->type != User::USER_CLINIC) {
             return Service::sendError(20701, '用户类型错误，不能注册诊所');
         }
 
@@ -111,7 +113,7 @@ class ClinicController extends ApiBaseController
         $user = \yii::$app->user->identity;
 
         //判断当前用户类型，只有诊所(type=2)才可以注册
-        if ($user->type != 2) {
+        if ($user->type != User::USER_CLINIC) {
             return Service::sendError(20701, '用户类型错误，不能注册诊所');
         }
 
@@ -166,7 +168,7 @@ class ClinicController extends ApiBaseController
         $user = \yii::$app->user->identity;
 
         //判断当前用户类型，只有诊所(type=2)才可以提交药品监管码
-        if ($user->type != 2) {
+        if ($user->type != User::USER_CLINIC) {
             return Service::sendError(20707, '用户类型错误，不能提交药品监管码');
         }
 

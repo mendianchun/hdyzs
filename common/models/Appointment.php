@@ -284,11 +284,19 @@ class Appointment extends \yii\db\ActiveRecord
 
     public static function getUnpayAmount($clinic_uuid)
     {
-        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_UNPAY, 'dx_status' => self::DX_STATUS_DO])->sum('real_fee');
+        if($unpayAmount = Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_UNPAY, 'dx_status' => self::DX_STATUS_DO])->sum('real_fee')){
+            return $unpayAmount;
+        }else{
+            return 0;
+        }
     }
 
     public static function getPayedAmount($clinic_uuid)
     {
-        return Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_PAYED, 'dx_status' => self::DX_STATUS_DO])->sum('real_fee');
+        if($payedAmount = Appointment::find()->where(['clinic_uuid' => $clinic_uuid, 'status' => self::STATUS_SUCC, 'pay_status' => self::PAY_STATUS_PAYED, 'dx_status' => self::DX_STATUS_DO])->sum('real_fee')){
+            return $payedAmount;
+        }else{
+            return 0;
+        }
     }
 }

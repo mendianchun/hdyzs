@@ -1,0 +1,71 @@
+<?php
+namespace api\modules\v1\controllers;
+
+use yii;
+use api\modules\ApiBaseController;
+use common\models\SystemConfig;
+use common\service\Service;
+use yii\helpers\ArrayHelper;
+
+
+class DebugController extends ApiBaseController
+{
+    public $modelClass = 'common\models\Zhumu';//对应的数据模型处理控制器
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return ArrayHelper::merge(parent::behaviors(), [
+            'authenticator' => [
+                'optional' => [
+                    'metrics',
+                    'record',
+                ],
+            ]
+        ]);
+    }
+
+    public function actionMetrics(){
+
+        $url = 'https://api.zhumu.me/v3/meeting/metrics';
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+        if (isset($systemConfig)) {
+            $api_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+        if (isset($systemConfig)) {
+            $api_secret = $systemConfig['value'];
+        }
+
+        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'type'=>2,'from'=>date("Y/m/d",strtotime('-1 month')),'to'=>date("Y/m/d")];
+
+        $ret = Service::curl_post($postData,$url);
+
+        echo $ret;
+        exit;
+    }
+
+    public function actionRecord($id)
+    {
+        $url = 'https://api.zhumu.me/v3/meeting/mcrecording';
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+        if (isset($systemConfig)) {
+            $api_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+        if (isset($systemConfig)) {
+            $api_secret = $systemConfig['value'];
+        }
+
+        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'meeting_id'=>$id,'zcode'=>9496495821,'from'=>date("Y/m/d"),'to'=>date("Y/m/d")];
+
+        $ret = Service::curl_post($postData,$url);
+        echo $ret;exit;
+    }
+}
