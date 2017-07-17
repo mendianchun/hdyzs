@@ -28,14 +28,14 @@ class DiagnosisController extends ApiBaseController
 		return ArrayHelper::merge(parent::behaviors(), [
 			'authenticator' => [
 				'optional' => [
-					'index',
-					'view',
-					'create',
-					'search',
-					'update',
-					'delete',
-					'detail',
-					'checkpay',
+//					'index',
+//					'view',
+//					'create',
+//					'search',
+//					'update',
+//					'delete',
+//					'detail',
+//					'checkpay',
 				],
 			]
 		]);
