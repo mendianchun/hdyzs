@@ -24,6 +24,7 @@ class DebugController extends ApiBaseController
                     'record',
                     'get',
                     'end',
+                    'create',
                 ],
             ]
         ]);
@@ -112,4 +113,26 @@ class DebugController extends ApiBaseController
         echo $ret;
         exit;
     }
+
+    public function actionCreate()
+    {
+        $url = 'https://api.zhumu.me/v3/meeting/end';
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+        if (isset($systemConfig)) {
+            $api_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+        if (isset($systemConfig)) {
+            $api_secret = $systemConfig['value'];
+        }
+
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'zcode' => 9496495821, 'topic' => "远程会诊" . time(), 'type' => 1];
+        $ret = Service::curl_post($postData, Yii::$app->params['zhumu.createmeeting']);
+        echo $ret;
+        exit;
+    }
+
+
 }

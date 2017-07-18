@@ -133,7 +133,7 @@ class ZhumuController extends ApiBaseController
         $retData = [];
         $appointmentVideo = AppointmentVideo::find()->where(['appointment_no' => $appointment_no])->orderBy('id DESC')->one();
         if (!empty($appointmentVideo)) {
-            $retData['meeting_number'] = $appointmentVideo->meeting_number;
+            $retData['meeting_number'] = (string)$appointmentVideo->meeting_number;
 
             $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
             if (isset($systemConfig)) {
@@ -412,7 +412,7 @@ class ZhumuController extends ApiBaseController
             if (is_string($ret)) {
                 $retArr = json_decode($ret, true);
                 if (!isset($retArr['code'])) {
-                    $retData['meeting_number'] = $appointmentVideo->meeting_number;
+                    $retData['meeting_number'] = (string)$appointmentVideo->meeting_number;
                     $retData['app_key'] = $app_key;
                     $retData['app_secret'] = $app_secret;
                     return Service::sendSucc($retData);
@@ -455,7 +455,7 @@ class ZhumuController extends ApiBaseController
                         $appointment->save();
                     }
 
-                    $retData = ['app_key' => $app_key, 'app_secret' => $app_secret, 'username' => $zhumu->username, 'password' => $zhumu->password, 'meeting_number' => $retArr['id']];
+                    $retData = ['app_key' => $app_key, 'app_secret' => $app_secret, 'username' => $zhumu->username, 'password' => $zhumu->password, 'meeting_number' => (string)$retArr['id']];
                     return Service::sendSucc($retData);
                 }
             }
