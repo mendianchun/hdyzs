@@ -22,12 +22,15 @@ class DebugController extends ApiBaseController
                 'optional' => [
                     'metrics',
                     'record',
+                    'get',
+                    'end',
                 ],
             ]
         ]);
     }
 
-    public function actionMetrics(){
+    public function actionMetrics()
+    {
 
         $url = 'https://api.zhumu.me/v3/meeting/metrics';
 
@@ -41,9 +44,9 @@ class DebugController extends ApiBaseController
             $api_secret = $systemConfig['value'];
         }
 
-        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'type'=>2,'from'=>date("Y/m/d",strtotime('-1 month')),'to'=>date("Y/m/d")];
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'type' => 2, 'from' => date("Y/m/d", strtotime('-1 month')), 'to' => date("Y/m/d")];
 
-        $ret = Service::curl_post($postData,$url);
+        $ret = Service::curl_post($postData, $url);
 
         echo $ret;
         exit;
@@ -63,9 +66,50 @@ class DebugController extends ApiBaseController
             $api_secret = $systemConfig['value'];
         }
 
-        $postData = ['api_key' => $api_key,'api_secret'=>$api_secret,'meeting_id'=>$id,'zcode'=>9496495821,'from'=>date("Y/m/d"),'to'=>date("Y/m/d")];
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'meeting_id' => $id, 'zcode' => 9496495821, 'from' => date("Y/m/d"), 'to' => date("Y/m/d")];
 
-        $ret = Service::curl_post($postData,$url);
-        echo $ret;exit;
+        $ret = Service::curl_post($postData, $url);
+        echo $ret;
+        exit;
+    }
+
+    public function actionGet($meeting_number,$zcode)
+    {
+        $url = 'https://api.zhumu.me/v3/meeting/get';
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+        if (isset($systemConfig)) {
+            $api_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+        if (isset($systemConfig)) {
+            $api_secret = $systemConfig['value'];
+        }
+
+        $postData = ['api_key' => $api_key,'api_secret' => $api_secret,'zcode' => $zcode,'meeting_id'=>$meeting_number];
+        $ret = Service::curl_post($postData, $url);
+        echo $ret;
+        exit;
+    }
+
+    public function actionEnd($meeting_number,$zcode)
+    {
+        $url = 'https://api.zhumu.me/v3/meeting/end';
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+        if (isset($systemConfig)) {
+            $api_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+        if (isset($systemConfig)) {
+            $api_secret = $systemConfig['value'];
+        }
+
+        $postData = ['api_key' => $api_key,'api_secret' => $api_secret,'zcode' => $zcode,'meeting_id'=>$meeting_number];
+        $ret = Service::curl_post($postData, $url);
+        echo $ret;
+        exit;
     }
 }

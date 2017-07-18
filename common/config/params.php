@@ -33,4 +33,7 @@ return [
 
 	'zhumu.getuser' => 'https://api.zhumu.me/v3/user/get',
 	'zhumu.mcrecording' => 'https://api.zhumu.me/v3/meeting/mcrecording',
+	'zhumu.createmeeting' => 'https://api.zhumu.me/v3/meeting/create',
+	'zhumu.endmeeting' => 'https://api.zhumu.me/v3/meeting/end',
+	'zhumu.getmeeting' => 'https://api.zhumu.me/v3/meeting/get',
 ];

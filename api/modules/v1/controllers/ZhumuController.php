@@ -32,6 +32,7 @@ class ZhumuController extends ApiBaseController
     }
 
     /*
+     * 废弃
      * 接口1:从瞩目池中随机选取一个未被使用的
      * 包括（瞩目uuid、appkey、appsecret、username、password）
      */
@@ -69,6 +70,7 @@ class ZhumuController extends ApiBaseController
     }
 
     /*
+     * 废弃
      * 接口2:回传会议信息（瞩目uuid+会议号+预约单号）
      */
     public function actionSetinfo()
@@ -131,8 +133,7 @@ class ZhumuController extends ApiBaseController
         $retData = [];
         $appointmentVideo = AppointmentVideo::find()->where(['appointment_no' => $appointment_no])->orderBy('id DESC')->one();
         if (!empty($appointmentVideo)) {
-            $retData = $appointmentVideo->attributes;
-            unset($retData['id'], $retData['status'], $retData['audio_url'], $retData['created_at'], $retData['zhumu_uuid']);
+            $retData['meeting_number'] = $appointmentVideo->meeting_number;
 
             $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
             if (isset($systemConfig)) {
@@ -154,7 +155,7 @@ class ZhumuController extends ApiBaseController
         return Service::sendSucc($retData);
     }
 
-    /*
+    /*废弃
      * 接口4:通知会议开始，回传预约单号。
      * 记录对应的预约单实际开始时间
      */
@@ -225,23 +226,25 @@ class ZhumuController extends ApiBaseController
             return Service::sendError(20403, '没有此预约单');
         }
 
-        //检查预约单状态，只有预约成功的才可以记录开始时间，并且只能记录一次。
+        //检查预约单状态，只有预约成功并且已经开始的才可以结束。
         if ($appointment->status != Appointment::STATUS_SUCC || $appointment->real_starttime == 0) {
             return Service::sendError(20409, '只有预约成功并且已经开始的才可以结束');
         }
 
-        if ($appointment->dx_status == Appointment::DX_STATUS_DO) {
-            return Service::sendError(20410, '预约单已经结束了');
-        }
+//        if ($appointment->dx_status == Appointment::DX_STATUS_DO) {
+//            return Service::sendError(20410, '预约单已经结束了');
+//        }
 
-        $appointment->real_endtime = time();
+        if ($appointment->real_endtime == 0) {
+            $appointment->real_endtime = time();
+        }
         $appointment->dx_status = Appointment::DX_STATUS_DO;
 
         //按次收费的，真实价格与预约价格相等，积分也与预约积分相等
-        if($appointment->fee_type == Appointment::FEE_TYPE_TIMES){
+        if ($appointment->fee_type == Appointment::FEE_TYPE_TIMES) {
             $appointment->real_fee = $appointment->order_fee;
             $appointment->real_score = $appointment->order_score;
-        }else{
+        } else {
             //按次计费的需要重新计算 toDO
         }
 
@@ -256,8 +259,22 @@ class ZhumuController extends ApiBaseController
                 $zhumu = Zhumu::findOne(['uuid' => $v->zhumu_uuid]);
                 $zhumu->status = Zhumu::STATUS_ACTIVE;
                 $zhumu->save();
+
+                //通知瞩目结束会议
+                $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+                if (isset($systemConfig)) {
+                    $api_app_key = $systemConfig['value'];
+                }
+
+                $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+                if (isset($systemConfig)) {
+                    $api_app_secret = $systemConfig['value'];
+                }
+                $postData = ['api_key' => $api_app_key, 'api_secret' => $api_app_secret, 'zcode' => $zhumu->zcode, 'meeting_id' => $v->meeting_number];
+                $ret = Service::curl_post($postData, Yii::$app->params['zhumu.endmeeting']);
             }
         }
+
         return Service::sendSucc();
     }
 
@@ -327,6 +344,124 @@ class ZhumuController extends ApiBaseController
         }
         fclose($fp);
         exit;
+    }
+
+    /*
+     * 接口7 创建会议
+     * 创建会议-》获取会议号-》更改瞩目账号状态-》建立会议号与预约单的关联关系
+     */
+    public function actionCreate()
+    {
+        $post = Yii::$app->request->post();
+
+        //参数检查
+        if (!isset($post['appointment_no'])) {
+            return Service::sendError(10400, '缺少参数');
+        }
+
+        //当前用户
+        $user = \yii::$app->user->identity;
+
+        //只有专家才能发起
+        if ($user->type != User::USER_EXPERT) {
+            return Service::sendError(20401, '非法请求，只能专家才能发起会议');
+        }
+
+        //判断是否存在此预约单
+        $appointment = Appointment::findone(['appointment_no' => $post['appointment_no']]);
+        if (empty($appointment)) {
+            return Service::sendError(20403, '没有此预约单');
+        }
+
+        //检查预约单状态，只有预约成功的才可以开始视频。
+        if ($appointment->status != Appointment::STATUS_SUCC) {
+            return Service::sendError(20406, '只有预约成功的才可以开始');
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_key']);
+        if (isset($systemConfig)) {
+            $app_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_app_secret']);
+        if (isset($systemConfig)) {
+            $app_secret = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_key']);
+        if (isset($systemConfig)) {
+            $api_app_key = $systemConfig['value'];
+        }
+
+        $systemConfig = SystemConfig::findOne(['name' => 'zhumu_api_app_secret']);
+        if (isset($systemConfig)) {
+            $api_app_secret = $systemConfig['value'];
+        }
+
+        //检查该预约单是否已经创建过会议，并且会议未结束
+        $appointmentVideo = AppointmentVideo::find()->where(['appointment_no' => $post['appointment_no']])->orderBy('id DESC')->one();
+        if (!empty($appointmentVideo)) {
+            $zhumu = Zhumu::findOne(['uuid' => $appointmentVideo->zhumu_uuid]);
+            if (!empty($zhumu)) {
+                $retData['username'] = $zhumu->username;
+                $retData['password'] = $zhumu->password;
+            }
+            //检查会议是否结束
+            $postData = ['api_key' => $api_app_key, 'api_secret' => $api_app_secret, 'zcode' => $zhumu->zcode, 'meeting_id' => $appointmentVideo->meeting_number];
+            $ret = Service::curl_post($postData, Yii::$app->params['zhumu.getmeeting']);
+            if (is_string($ret)) {
+                $retArr = json_decode($ret, true);
+                if (!isset($retArr['code'])) {
+                    $retData['meeting_number'] = $appointmentVideo->meeting_number;
+                    $retData['app_key'] = $app_key;
+                    $retData['app_secret'] = $app_secret;
+                    return Service::sendSucc($retData);
+                }
+            }
+        }
+
+        //随机选择一个瞩目账号
+        $maxId = Zhumu::find()->where(["status" => Zhumu::STATUS_ACTIVE])->max('id');
+        if ($maxId > 0) {
+            $randId = rand(0, $maxId);
+
+            $zhumu = Zhumu::find()->where(['>=', 'id', $randId])->andWhere(['status' => Zhumu::STATUS_ACTIVE])->one();
+            if (!empty($zhumu)) {
+                $zcode = $zhumu->zcode;
+            }
+        }
+
+        if (empty($zcode)) {
+            return Service::sendError(20412, '无可用的创建会议的账号');
+        }
+
+        //调用zhumu接口创建会议
+        $postData = ['api_key' => $api_app_key, 'api_secret' => $api_app_secret, 'zcode' => $zcode, 'topic' => "远程会诊" . $post['appointment_no'], 'type' => 1];
+        $ret = Service::curl_post($postData, Yii::$app->params['zhumu.createmeeting']);
+        if (is_string($ret)) {
+            $retArr = json_decode($ret, true);
+            if (isset($retArr['id'])) {
+                $zhumu->status = Zhumu::STATUS_USED;
+                $zhumu->save();
+
+                $appointmentVideo = new AppointmentVideo();
+                $appointmentVideo->appointment_no = $post['appointment_no'];
+                $appointmentVideo->zhumu_uuid = $zhumu->uuid;
+                $appointmentVideo->meeting_number = $retArr['id'];
+                if ($appointmentVideo->save()) {
+                    //记录预约单实际开始时间
+                    if ($appointment->real_starttime == 0) {
+                        $appointment->real_starttime = time();
+                        $appointment->save();
+                    }
+
+                    $retData = ['app_key' => $app_key, 'app_secret' => $app_secret, 'username' => $zhumu->username, 'password' => $zhumu->password, 'meeting_number' => $retArr['id']];
+                    return Service::sendSucc($retData);
+                }
+            }
+        }
+
+        return Service::sendError(20404, '处理失败');
     }
 
     /** 获取header range信息
