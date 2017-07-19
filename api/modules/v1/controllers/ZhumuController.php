@@ -436,7 +436,7 @@ class ZhumuController extends ApiBaseController
         }
 
         //调用zhumu接口创建会议
-        $postData = ['api_key' => $api_app_key, 'api_secret' => $api_app_secret, 'zcode' => $zcode, 'topic' => "远程会诊" . $post['appointment_no'], 'type' => 1];
+        $postData = ['api_key' => $api_app_key, 'api_secret' => $api_app_secret, 'zcode' => $zcode, 'topic' => "远程会诊" . $post['appointment_no'], 'type' => 2];
         $ret = Service::curl_post($postData, Yii::$app->params['zhumu.createmeeting']);
         if (is_string($ret)) {
             $retArr = json_decode($ret, true);
