@@ -36,4 +36,6 @@ return [
 	'zhumu.createmeeting' => 'https://api.zhumu.me/v3/meeting/create',
 	'zhumu.endmeeting' => 'https://api.zhumu.me/v3/meeting/end',
 	'zhumu.getmeeting' => 'https://api.zhumu.me/v3/meeting/get',
+
+	'zhumu.basedir' => Yii::getAlias('@yii_base') . "/data/zhumu",
 ];

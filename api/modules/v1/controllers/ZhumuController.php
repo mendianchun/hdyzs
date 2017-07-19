@@ -297,12 +297,12 @@ class ZhumuController extends ApiBaseController
             exit;
         }
 
-        if (!$appointment->audio_url || !is_file($appointment->audio_url)) {
+        if (!$appointment->audio_url || !is_file(Yii::$app->params['zhumu.basedir'] . "/" . $appointment->audio_url)) {
             echo "还未生成音频";
             exit;
         }
 
-        $file = $appointment->audio_url;
+        $file = Yii::$app->params['zhumu.basedir'] . "/" . $appointment->audio_url;
         $file_size = filesize($file);
         $ranges = $this->getRange($file_size);
 
