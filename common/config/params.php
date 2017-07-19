@@ -38,4 +38,10 @@ return [
 	'zhumu.getmeeting' => 'https://api.zhumu.me/v3/meeting/get',
 
 	'zhumu.basedir' => Yii::getAlias('@yii_base') . "/data/zhumu",
+
+	//短信接口配置
+	'sms_host'=>'http://101.227.68.49:7891/mt?',
+	'sms_user'=>'10690116',
+	'sms_pwd'=>'SihAi429',
+	'sms_prefix' => '【汉典云诊所】',
 ];

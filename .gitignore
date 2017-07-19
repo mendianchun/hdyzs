@@ -1,6 +1,8 @@
 /.project
 .idea/
-zhumu/
 vendor/
 composer.lock
 data/
+api/config/
+backend/config/
+common/config/

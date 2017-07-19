@@ -64,19 +64,23 @@ class Service
             return false;
         //调用短信接口发送短信
 
-//        $post_data = [
-//            'un' => Yii::$app->params['sms_user'],
-//            'pw' => Yii::$app->params['sms_pwd'],
-//            'da' => $result['tel'],
-//            'sm' => bin2hex(iconv("UTf-8", "GBK", $result['message'])),
-//            'dc' => 15,
-//            'rd' => 0
-//        ];
-//
-//
-//        //密码可以使用明文密码或使用32位MD5加密
-//        $gets                   =   self::curl_post($post_data,Yii::$app->params['sms_host']);
-        $status = 0; //发送成功
+        $content = Yii::$app->params['sms_prefix'] . $content;
+        $data = [
+            'un' => Yii::$app->params['sms_user'],
+            'pw' => Yii::$app->params['sms_pwd'],
+            'da' => $mobile,
+            'sm' => bin2hex(iconv("UTf-8", "GBK", $content)),
+            'dc' => 15,
+            'rd' => 0
+        ];
+
+        //密码可以使用明文密码或使用32位MD5加密
+        $gets = self::curl_get(Yii::$app->params['sms_host'] . http_build_query($data));
+        if(strstr($gets,"id=")){
+            $status = 0; //发送成功
+        }else{
+            $status = str_replace("r=","",$gets);
+        }
 
         $smsLog = new \common\models\SmsLog();
         $smsLog->mobile = $mobile;
@@ -118,7 +122,7 @@ class Service
         return $output;
     }
 
-    public static function download($url, $file, $fileszie=0)
+    public static function download($url, $file, $fileszie = 0)
     {
         $download_size = 0;
         if (empty($url) || empty($file))
@@ -139,7 +143,7 @@ class Service
             return false;
         }
 
-        if($fileszie > 0 && $download_size != $fileszie){
+        if ($fileszie > 0 && $download_size != $fileszie) {
             return false;
         }
 
