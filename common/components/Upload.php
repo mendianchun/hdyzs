@@ -62,7 +62,7 @@ class Upload extends Model
 
 		if ($model->validate()) {
 			$relativePath = Yii::$app->params['imageUploadRelativePath'].date('Ymd').'/';
-			$successPath = Yii::$app->params['imageUploadSuccessPath'];
+			$successPath = Yii::$app->params['imageUploadSuccessPath'].date('Ymd').'/';
 			$img_id = date('Ymd').substr(Service::create_uuid(),0,8);
 			//$fileName = $model->file->baseName . '.' . $model->file->extension;
 			$fileName = $img_id . '.' . $model->file->extension;
