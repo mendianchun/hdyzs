@@ -45,7 +45,7 @@ class DebugController extends ApiBaseController
             $api_secret = $systemConfig['value'];
         }
 
-        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'type' => 2, 'from' => date("Y/m/d", strtotime('-1 month')), 'to' => date("Y/m/d")];
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'type' => 2, 'from' => date("Y/m/d", strtotime('-1 day')), 'to' => date("Y/m/d")];
 
         $ret = Service::curl_post($postData, $url);
 

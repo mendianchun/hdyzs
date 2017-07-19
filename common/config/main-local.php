@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=liuxue818.cn;dbname=liuxue_test',
-            'username' => 'liuxue_test',
-            'password' => 'liuxue_test',
+            'dsn' => 'mysql:host=rm-2ze161f04550y64bt.mysql.rds.aliyuncs.com;dbname=hdyzs',
+            'username' => 'handian',
+            'password' => 'cu7CheW4',
             'charset' => 'utf8',
         ],
         'mailer' => [
