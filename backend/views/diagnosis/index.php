@@ -118,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {approve} {pay} {rebuild}',
+                'template' => '{view} {approve} {pay} {rebuild} {toundx}',
                 'buttons' => [
                     'rebuild'=>function($url,$model,$key)
                     {
@@ -132,8 +132,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-method'=>'post',
                             'data-pjax'=>'0',
                         ];
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>',$url,$options);
+                        return Html::a('<span class="glyphicon glyphicon-retweet"></span>',$url,$options);
                     },
+
+	                'toundx'=>function($url,$model,$key)
+	                {
+		                if($model->dx_status != Appointment::DX_STATUS_DO){
+			                return '';
+		                }
+		                $options=[
+			                'title'=>Yii::t('yii', '修改状态'),
+			                'aria-label'=>Yii::t('yii','修改状态'),
+			                'data-confirm'=>Yii::t('yii','你确定修改状态为未诊断吗？'),
+			                'data-method'=>'post',
+			                'data-pjax'=>'0',
+		                ];
+		                return Html::a('<span class="glyphicon glyphicon-transfer"></span>',$url,$options);
+	                },
 
 
 //                    'approve'=>function($url,$model,$key)
