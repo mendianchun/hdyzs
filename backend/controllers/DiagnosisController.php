@@ -225,6 +225,7 @@ class DiagnosisController extends Controller
 		$appointment = Appointment::findOne(['appointment_no' => $id]);
 		//$appointment->attributes['dx_status']=1;
 		$appointment->dx_status=1;
+		$appointment->real_endtime=0;
 		Appointment::updateAll($appointment,['appointment_no' => $id]);
 		$this->redirect(['diagnosis/index']);
 
