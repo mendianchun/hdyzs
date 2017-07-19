@@ -171,6 +171,7 @@ class AppointmentController extends Controller
 
     private function ordertime($model)
     {
+
         $expert_uuid = $model['expert_uuid'];
         $start_time = $model['order_starttime'];
         $end_time = $model['order_endtime'];
@@ -181,10 +182,10 @@ class AppointmentController extends Controller
 
         for ($start_time; $start_time < $end_time; $start_time = $start_time + 1800) {
             if ($start_time % 3600 == 0) {
-                $hour = date('h', $start_time);
+                $hour = date('H', $start_time);
                 $use_set[(int)$hour][1] = 1;
             } else {
-                $hour = date('h', $start_time);
+                $hour = date('H', $start_time);
                 $use_set[(int)$hour][2] = 1;
             }
         }
@@ -193,14 +194,14 @@ class AppointmentController extends Controller
         $new_oredr['is_order'] = 1;
         $new_oredr['clinic_uuid'] = $clinic_uuid;
         $new_oredr['order_no'] = $appoint_no;
+
         foreach ($use_set as $k_sets => $value_sets) {
             foreach ($value_sets as $k => $v) {
-                $op_status = ExpertTime::updateAll($new_oredr,
-                    ['expert_uuid' => $expert_uuid,
-                        'date' => $date,
-                        'hour' => $k_sets,
-                        'zone' => $k]);
-
+				$condition = ['expert_uuid' => $expert_uuid,
+					'date' => $date,
+					'hour' => $k_sets,
+					'zone' => $k];
+                $op_status = ExpertTime::updateAll($new_oredr,$condition );
                 if ($op_status > 0) {
                     $cnt++;
                 }
