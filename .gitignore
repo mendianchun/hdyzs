@@ -3,6 +3,6 @@
 vendor/
 composer.lock
 data/
-api/config/
-backend/config/
-common/config/
+/backend/config
+/common/config
+/api/config
