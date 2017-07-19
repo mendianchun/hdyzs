@@ -220,6 +220,16 @@ class DiagnosisController extends Controller
 //		}
     }
 
+	public function actionToundx($id)
+	{
+		$appointment = Appointment::findOne(['appointment_no' => $id]);
+		//$appointment->attributes['dx_status']=1;
+		$appointment->dx_status=1;
+		Appointment::updateAll($appointment,['appointment_no' => $id]);
+		$this->redirect(['diagnosis/index']);
+
+	}
+
 
     /** 获取header range信息
      * @param  int $file_size 文件大小
