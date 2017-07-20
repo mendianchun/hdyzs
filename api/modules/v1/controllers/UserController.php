@@ -190,7 +190,7 @@ class UserController extends ApiBaseController
             return Service::sendError(20113,'修改密码出错');
         }
     }
-    
+
     public function actionUpdate()
     {
         //当前用户
