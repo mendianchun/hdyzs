@@ -112,7 +112,7 @@ class AppointmentController extends Controller
 		    $model->save();
 		    return $this->redirect(['view', 'id' => $model->appointment_no]);
 	    } else {
-		    return $this->renderAjax('Cancel', [
+		    return $this->renderAjax('cancel', [
 			    'model' => $model,
 		    ]);
 	    }
