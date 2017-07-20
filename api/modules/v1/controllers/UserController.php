@@ -68,7 +68,8 @@ class UserController extends ApiBaseController
         $model->code = "$smscode";
         $model->expire_time = time()+30*60;
 
-        if($model->save()){
+        $sms_content = sprintf(Yii::$app->params['verifycode.msg'],$smscode);
+        if($model->save() && Service::sendSms($mobile,$sms_content) == 0){
             //发送短信给用户
             return Service::sendSucc();
         }else{
@@ -91,14 +92,14 @@ class UserController extends ApiBaseController
         }
 
         //检查验证码是否正确，上线前需要打开
-//        $verfiycode = VerifycodeCache::find()
-//            ->where(['mobile' => $post['mobile']])
-//            ->andWhere(['code' => $post['code']])
-//            ->andWhere(['>=','expire_time',time()])
-//            ->one();
-//        if(!$verfiycode){
-//            return Service::sendError(20103,'验证码错误');
-//        }
+        $verfiycode = VerifycodeCache::find()
+            ->where(['mobile' => $post['mobile']])
+            ->andWhere(['code' => $post['code']])
+            ->andWhere(['>=','expire_time',time()])
+            ->one();
+        if(!$verfiycode){
+            return Service::sendError(20103,'验证码错误');
+        }
 
         //检查手机号是否存在
         if(User::findOne(['mobile' => $post['mobile']])){
@@ -157,14 +158,14 @@ class UserController extends ApiBaseController
         }
 
         //检查验证码是否正确
-//        $verfiycode = VerifycodeCache::find()
-//            ->where(['mobile' => $post['mobile']])
-//            ->andWhere(['code' => $post['code']])
-//            ->andWhere(['>=','expire_time',time()])
-//            ->one();
-//        if(!$verfiycode){
-//            return Service::sendError(20103,'验证码错误');
-//        }
+        $verfiycode = VerifycodeCache::find()
+            ->where(['mobile' => $post['mobile']])
+            ->andWhere(['code' => $post['code']])
+            ->andWhere(['>=','expire_time',time()])
+            ->one();
+        if(!$verfiycode){
+            return Service::sendError(20103,'验证码错误');
+        }
 
         //检查密码强度并且检查两次输入的是否一样
         if(strlen($post['password']) < 6){
