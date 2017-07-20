@@ -41,7 +41,7 @@ class UploadController extends ApiBaseController{
             return Service::sendError(20801,'类型错误');
         }
 
-        $targetFolder = \Yii::$app->basePath.'/../data/img/uploads/'.$type.'/'.date('Y/md');
+        $targetFolder = Yii::getAlias('@yii_base').'/data/img/uploads/'.$type.'/'.date('Y/md');
         $file = new \yii\helpers\FileHelper();
         $file->createDirectory($targetFolder);
 //        return Yii::$app->request->post();
