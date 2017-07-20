@@ -68,16 +68,23 @@ class CrontabController extends Controller
 
 	public function actionOrdersms()
 	{
-		$start_time = time()+1800;
-		$end_time= $start_time+3600;
+		$start_time = time()+60;
+		$end_time = time()+1860;
 
-		$appointments =Appointment::find()->select('patient_name,patient_mobile')->where(['between','order_starttime',$start_time,$end_time])->all();
+		$appointments =Appointment::find()
+			->select('patient_name,patient_mobile')
+			->where(['between','order_starttime',$start_time,$end_time])
+			->andWhere(['is_sms_notify'=>0,'status'=>Appointment::STATUS_SUCC])
+			->all();
 		if($appointments){
 			foreach ($appointments as $item){
 				$patient_name = $item->attributes['patient_name'];
 				$patient_mobile = $item->attributes['patient_mobile'];
 				$msg = $patient_name.' '.Yii::$app->params['appointment.start_msg'];;
-				Service::sendSms($patient_mobile,$msg);
+				$send_status = Service::sendSms($patient_mobile,$msg);
+				if($send_status==0){
+					Appointment::updateAll(['is_sms_notify'=>1],['appointment_no'=>$item->attributes['appointment_no']]);
+				}
 			}
 
 		}
