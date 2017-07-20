@@ -25,6 +25,7 @@ class DebugController extends ApiBaseController
                     'get',
                     'end',
                     'create',
+                    'sendsms',
                 ],
             ]
         ]);
@@ -130,6 +131,13 @@ class DebugController extends ApiBaseController
 
         $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'zcode' => 9496495821, 'topic' => "远程会诊" . time(), 'type' => 1];
         $ret = Service::curl_post($postData, Yii::$app->params['zhumu.createmeeting']);
+        echo $ret;
+        exit;
+    }
+
+    public function actionSendsms($mobile,$content)
+    {
+        $ret = Service::sendSms($mobile,$content);
         echo $ret;
         exit;
     }
