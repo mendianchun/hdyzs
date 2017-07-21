@@ -463,11 +463,13 @@ class OrderController extends ApiBaseController
                 }
                 $date_change = true;
             }
+	        $appointment_new['order_starttime'] = $start_time;
+	        $appointment_new['order_endtime'] = $end_time;
+
         } else {
             return Service::sendError(20204, '缺少预约时间');
         }
-        $appointment_new['order_starttime'] = $start_time;
-        $appointment_new['order_endtime'] = $end_time;
+
         if (!isset($order_post['patient_name']) || !isset($order_post['patient_description'])) {
 
             return Service::sendError(20205, '患者信息不完整');

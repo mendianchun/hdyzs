@@ -152,6 +152,9 @@ class ZhumuController extends ApiBaseController
 //                $retData['password'] = $zhumu->password;
 //            }
         }
+        if(empty($retData)){
+	        return Service::sendError(20404, '专家还未开始');
+        }
         return Service::sendSucc($retData);
     }
 
