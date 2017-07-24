@@ -70,6 +70,11 @@ class ZhumuSearch extends Zhumu
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'zcode', $this->zcode]);
 
+        $dataProvider->sort->defaultOrder =
+            [
+                'status'=>SORT_DESC,
+            ];
+
         return $dataProvider;
     }
 }
