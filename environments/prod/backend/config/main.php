@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+	'name'=>'汉典云诊所管理后台',
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
