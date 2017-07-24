@@ -68,6 +68,12 @@ class Expert extends \common\models\Expert
 			'password' => '密码',
 			'password_repeat'=>'重输密码',
 			'mobile'=>'手机号',
+			'head_img' => '头像',
+			'free_time' => '空闲时间',
+			'fee_per_times' => '每次费用',
+			'fee_per_hour' => '每小时费用',
+			'skill' => '特长',
+			'introduction' => '介绍',
 		];
 	}
 

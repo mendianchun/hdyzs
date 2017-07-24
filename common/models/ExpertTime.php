@@ -64,9 +64,9 @@ class ExpertTime extends \yii\db\ActiveRecord
     {
         return [
             'expert_uuid' => 'Expert Uuid',
-            'date' => 'Date',
-            'hour' => 'Hour',
-            'zone' => 'Zone',
+            'date' => '日期',
+            'hour' => '小时',
+            'zone' => '区间',
             'is_order' => 'Is Order',
             'clinic_uuid' => 'Clinic Uuid',
             'order_no' => 'Order No',

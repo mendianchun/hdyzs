@@ -55,16 +55,16 @@ class Expert extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-	        'name' => 'Name',
+	        'name' => '专家姓名',
 //	        'loginname' => 'LoginName',
 //	        'pwd' => 'pwd',
 //	        'pwd_repeat' => 'pwd_repeat',
-            'head_img' => 'Head Img',
-            'free_time' => 'Free Time',
-            'fee_per_times' => 'Fee Per Times',
-            'fee_per_hour' => 'Fee Per Hour',
-            'skill' => 'Skill',
-            'introduction' => 'Introduction',
+            'head_img' => '头像',
+            'free_time' => '空闲时间',
+            'fee_per_times' => '每次费用',
+            'fee_per_hour' => '每小时费用',
+            'skill' => '特长',
+            'introduction' => '介绍',
             'user_uuid' => 'User Uuid',
         ];
     }

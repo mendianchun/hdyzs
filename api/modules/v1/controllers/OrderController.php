@@ -666,6 +666,9 @@ class OrderController extends ApiBaseController
 
     private function checktime($expert_uuid, $start_time, $end_time, $clinic_uuid = null)
     {
+    	if($start_time < time()){
+		    return Service::sendError(20299, '不可预约已经过去的时间段');
+	    }
 
         $date_start = date('Y-m-d', $start_time);
         $date_end = date('Y-m-d', $end_time);
