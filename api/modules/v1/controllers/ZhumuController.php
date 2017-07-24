@@ -425,8 +425,9 @@ class ZhumuController extends ApiBaseController
 
         //随机选择一个瞩目账号
         $maxId = Zhumu::find()->where(["status" => Zhumu::STATUS_ACTIVE])->max('id');
-        if ($maxId > 0) {
-            $randId = rand(0, $maxId);
+        $minId = Zhumu::find()->where(["status" => Zhumu::STATUS_ACTIVE])->min('id');
+        if ($maxId > 0 && $minId > 0) {
+            $randId = rand($minId, $maxId);
 
             $zhumu = Zhumu::find()->where(['>=', 'id', $randId])->andWhere(['status' => Zhumu::STATUS_ACTIVE])->one();
             if (!empty($zhumu)) {
