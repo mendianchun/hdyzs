@@ -73,7 +73,7 @@ class ZhumuSearch extends Zhumu
         $dataProvider->sort->defaultOrder =
             [
                 'status'=>SORT_DESC,
-                'id'=>SORT_DESC,
+                'id'=>SORT_ASC,
             ];
 
         return $dataProvider;
