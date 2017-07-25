@@ -54,7 +54,7 @@ class DebugController extends ApiBaseController
         exit;
     }
 
-    public function actionRecord($id)
+    public function actionRecord($meeting_number,$zcode)
     {
         $url = 'https://api.zhumu.me/v3/meeting/mcrecording';
 
@@ -68,7 +68,7 @@ class DebugController extends ApiBaseController
             $api_secret = $systemConfig['value'];
         }
 
-        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'meeting_id' => $id, 'zcode' => 9496495821, 'from' => date("Y/m/d"), 'to' => date("Y/m/d")];
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'meeting_id' => $meeting_number, 'zcode' => $zcode, 'from' => date("Y/m/d"), 'to' => date("Y/m/d")];
 
         $ret = Service::curl_post($postData, $url);
         echo $ret;
