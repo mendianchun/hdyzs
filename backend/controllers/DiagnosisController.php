@@ -149,7 +149,7 @@ class DiagnosisController extends Controller
     public function actionRebuild($id)
     {
 
-        $command = "php ".Yii::getAlias('@yii_base')."/yii zhumu -a=$id & ";
+        $command = "php ".Yii::getAlias('@yii_base')."/yii zhumu -a=$id >> /tmp/zhumu_rebuild.log &";
         exec($command);
         $this->redirect(['diagnosis/index']);
     }
