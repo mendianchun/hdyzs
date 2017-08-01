@@ -62,6 +62,7 @@ class DiagnosisController extends ApiBaseController
 		$uuid = $user->uuid;
 		$params['AppointmentSearch']['clinic_uuid'] = $uuid;
 		$params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
+		$params['AppointmentSearch']['dx_status'] = isset($queryParam['dx_status']) ? $queryParam['dx_status'] : null;
 		$params['AppointmentSearch']['status'] = Appointment::STATUS_SUCC;
 		if(isset($queryParam['date'])){
 			$date= $queryParam['date'];
@@ -89,6 +90,7 @@ class DiagnosisController extends ApiBaseController
 			foreach($data as $item){
 				$app=array();
 				$app['appointment_no'] = $item->attributes['appointment_no'];
+				$app['dx_status'] = $item->attributes['dx_status'];
 				//$app['clinic_uuid'] = $item->attributes['clinic_uuid'];
 
 				$app['order_starttime'] = date('Y-m-d H:i',$item->attributes['order_starttime']);

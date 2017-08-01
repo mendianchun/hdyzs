@@ -59,7 +59,8 @@ class OrderController extends ApiBaseController
         $user = \yii::$app->user->identity;
         $uuid = $user->uuid;
         $params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
-        $params['AppointmentSearch']['status'] = isset($queryParam['status']) ? $queryParam['status'] : null;
+	    $params['AppointmentSearch']['status'] = isset($queryParam['status']) ? $queryParam['status'] : null;
+	    $params['AppointmentSearch']['dx_status'] = isset($queryParam['dx_status']) ? $queryParam['dx_status'] : null;
         $params['AppointmentSearch']['clinic_uuid'] = $uuid;
         if (isset($queryParam['date'])) {
             $date = $queryParam['date'];
