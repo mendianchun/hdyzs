@@ -37,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'fee_per_times',
             'fee_per_hour',
             'skill',
-            'introduction:ntext',
+	        'introduction:ntext',
+	        'url:ntext',
            // 'user_uuid',
         ],
     ]) ?>

@@ -34,7 +34,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'skill')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'introduction')->textarea(['rows' => 6]) ?>
+	<?= $form->field($model, 'introduction')->textarea(['rows' => 6]) ?>
+	<?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
 
     <div class="form-group">

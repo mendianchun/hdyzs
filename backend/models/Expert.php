@@ -50,12 +50,13 @@ class Expert extends \common\models\Expert
 			['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '登录名已经存在.'],
 			['mobile', 'unique', 'targetClass' => '\common\models\User', 'message' => '手机号已经存在.'],
 
-
+			[['introduction'], 'string', 'max' => 200],
+			[['url'], 'string', 'max' => 200],
 			['password', 'string', 'min' => 6],
 
 			['password_repeat','compare','compareAttribute'=>'password','message'=>'两次输入的密码不一致！'],
 
-			[['name', 'username', 'mobile', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction'], 'string'],
+			[['name', 'username', 'mobile', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction', 'url'], 'string'],
 
 		];
 	}
@@ -74,6 +75,7 @@ class Expert extends \common\models\Expert
 			'fee_per_hour' => '每小时费用',
 			'skill' => '特长',
 			'introduction' => '介绍',
+			'url' => '链接',
 		];
 	}
 
@@ -105,6 +107,7 @@ class Expert extends \common\models\Expert
 			$expert->fee_per_hour =$this->fee_per_hour;
 			$expert->skill =$this->skill;
 			$expert->introduction =$this->introduction;
+			$expert->url =$this->url;
 			$expert->user_uuid =$uuid;
 			if($expert->save()>0){
 				return array('uuid'=>$uuid,'id'=>$this->id);

@@ -15,6 +15,7 @@ use Yii;
  * @property integer $fee_per_hour
  * @property string $skill
  * @property string $introduction
+ * @property string $url
  * @property string $user_uuid
  *
  * @property Appointment[] $appointments
@@ -41,7 +42,9 @@ class Expert extends \yii\db\ActiveRecord
             [['fee_per_times', 'fee_per_hour'], 'integer'],
             [['name'], 'string', 'max' => 10],
             [['head_img'], 'string', 'max' => 100],
-            [['skill'], 'string', 'max' => 255],
+	        [['skill'], 'string', 'max' => 255],
+	        [['introduction'], 'string', 'max' => 200],
+	        [['url'], 'string', 'max' => 200],
             [['user_uuid'], 'string', 'max' => 36],
             [['user_uuid'], 'unique'],
             [['user_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_uuid' => 'uuid']],
@@ -64,7 +67,8 @@ class Expert extends \yii\db\ActiveRecord
             'fee_per_times' => '每次费用',
             'fee_per_hour' => '每小时费用',
             'skill' => '特长',
-            'introduction' => '介绍',
+	        'introduction' => '介绍',
+	        'url' => '链接',
             'user_uuid' => 'User Uuid',
         ];
     }

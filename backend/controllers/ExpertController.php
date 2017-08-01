@@ -182,6 +182,7 @@ class ExpertController extends Controller
 	        $model->fee_per_hour =$post['Expert']['fee_per_hour'];
 	        $model->skill =$post['Expert']['skill'];
 	        $model->introduction =$post['Expert']['introduction'];
+	        $model->url =$post['Expert']['url'];
 	        $status = Expert::updateAll($model,['id'=>$id]);
 
 	        if($status){
