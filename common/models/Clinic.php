@@ -69,7 +69,7 @@ class Clinic extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '名字',
+            'name' => '诊所名',
             'address' => '地址',
             'tel' => '联系电话',
             'chief' => '负责人',

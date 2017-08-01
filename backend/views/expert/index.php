@@ -22,6 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
+	        ['attribute'=>'username',
+		        'label'=>'专家ID',
+		        'value'=>'userUu.username',
+	        ],
             'head_img',
           //  'free_time:ntext',
             'fee_per_times',

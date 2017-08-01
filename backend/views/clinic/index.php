@@ -21,6 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'name',
+	        ['attribute'=>'username',
+		        'label'=>'诊所ID',
+		        'value'=>'userUu.username',
+	        ],
             'address',
             'tel',
             'chief',
