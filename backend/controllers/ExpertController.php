@@ -211,7 +211,15 @@ class ExpertController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+
+
+	    $model = $this->findModel($id);
+	   $res =  User::deleteAll(['uuid'=>$model->attributes['user_uuid']]);
+
+//	    echo '<pre>';
+//	    var_dump($res);
+//	    exit();
+//        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
