@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="clinic-create">
     <?= $this->render('_form', [
         'model' => $model,
+	    'op'=>'create',
     ]) ?>
 
 </div>

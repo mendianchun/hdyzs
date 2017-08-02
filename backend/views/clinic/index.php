@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {approve} {pay}',
+                'template' => '{view} {update} {delete} {approve} {pay}',
                 'buttons' => [
                     'approve'=>function($url,$model,$key)
                     {

@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions'=>
             		function($model)
                     {
-                        return ($model->dx_status==Appointment::DX_STATUS_DO)?['class'=>'bg-danger','width'=>'80px']:['width'=>'80px'];
+                        return ($model->dx_status==Appointment::DX_STATUS_DO)?['class'=>'bg-danger','width'=>'120px']:['width'=>'120px'];
                     }
             ],
 //            'pay_status',
