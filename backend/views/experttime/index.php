@@ -35,17 +35,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'hour',
 	        ['attribute'=>'zone',
 		        'value'=>'ZoneStr',
-		        'filter'=>ExpertTime::allZone()
+		        'filter'=>ExpertTime::allZone(),
+		        'contentOptions'=>['width'=>'120px'],
 	        ],
 
 	        ['attribute'=>'order_status',
 		        'label'=>'预约状态',
 		        'value'=>'OrderStatus',
-		        'filter'=>ExpertTime::allOrderStatus()
+		        'filter'=>ExpertTime::allOrderStatus(),
+		        'contentOptions'=>['width'=>'120px'],
 	        ],
 	        ['attribute'=>'status',
 		        'value'=>'StatusStr',
-		        'filter'=>ExpertTime::allStatus()
+		        'filter'=>ExpertTime::allStatus(),
+		        'contentOptions'=>['width'=>'120px'],
 	        ],
            // 'status',
             //'is_order',
@@ -69,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					        'data-method'=>'post',
 					        'data-pjax'=>'0',
 				        ];
-				        return Html::a('<span class="glyphicon glyphicon-check"></span>',$url,$options);
+				        return Html::a('<span class="glyphicon glyphicon-trash"></span>',$url,$options);
 			        },
 
 		        ]

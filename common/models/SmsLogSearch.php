@@ -72,6 +72,10 @@ class SmsLogSearch extends SmsLog
             //大于1都是失败
             $query->andFilterWhere(['>=', 'status', $this->status]);
         }
+	    $dataProvider->sort->defaultOrder =
+		    [
+			    'created_at'=>SORT_DESC,
+		    ];
 
         return $dataProvider;
     }
