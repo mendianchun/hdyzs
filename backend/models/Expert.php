@@ -18,7 +18,7 @@ class Expert extends \common\models\Expert
 
 	public $username;
 	public $password;
-	public $head_img;
+//	public $head_img;
 	public $password_repeat;
 	public $mobile;
 	public $email;

@@ -71,7 +71,6 @@ class ExpertController extends Controller
     public function actionView($id)
     {
     	$model = $this->findModel($id);
-
     	//专家闲时处理
 	    $time = $this->freetime($model->free_time);
 	    $free_time_str = '';
@@ -81,6 +80,7 @@ class ExpertController extends Controller
 		    }
 	    }
 		$model->free_time= rtrim($free_time_str,',');
+
         return $this->render('view', [
             'model' => $model,
         ]);
