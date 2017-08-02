@@ -21,6 +21,7 @@ class Expert extends \common\models\Expert
 	public $head_img;
 	public $password_repeat;
 	public $mobile;
+	public $email;
 
 //	public $fee_per_times;
 //	public $fee_per_hour;
@@ -45,10 +46,12 @@ class Expert extends \common\models\Expert
 			['username', 'required'],
 			['mobile', 'required'],
 			['password', 'required'],
+			['email', 'required'],
 
 			['name', 'unique',  'message' => '专家姓名已经存在.'],
 			['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '登录名已经存在.'],
 			['mobile', 'unique', 'targetClass' => '\common\models\User', 'message' => '手机号已经存在.'],
+			['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'email已经存在.'],
 
 			[['introduction'], 'string', 'max' => 200],
 			[['url'], 'string', 'max' => 200],
@@ -56,7 +59,7 @@ class Expert extends \common\models\Expert
 
 			['password_repeat','compare','compareAttribute'=>'password','message'=>'两次输入的密码不一致！'],
 
-			[['name', 'username', 'mobile', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction', 'url'], 'string'],
+			[['name', 'username', 'mobile','email', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction', 'url'], 'string'],
 
 		];
 	}
@@ -69,6 +72,7 @@ class Expert extends \common\models\Expert
 			'password' => '密码',
 			'password_repeat'=>'重输密码',
 			'mobile'=>'手机号',
+			'email'=>'E-mail',
 			'head_img' => '头像',
 			'free_time' => '空闲时间',
 			'fee_per_times' => '每次费用',
@@ -88,10 +92,13 @@ class Expert extends \common\models\Expert
 		$user = new User();
 		$user->username = $this->username;
 		$user->mobile = $this->mobile;
+		$user->email = $this->email;
 		$user->type=User::USER_EXPERT;
 
 		$user->setPassword($this->password);
 		$user->generateAuthKey();
+
+
 
 		$uuid = Service::create_uuid();
 		$user->uuid = $uuid;
@@ -110,7 +117,7 @@ class Expert extends \common\models\Expert
 			$expert->url =$this->url;
 			$expert->user_uuid =$uuid;
 			if($expert->save()>0){
-				return array('uuid'=>$uuid,'id'=>$this->id);
+				return array('uuid'=>$uuid,'id'=>$expert->id);
 			}else{
 				return null;
 			}

@@ -95,6 +95,7 @@ class ExpertController extends Controller
     {
         $expert= new Expert();
 	    if (Yii::$app->request->post()) {
+
 	    	$post = Yii::$app->request->post();
 		    $free_time = array();
 		    if(is_array($post['Expert']['free_time'])){
@@ -109,6 +110,7 @@ class ExpertController extends Controller
 
 		    $expert->load(Yii::$app->request->post());
 			$res = $expert->newExpert();
+
 			if($res){
 				$this->ordertime($res['uuid'],$free_time);
 			    return $this->redirect(['view', 'id' => $res['id']]);
