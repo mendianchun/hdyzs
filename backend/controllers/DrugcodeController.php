@@ -160,7 +160,7 @@ class DrugcodeController extends Controller
                     $totalCnt++;
 
                     //格式检查，必须是20位的数字
-                    if($this->checkCode($content)){
+                    if(!$this->checkCode($content)){
                         $dataErrorCnt++;
                         continue;
                     }
