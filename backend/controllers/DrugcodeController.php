@@ -160,7 +160,7 @@ class DrugcodeController extends Controller
                     $totalCnt++;
 
                     //格式检查，必须是20位的数字
-                    if(strlen($content) != 20 || !preg_match('/^\d+$/i', $content)){
+                    if($this->checkCode($content)){
                         $dataErrorCnt++;
                         continue;
                     }
@@ -192,5 +192,13 @@ class DrugcodeController extends Controller
             'okCnt' => $okCnt,
             'failedCnt' => $failedCnt,
         ]);
+    }
+
+    protected function checkCode($code){
+        //必须是20位的数字
+        if(strlen($code) != 20 || !preg_match('/^\d+$/i', $code)){
+            return false;
+        }
+        return true;
     }
 }

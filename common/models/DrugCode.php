@@ -31,7 +31,7 @@ class DrugCode extends \yii\db\ActiveRecord
         return [
             [['code'], 'required'],
             [['created_at'], 'integer'],
-            [['code'], 'string', 'max' => 20],
+            [['code'], 'checkCode'],
         ];
     }
 
@@ -62,6 +62,13 @@ class DrugCode extends \yii\db\ActiveRecord
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function checkCode($attribute , $params){
+        //必须是20位的数字
+        if(strlen($this->$attribute) != 20 || !preg_match('/^\d+$/i', $this->$attribute)){
+            $this->addError($attribute , '监管码必须是20位的数字');
         }
     }
 }
