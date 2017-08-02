@@ -131,6 +131,7 @@ class DrugcodeController extends Controller
     {
         $existCnt = 0;
         $failedCnt = 0;
+        $dataErrorCnt = 0;
         $okCnt = 0;
         $totalCnt = 0;
 
@@ -139,29 +140,7 @@ class DrugcodeController extends Controller
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
 
-//            $fileParts = pathinfo($model->file);
-//            $extension = $fileParts['extension'];
-//            var_dump($model->file,$extension);
-//            exit;
-            //检查文件类型，只允许上传txt文件
-//            if ($extension != 'txt') {
-//                return $this->render('import', [
-//                    'model' => $model,
-//                    'errorMsg' => '上传类型错误，只允许上传txt文件',
-//                ]);
-//            }
-//
-//            //检查文件大小
-//            if($model->file->size > Yii::$app->params['upload.maxsize'] * 1024* 1024){
-//                return $this->render('import', [
-//                    'model' => $model,
-//                    'errorMsg' => '上传文件大小超过限制，最大为'.Yii::$app->params['upload.maxsize'].'MB',
-//                ]);
-//            }
-
             if ($model->file && $model->validate()) {
-//                $modelDrugCode = new DrugCode();
-
                 //要插入的表的名称
                 $tableName = DrugCode::tableName();
 
@@ -180,23 +159,14 @@ class DrugcodeController extends Controller
                     //总数加1
                     $totalCnt++;
 
+                    //格式检查，必须是20位的数字
+                    if(strlen($content) != 20 || !preg_match('/^\d+$/i', $content)){
+                        $dataErrorCnt++;
+                        continue;
+                    }
 
-//                    if (DrugCode::findOne(['code' => $content])) {
-//                        //已经存在的加1
-//                        $existCnt++;
-//                    } else {
-                        $insertData[] = [$content,$now];
-//                        $modelDrugCode->isNewRecord = true;
-//                        $modelDrugCode->code = $content;
-//                        if ($modelDrugCode->save()) {
-//                            //成功加1
-//                            $succ_count++;
-//                        } else {
-//                            //失败加1
-//                            $failed_count++;
-//                        }
-//                        $modelDrugCode->id = 0;
-//                    }
+                    $insertData[] = [$content,$now];
+
                     if($totalCnt % 10000 == 0){
                         //执行插入--返回值为插入成功的数目
                         if(!empty($insertData)){
@@ -213,14 +183,14 @@ class DrugcodeController extends Controller
             }
         }
 
+        $failedCnt = $totalCnt - $okCnt - $dataErrorCnt;
 //        $result = "总数：" . $total_count . ",已经存在：" . $exist_count . ",成功数：" . $succ_count . ",失败数：" . $failed_count;
         return $this->render('import', [
             'model' => $model,
-//            'result' => $result,
             'totalCnt' => $totalCnt,
-//            'existCnt' => $existCnt,
+            'dataErrorCnt' => $dataErrorCnt,
             'okCnt' => $okCnt,
-            'failedCnt' => $totalCnt - $okCnt,
+            'failedCnt' => $failedCnt,
         ]);
     }
 }

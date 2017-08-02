@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo "导入完成<br>";
         echo "总数：".$totalCnt."<br>";
         echo "成功数：".$okCnt."<br>";
+        echo "格式错误数：".$dataErrorCnt."<br>";
         echo "失败数：".$failedCnt."<br>";
     }
 
