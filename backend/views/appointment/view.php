@@ -50,7 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'real_fee',
             'real_score',
             'patient_name',
-            'patient_age',
+            ['attribute'=>'patient_age',
+	            'value'=>$model->patient_age==0?'(未设置)':$model->patient_age,],
+
             'patient_mobile',
             'patient_idcard',
             'patient_description:ntext',
