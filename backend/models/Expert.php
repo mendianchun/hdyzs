@@ -47,6 +47,7 @@ class Expert extends \common\models\Expert
 			['mobile', 'required'],
 			['password', 'required'],
 			['email', 'required'],
+			['head_img', 'required'],
 
 			['name', 'unique',  'message' => '专家姓名已经存在.'],
 			['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '登录名已经存在.'],
