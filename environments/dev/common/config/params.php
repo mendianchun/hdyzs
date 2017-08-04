@@ -45,4 +45,8 @@ return [
 	'sms_user'=>'10690116',
 	'sms_pwd'=>'SihAi429',
 	'sms_prefix' => '【汉典云诊所】',
+
+	//支付的时间限制
+	'pay.time' => 15*60,
+	'pay.channel' => ['alipay_qr','wx_pub_qr'],
 ];
