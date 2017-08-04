@@ -32,6 +32,7 @@ use Yii;
  * @property integer $status
  * @property string $cancel_reason
  * @property integer $pay_status
+ * @property integer $pay_time
  * @property integer $dx_status
  * @property integer $is_sms_notify
  * @property integer $fee_type
@@ -92,7 +93,7 @@ class Appointment extends \yii\db\ActiveRecord
     {
         return [
             [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_description', 'created_at', 'updated_at'], 'required'],
-            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'order_score', 'real_starttime', 'real_endtime', 'real_fee', 'real_score', 'patient_age', 'patient_gender', 'pay_type', 'status', 'pay_status', 'dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at', 'audio_created_at', 'audio_status'], 'integer'],
+            [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'order_score', 'real_starttime', 'real_endtime', 'real_fee', 'real_score', 'patient_age', 'patient_gender', 'pay_type', 'status', 'pay_status', 'pay_time', 'dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at', 'audio_created_at', 'audio_status'], 'integer'],
 
             [['patient_description', 'expert_diagnosis'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
@@ -135,6 +136,7 @@ class Appointment extends \yii\db\ActiveRecord
             'pay_type' => '支付类型',
             'status' => '状态',
             'pay_status' => '支付状态',
+            'pay_time' => '支付时间',
             'dx_status' => '诊断状态',
             'is_sms_notify' => '是否短信通知患者',
             'fee_type' => '付费类型',

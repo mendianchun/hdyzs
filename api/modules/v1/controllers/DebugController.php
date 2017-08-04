@@ -6,7 +6,8 @@ use api\modules\ApiBaseController;
 use common\models\SystemConfig;
 use common\service\Service;
 use yii\helpers\ArrayHelper;
-
+use dosamigos\qrcode\QrCode;    //引入类
+use dosamigos\qrcode\lib\Enum;
 
 class DebugController extends ApiBaseController
 {
@@ -26,6 +27,7 @@ class DebugController extends ApiBaseController
                     'end',
                     'create',
                     'sendsms',
+                    'qrcode',
                 ],
             ]
         ]);
@@ -54,7 +56,7 @@ class DebugController extends ApiBaseController
         exit;
     }
 
-    public function actionRecord($meeting_number,$zcode)
+    public function actionRecord($meeting_number, $zcode)
     {
         $url = 'https://api.zhumu.me/v3/meeting/mcrecording';
 
@@ -75,7 +77,7 @@ class DebugController extends ApiBaseController
         exit;
     }
 
-    public function actionGet($meeting_number,$zcode)
+    public function actionGet($meeting_number, $zcode)
     {
         $url = 'https://api.zhumu.me/v3/meeting/get';
 
@@ -89,13 +91,13 @@ class DebugController extends ApiBaseController
             $api_secret = $systemConfig['value'];
         }
 
-        $postData = ['api_key' => $api_key,'api_secret' => $api_secret,'zcode' => $zcode,'meeting_id'=>$meeting_number];
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'zcode' => $zcode, 'meeting_id' => $meeting_number];
         $ret = Service::curl_post($postData, $url);
         echo $ret;
         exit;
     }
 
-    public function actionEnd($meeting_number,$zcode)
+    public function actionEnd($meeting_number, $zcode)
     {
         $url = 'https://api.zhumu.me/v3/meeting/end';
 
@@ -109,7 +111,7 @@ class DebugController extends ApiBaseController
             $api_secret = $systemConfig['value'];
         }
 
-        $postData = ['api_key' => $api_key,'api_secret' => $api_secret,'zcode' => $zcode,'meeting_id'=>$meeting_number];
+        $postData = ['api_key' => $api_key, 'api_secret' => $api_secret, 'zcode' => $zcode, 'meeting_id' => $meeting_number];
         $ret = Service::curl_post($postData, $url);
         echo $ret;
         exit;
@@ -135,11 +137,30 @@ class DebugController extends ApiBaseController
         exit;
     }
 
-    public function actionSendsms($mobile,$content)
+    public function actionSendsms($mobile, $content)
     {
-        $ret = Service::sendSms($mobile,$content);
+        $ret = Service::sendSms($mobile, $content);
         echo $ret;
         exit;
+    }
+
+    public function actionQrcode($id, $url)
+    {
+        $date = date('Y/md');
+        $qrPath = 'qrcode/' . $date;
+        $qrName = $id . '.png';
+
+        $targetFolder = Yii::getAlias('@yii_base') . '/data/img/' . $qrPath;
+        $file = new \yii\helpers\FileHelper();
+        $file->createDirectory($targetFolder);
+
+        $qrFile = rtrim($targetFolder, '/') . '/' . $qrName;
+
+        QrCode::png($url,$qrFile,Enum::QR_ECLEVEL_L,4,2);    //调用二维码生成方法
+
+        $qrUrl = rtrim(Yii::$app->params['domain'], '/') . '/' . $qrPath . '/' . $qrName;
+
+        return Service::sendSucc($qrUrl);
     }
 
 
