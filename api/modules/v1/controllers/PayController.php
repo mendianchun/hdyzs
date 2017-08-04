@@ -38,6 +38,7 @@ class PayController extends ApiBaseController
                 'optional' => [
                     'pingxx',
                     'create',
+                    'callback',
                 ],
             ]
         ]);
