@@ -156,7 +156,7 @@ class PayController extends ApiBaseController
 
                 $qrUrl = rtrim(Yii::$app->params['domain'], '/') . '/' . $qrPath . '/' . $qrName;
 
-                return Service::sendSucc($qrUrl);
+                return Service::sendSucc(['qrcode'=>$qrUrl]);
             } else {
                 return Service::sendError(20503, '支付平台返回错误');
             }
