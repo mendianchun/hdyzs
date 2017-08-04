@@ -176,7 +176,7 @@ class PayController extends ApiBaseController
         switch ($event['type']) {
             case "charge.succeeded":
                 if ($inputData['paid'] == true) {
-                    $pay = Pay::findOne(['pay_no' => $inputData['id']]);
+                    $pay = Pay::findOne(['pay_no' => $inputData['order_no']]);
                     if ($pay) {
 
                         if ($pay->amount != $inputData['amount']) {
