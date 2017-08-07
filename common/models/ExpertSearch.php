@@ -19,7 +19,7 @@ class ExpertSearch extends Expert
     {
         return [
             [['id', 'fee_per_times', 'fee_per_hour'], 'integer'],
-            [['name', 'head_img', 'free_time', 'skill', 'introduction', 'user_uuid'], 'safe'],
+            [['name', 'head_img', 'free_time', 'skill', 'introduction', 'user_uuid', 'expert_status'], 'safe'],
         ];
     }
 
@@ -68,11 +68,11 @@ class ExpertSearch extends Expert
         $query->andFilterWhere([
             'id' => $this->id,
             'fee_per_times' => $this->fee_per_times,
-            'fee_per_hour' => $this->fee_per_hour,
+	        'fee_per_hour' => $this->fee_per_hour,
+	        'expert_status' => $this->expert_status,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'head_img', $this->head_img])
             ->andFilterWhere(['like', 'free_time', $this->free_time])
             ->andFilterWhere(['like', 'skill', $this->skill])
             ->andFilterWhere(['like', 'introduction', $this->introduction])
