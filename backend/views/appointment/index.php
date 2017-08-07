@@ -58,6 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=>'status',
                 'value'=>'StatusStr',
                 'filter'=>Appointment::allStatus(),
+                'headerOptions'=>['width'=>'100px'],
                 'contentOptions'=>
             		function($model)
                     {
@@ -67,11 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'pay_status',
             ['attribute'=>'pay_status',
                 'value'=>'PayStatusStr',
+                'headerOptions'=>['width'=>'100px'],
                 'filter'=>Appointment::allPayStatus()
             ],
 //            'pay_type',
             ['attribute'=>'pay_type',
                 'value'=>'PayTypeStatusStr',
+                'headerOptions'=>['width'=>'100px'],
                 'filter'=>Appointment::allPayTypeStatus()
             ],
 //            'order_starttime:datetime',
@@ -80,13 +83,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'order_starttime',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'headerOptions'=>['width'=>'150px'],
+//                'contentOptions'=>['width'=>'150px'],
             ],
 
             [
                 'attribute' => 'order_endtime',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'headerOptions'=>['width'=>'150px'],
+//                'contentOptions'=>['width'=>'150px'],
             ],
             // 'order_fee',
             // 'real_starttime:datetime',

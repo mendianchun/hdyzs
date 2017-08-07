@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=>'verify_status',
                 'value'=>'StatusStr',
                 'filter'=>Clinic::allStatus(),
+                'headerOptions'=>['width'=>'120px'],
                 'contentOptions'=>
                     function($model)
                     {
