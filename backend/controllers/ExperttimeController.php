@@ -37,7 +37,11 @@ class ExperttimeController extends Controller
     {
         $searchModel = new ExpertTimeSearch();
         $param = Yii::$app->request->queryParams;
-	    $param['ExpertTimeSearch']['start_time'] = date('Y-m-d');
+	    if(isset($param['date'])){
+		    $param['ExpertTimeSearch']['date']=$param['date'];
+	    }else{
+		    $param['ExpertTimeSearch']['start_time'] = date('Y-m-d');
+	    }
         $dataProvider = $searchModel->search($param);
 
         return $this->render('index', [

@@ -28,7 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
 		        'label'=>'患者名称',
 		        'value'=>'appointment.patient_name',
 	        ],
-            'date',
+	        ['attribute'=>'date',
+		        'label'=>'时间（Y-m-d）',
+		        'value'=>'date',
+		        'filter' => \yii\jui\DatePicker::widget([
+			        'name'=>'date',
+			        'language' => 'zh-CN',
+			        'dateFormat' => 'yyyy-MM-dd'
+		        ]),
+		        'format' => 'html',
+	        ],
             'hour',
 	        ['attribute'=>'zone',
 		        'value'=>'ZoneStr',
