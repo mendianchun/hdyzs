@@ -22,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'username',
                 'label'=>'用户名',
-                'contentOptions'=>['width'=>'100px'],
+                'headerOptions'=>['width'=>'100px'],
+//                'contentOptions'=>['width'=>'100px'],
                 'value' => 'adminuser.username',
             ],
 //            'route',
@@ -40,7 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'headerOptions'=>['width'=>'150px'],
+//                'contentOptions'=>['width'=>'150px'],
             ],
 
 //             'ip',
@@ -51,7 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return long2ip($model->ip);
                 },
-                'contentOptions'=>['width'=>'100px'],
+                'headerOptions'=>['width'=>'100px'],
+//                'contentOptions'=>['width'=>'100px'],
             ],
 
             [

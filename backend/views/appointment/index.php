@@ -80,13 +80,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'order_starttime',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'headerOptions'=>['width'=>'150px'],
+//                'contentOptions'=>['width'=>'150px'],
             ],
 
             [
                 'attribute' => 'order_endtime',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
-                'contentOptions'=>['width'=>'150px'],
+                'headerOptions'=>['width'=>'150px'],
+//                'contentOptions'=>['width'=>'150px'],
             ],
             // 'order_fee',
             // 'real_starttime:datetime',
