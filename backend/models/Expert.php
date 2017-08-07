@@ -60,7 +60,7 @@ class Expert extends \common\models\Expert
 
 			['password_repeat','compare','compareAttribute'=>'password','message'=>'两次输入的密码不一致！'],
 
-			[['name', 'username', 'mobile','email', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction', 'url'], 'string'],
+			[['name', 'username', 'mobile','email', 'password', 'head_img', 'fee_per_times', 'fee_per_hour', 'skill', 'introduction', 'url','expert_status'], 'string'],
 
 		];
 	}

@@ -30,10 +30,11 @@ class ExpertTime extends \yii\db\ActiveRecord
 	const TIME_ZONE_BOTTOM = 2;
 
 
-	//预约单状态 1:正常，2:专家取消
+	//预约单状态 1:正常，2:专家取消 3:专家被删除
 	//const STATUS_WAITING = 1;
 	const ORDER_STATUS_SUCC = 1;
 	const ORDER_STATUS_FREE = 2;
+	const ORDER_STATUS_DEL = 3;
 
 
     /**

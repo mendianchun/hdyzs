@@ -17,12 +17,16 @@ use Yii;
  * @property string $introduction
  * @property string $url
  * @property string $user_uuid
+ * @property string $expert_status
  *
  * @property Appointment[] $appointments
  * @property User $userUu
  */
 class Expert extends \yii\db\ActiveRecord
 {
+	//专家状态
+	const EXPERT_ON =1;
+	const EXPERT_OFF =2;
     /**
      * @inheritdoc
      */
@@ -45,6 +49,7 @@ class Expert extends \yii\db\ActiveRecord
 	        [['skill'], 'string', 'max' => 255],
 	        [['introduction'], 'string', 'max' => 200],
 	        [['url'], 'string', 'max' => 200],
+	        [['expert_status'], 'int', 'max' => 200],
             [['user_uuid'], 'string', 'max' => 36],
             [['user_uuid'], 'unique'],
             [['user_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_uuid' => 'uuid']],

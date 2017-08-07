@@ -36,7 +36,9 @@ class ExperttimeController extends Controller
     public function actionIndex()
     {
         $searchModel = new ExpertTimeSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $param = Yii::$app->request->queryParams;
+	    $param['ExpertTimeSearch']['start_time'] = date('Y-m-d');
+        $dataProvider = $searchModel->search($param);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

@@ -55,7 +55,10 @@ class ExpertController extends Controller
     public function actionIndex()
     {
         $searchModel = new ExpertSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+	    $params = Yii::$app->request->queryParams;
+	    $params['ExpertSearch']['expert_status'] = Expert::EXPERT_ON;
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -216,12 +219,16 @@ class ExpertController extends Controller
 
 
 	    $model = $this->findModel($id);
-	   $res =  User::deleteAll(['uuid'=>$model->attributes['user_uuid']]);
+	 //  $res =  User::deleteAll(['uuid'=>$model->attributes['user_uuid']]);
+		$model->expert_status=Expert::EXPERT_OFF;
+	    $status = Expert::updateAll($model,['id'=>$id]);
+		if($status){
+			$experttime['status']=ExpertTime::ORDER_STATUS_DEL;
+			ExpertTime::updateAll($experttime,['expert_uuid'=>$model->user_uuid,'is_order'=>1]);
+			$user['status'] = User::STATUS_DELETED;
+			User::updateAll($user,['uuid'=>$model->user_uuid]);
 
-//	    echo '<pre>';
-//	    var_dump($res);
-//	    exit();
-//        $this->findModel($id)->delete();
+		}
 
         return $this->redirect(['index']);
     }
