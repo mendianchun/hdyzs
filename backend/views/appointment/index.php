@@ -9,8 +9,8 @@ use yii\bootstrap\Modal;
 // 更新操作
 Modal::begin([
 	'id' => 'cancel-modal',
-	'header' => '<h4 class="modal-title">更新</h4>',
-	'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+	'header' => '<h4 class="modal-title">取消预约单</h4>',
+	'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
 ]);
 Modal::end();
 

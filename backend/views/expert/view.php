@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Expert */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Experts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '专家管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="expert-view">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('删除', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '确定要删除吗?',
                 'method' => 'post',
             ],
         ]) ?>

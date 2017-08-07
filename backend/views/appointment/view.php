@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Appointment */
 
 $this->title = $model->appointment_no;
-$this->params['breadcrumbs'][] = ['label' => 'Appointments', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '预约管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="appointment-view">
@@ -85,6 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>['date','php:Y-m-d H:i:s']
             ],
         ],
+        'template' => '<tr><th width="150px">{label}</th><td>{value}</td></tr>',
     ]) ?>
 
 </div>
