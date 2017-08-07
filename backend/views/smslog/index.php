@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=>'status',
                 'value'=>'StatusStr',
                 'filter'=>SmsLog::allStatus(),
-                'headerOptions'=>['width'=>'50px'],
+                'headerOptions'=>['width'=>'80px'],
 //                'contentOptions'=>['width'=>'50px'],
             ],
 
