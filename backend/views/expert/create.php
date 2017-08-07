@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Expert */
 
 $this->title = '创建专家';
-$this->params['breadcrumbs'][] = ['label' => 'Experts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '专家管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="expert-create">

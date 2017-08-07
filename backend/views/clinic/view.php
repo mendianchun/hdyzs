@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Clinic */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Clinics', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '诊所管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clinic-view">

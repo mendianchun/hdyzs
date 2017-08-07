@@ -64,13 +64,13 @@ class ExpertTime extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'expert_uuid' => 'Expert Uuid',
+            'expert_uuid' => '专家ID',
             'date' => '日期',
             'hour' => '小时',
             'zone' => '区间',
-            'is_order' => 'Is Order',
-            'clinic_uuid' => 'Clinic Uuid',
-            'order_no' => 'Order No',
+            'is_order' => '是否预约',
+            'clinic_uuid' => '诊所ID',
+            'order_no' => '预约单号',
 	        'status'=>'状态',
         ];
     }

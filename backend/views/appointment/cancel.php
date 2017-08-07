@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 $this->title = 'Update Appointment: ' . $model->appointment_no;
 $this->params['breadcrumbs'][] = ['label' => 'Appointments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->appointment_no, 'url' => ['view', 'id' => $model->appointment_no]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = '取消';
 ?>
 <div class="appointment-update">
 
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = 'Update';
 		<?= $form->field($model, 'cancel_reason')->textInput() ?>
 
 		<div class="form-group">
-			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+			<?= Html::submitButton('取消', ['class' => 'btn btn-primary']) ?>
 		</div>
 
 		<?php ActiveForm::end(); ?>

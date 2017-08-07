@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => long2ip($model->ip),
             ],
         ],
+        'template' => '<tr><th width="70px">{label}</th><td>{value}</td></tr>',
     ]) ?>
 
 </div>
