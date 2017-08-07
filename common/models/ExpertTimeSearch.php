@@ -13,6 +13,7 @@ use common\models\ExpertTime;
 class ExpertTimeSearch extends ExpertTime
 {
 	public $order_status;
+	public $start_time;
 
 	public function attributes()
 	{
@@ -25,7 +26,7 @@ class ExpertTimeSearch extends ExpertTime
     {
         return [
             [['id', 'hour', 'zone', 'is_order', 'status'], 'integer'],
-            [['expert_uuid', 'date', 'clinic_uuid', 'order_no', 'reason','patientName', 'expertName','order_status'], 'safe'],
+            [['expert_uuid', 'date', 'clinic_uuid', 'order_no', 'reason','patientName', 'expertName','order_status','start_time'], 'safe'],
         ];
     }
 
@@ -86,6 +87,8 @@ class ExpertTimeSearch extends ExpertTime
 	    $query->andFilterWhere(['like', 'clinic_uuid', $this->clinic_uuid])
             ->andFilterWhere(['like', 'order_no', $this->order_no])
             ->andFilterWhere(['like', 'reason', $this->reason]);
+
+	    $query->andFilterWhere(['>=', 'date', $this->start_time]);
 
 	    $query->join('left JOIN','appointment','expert_time.order_no = appointment.appointment_no');
 	    $query->andFilterWhere(['like','appointment.patient_name',$this->patientName]);
