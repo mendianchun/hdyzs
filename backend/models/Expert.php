@@ -8,6 +8,7 @@
 
 namespace backend\models;
 
+use common\models\ExpertTime;
 use yii\base\Model;
 use yii\helpers\VarDumper;
 use common\models\User;
@@ -49,6 +50,8 @@ class Expert extends \common\models\Expert
 			['email', 'required'],
 			['head_img', 'required'],
 
+
+			[['name'], 'string', 'max' => 10],
 			[['mobile'], 'number'],
 			[['mobile'], 'string', 'min' => 11],
 			[['email'], 'email'],
@@ -103,10 +106,9 @@ class Expert extends \common\models\Expert
 		$user->setPassword($this->password);
 		$user->generateAuthKey();
 
-
-
 		$uuid = Service::create_uuid();
 		$user->uuid = $uuid;
+
 		if($user->save()){
 			$expert=new \common\models\Expert();
 
@@ -121,6 +123,7 @@ class Expert extends \common\models\Expert
 			$expert->introduction =$this->introduction;
 			$expert->url =$this->url;
 			$expert->user_uuid =$uuid;
+			$expert->expert_status =Expert::EXPERT_ON;
 			if($expert->save()>0){
 				return array('uuid'=>$uuid,'id'=>$expert->id);
 			}else{

@@ -49,7 +49,7 @@ class Expert extends \yii\db\ActiveRecord
 	        [['skill'], 'string', 'max' => 255],
 	        [['introduction'], 'string', 'max' => 200],
 	        [['url'], 'string', 'max' => 200],
-	        [['expert_status'], 'int', 'max' => 200],
+	        [['expert_status'], 'number', 'max' => 200],
             [['user_uuid'], 'string', 'max' => 36],
             [['user_uuid'], 'unique'],
             [['user_uuid'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_uuid' => 'uuid']],

@@ -15,11 +15,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tel')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tel')->textInput(['maxlength' => 12]) ?>
 
     <?= $form->field($model, 'chief')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'idcard')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'idcard')->textInput(['maxlength' => 18]) ?>
 	<?php if($op=='create'){?>
 
     <?= $form->field($model, 'Business_license_img')->textInput(['maxlength' => true]) ?>
