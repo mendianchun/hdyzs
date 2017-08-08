@@ -44,7 +44,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=>['date','php:Y-m-d H:i:s'],
             ],
             ['class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}'
+                'template'=>'{update} {delete}',
+	            'buttons' => [
+		            'delete'=>function($url,$model,$key)
+		            {
+			            if($model->status == Zhumu::STATUS_DELETED ){
+				            return '';
+			            }
+		            },
+                ]
             ],
         ],
     ]); ?>
