@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = '取消';
 		<?= $form->field($model, 'cancel_reason')->textInput() ?>
 
 		<div class="form-group">
-			<?= Html::submitButton('取消', ['class' => 'btn btn-primary']) ?>
+			<?= Html::submitButton('确定', ['class' => 'btn btn-primary']) ?>
 		</div>
 
 		<?php ActiveForm::end(); ?>
