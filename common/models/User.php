@@ -66,7 +66,12 @@ class User extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
 	        [['email'], 'required'],
             [['mobile'], 'unique'],
-            [['mobile'], 'required'],
+	        [['mobile'], 'required'],
+
+	        [['mobile'], 'number'],
+	        [['mobile'], 'string', 'min' => 11],
+	        [['email'], 'email'],
+	        
             [['uuid'], 'unique'],
             [['uuid'], 'required'],
             [['username'], 'unique'],

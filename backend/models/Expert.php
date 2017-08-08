@@ -49,6 +49,10 @@ class Expert extends \common\models\Expert
 			['email', 'required'],
 			['head_img', 'required'],
 
+			[['mobile'], 'number'],
+			[['mobile'], 'string', 'min' => 11],
+			[['email'], 'email'],
+
 			['name', 'unique',  'message' => '专家姓名已经存在.'],
 			['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '登录名已经存在.'],
 			['mobile', 'unique', 'targetClass' => '\common\models\User', 'message' => '手机号已经存在.'],
