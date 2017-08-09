@@ -36,7 +36,7 @@ class ExpertController extends ApiBaseController
         $pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
 
         $params['ExpertSearch']['name'] = isset($queryParam['name']) ? $queryParam['name'] : null;
-
+	    $params['ExpertSearch']['expert_status'] = Expert::EXPERT_ON;
         $userSearch = new ExpertSearch();
         $provider = $userSearch->search($params,$pageSize);
         $data = $provider->getModels();
