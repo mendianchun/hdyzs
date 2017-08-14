@@ -152,11 +152,18 @@ class DiagnosisController extends ApiBaseController
 		}
 
 
+		$source = isset($get_params['source']) ? $get_params['source'] : 'clinic';
+
 		$user = \yii::$app->user->identity;
 		$uuid = $user->uuid;
 
+		if($source =='expert'){
+			$appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'expert_uuid'=>$uuid]);
+		}else{
+			$appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
+		}
 		// $result = Appointment::findOne(['appointment_no'=>$appointment_no])->attributes;
-		$appointment = Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
+
 
 		if(!$appointment){
 			$result['code']='20303';
