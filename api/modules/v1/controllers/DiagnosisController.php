@@ -204,6 +204,7 @@ class DiagnosisController extends ApiBaseController
 		$order_post = Yii::$app->request->post();
 		$now =time();
 
+
 		if(!isset($order_post['appointment_no']) ){
 		    return Service::sendError(20302,'缺少预约单号');
 	    }
@@ -212,12 +213,20 @@ class DiagnosisController extends ApiBaseController
 			return Service::sendError(20307,'专家诊断');
 		}
 
+
+		$source = isset($order_post['source']) ? $order_post['source'] : 'clinic';
+
 		$appointment_no=$order_post['appointment_no'];
 
 		$user = \yii::$app->user->identity;
 		$uuid = $user->uuid;
+		if($source =='expert'){
+			$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'expert_uuid'=>$uuid]);
+		}else{
+			$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
+		}
 
-		$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
+
 
 		if($appointment){
 			$appointment_old = $appointment->attributes;
