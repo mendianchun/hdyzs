@@ -211,20 +211,30 @@ class DiagnosisController extends ApiBaseController
 		    return Service::sendError(20302,'缺少预约单号');
 	    }
 
-		if(!isset($order_post['expert_diagnosis']) ){
-			return Service::sendError(20307,'专家诊断');
-		}
-
-
 		$source = isset($order_post['source']) ? $order_post['source'] : 'clinic';
+
+
+
+
+
+
+
 
 		$appointment_no=$order_post['appointment_no'];
 
 		$user = \yii::$app->user->identity;
 		$uuid = $user->uuid;
 		if($source =='expert'){
+			if(!isset($order_post['expert_advise']) ){
+				return Service::sendError(20307,'缺少专家建议');
+			}
 			$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'expert_uuid'=>$uuid]);
 		}else{
+			if(!isset($order_post['expert_diagnosis']) ){
+				return Service::sendError(20307,'专家诊断');
+			}
+
+
 			$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 		}
 
@@ -260,11 +270,10 @@ class DiagnosisController extends ApiBaseController
 				$appointment_new['patient_age']=$order_post['patient_age'];
 			}
 
-
 			if($source =='expert'){
-				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
-			}else{
 				$appointment_new['expert_advise']=$order_post['expert_advise'];
+			}else{
+				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
 			}
 
 
