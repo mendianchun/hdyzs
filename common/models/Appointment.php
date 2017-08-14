@@ -28,6 +28,7 @@ use Yii;
  * @property string $patient_img3
  * @property string $patient_description
  * @property string $expert_diagnosis
+ * @property string $expert_advise
  * @property integer $pay_type
  * @property integer $status
  * @property string $cancel_reason
@@ -95,7 +96,7 @@ class Appointment extends \yii\db\ActiveRecord
             [['appointment_no', 'clinic_uuid', 'expert_uuid', 'order_starttime', 'order_endtime', 'patient_name', 'patient_description', 'created_at', 'updated_at'], 'required'],
             [['appointment_no', 'order_starttime', 'order_endtime', 'order_fee', 'order_score', 'real_starttime', 'real_endtime', 'real_fee', 'real_score', 'patient_age', 'patient_gender', 'pay_type', 'status', 'pay_status', 'pay_time', 'dx_status', 'is_sms_notify', 'fee_type', 'created_at', 'updated_at', 'audio_created_at', 'audio_status'], 'integer'],
 
-            [['patient_description', 'expert_diagnosis'], 'string'],
+            [['patient_description', 'expert_diagnosis', 'expert_advise'], 'string'],
             [['clinic_uuid', 'expert_uuid'], 'string', 'max' => 36],
             [['patient_name'], 'string', 'max' => 10],
             [['patient_mobile'], 'string', 'max' => 11],
@@ -132,7 +133,8 @@ class Appointment extends \yii\db\ActiveRecord
             'patient_mobile' => '患者手机号',
             'patient_idcard' => '患者身份证号',
             'patient_description' => '患者主述',
-            'expert_diagnosis' => '医生诊断',
+	        'expert_diagnosis' => '医生诊断',
+	        'expert_advise' => '专家建议',
             'pay_type' => '支付类型',
             'status' => '状态',
             'pay_status' => '支付状态',

@@ -103,7 +103,7 @@ class DiagnosisController extends ApiBaseController
 				$app['appointment_no'] = $item->attributes['appointment_no'];
 				$app['dx_status'] = $item->attributes['dx_status'];
 
-				$app['expert_diagnosis'] = $item->attributes['expert_diagnosis'];
+				$app['expert_advise'] = $item->attributes['expert_advise'];
 
 				$app['order_starttime'] = date('Y-m-d H:i',$item->attributes['order_starttime']);
 				$app['patient_name'] = $item->attributes['patient_name'];
@@ -259,7 +259,14 @@ class DiagnosisController extends ApiBaseController
 			}
 
 
-			$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
+			if($source =='expert'){
+				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
+			}else{
+				$appointment_new['expert_advise']=$order_post['expert_advise'];
+			}
+
+
+
 
 			$appointment_new['real_endtime']=$now ;
 
