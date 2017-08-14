@@ -115,9 +115,15 @@ class DiagnosisController extends ApiBaseController
 					$app['change_status']=1;
 				}
 				//$app['status'] = $item->attributes['status'];
-				//专家信息
-				$expert = $item->expertUu;
-				$app['expert_name']= $expert->attributes['name'];
+				if($source == 'expert'){
+					$clinic = $item->clinicUu;
+					$app['clinict_name']= $clinic->attributes['name'];
+				}else{
+					//专家信息
+					$expert = $item->expertUu;
+					$app['expert_name']= $expert->attributes['name'];
+				}
+
 
 				$result[]=$app;
 			}
@@ -159,11 +165,13 @@ class DiagnosisController extends ApiBaseController
 			$result=array();
 			$data= $appointment->attributes;
 			$expert = $appointment->expertUu;
+			$clinic = $appointment->clinicUu;
 //			$zhumu = $appointment->appointmentVideos;
 
 			$result['appointment_no']=$data['appointment_no'];
 
 			$result['expert_name']=$expert['name'];
+			$result['clinic_name']=$clinic['name'];
 			$result['real_starttime']=date('Y-m-d h:i',$data['real_starttime']);
 			$result['real_endtime']=date('Y-m-d h:i',$data['real_endtime']);
 			$result['patient_description']=$data['patient_description'];
@@ -206,19 +214,11 @@ class DiagnosisController extends ApiBaseController
 		$order_post = Yii::$app->request->post();
 		$now =time();
 
-
 		if(!isset($order_post['appointment_no']) ){
 		    return Service::sendError(20302,'缺少预约单号');
 	    }
 
 		$source = isset($order_post['source']) ? $order_post['source'] : 'clinic';
-
-
-
-
-
-
-
 
 		$appointment_no=$order_post['appointment_no'];
 
@@ -234,10 +234,8 @@ class DiagnosisController extends ApiBaseController
 				return Service::sendError(20307,'专家诊断');
 			}
 
-
 			$appointment =Appointment::findOne(['appointment_no'=>$appointment_no,'clinic_uuid'=>$uuid]);
 		}
-
 
 
 		if($appointment){
@@ -248,12 +246,6 @@ class DiagnosisController extends ApiBaseController
 					return Service::sendError(20304,'超过修改时间');
 				}
 			}
-
-//			if($appointment_old['real_starttime'] < $now ){
-//				return Service::sendError(20304,'诊断未开始');
-//			}
-
-
 
 			//患者信息
 			if(isset($order_post['patient_gender'])){
@@ -275,8 +267,6 @@ class DiagnosisController extends ApiBaseController
 			}else{
 				$appointment_new['expert_diagnosis']=$order_post['expert_diagnosis'];
 			}
-
-
 
 
 			$appointment_new['real_endtime']=$now ;
