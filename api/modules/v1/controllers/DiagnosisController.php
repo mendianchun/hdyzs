@@ -234,7 +234,7 @@ class DiagnosisController extends ApiBaseController
 			$appointment_old = $appointment->attributes;
 
 			if($appointment_old['dx_status'] ==2 ){
-				if($appointment_old['real_endtime']+3600<$now){
+				if($appointment_old['real_endtime']+3600*24<$now){
 					return Service::sendError(20304,'超过修改时间');
 				}
 			}
