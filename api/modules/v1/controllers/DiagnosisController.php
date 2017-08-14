@@ -104,6 +104,7 @@ class DiagnosisController extends ApiBaseController
 				$app['dx_status'] = $item->attributes['dx_status'];
 
 				$app['expert_advise'] = $item->attributes['expert_advise'];
+				$app['expert_diagnosis'] = $item->attributes['expert_diagnosis'];
 
 				$app['order_starttime'] = date('Y-m-d H:i',$item->attributes['order_starttime']);
 				$app['patient_name'] = $item->attributes['patient_name'];
@@ -183,6 +184,7 @@ class DiagnosisController extends ApiBaseController
 			$result['patient_idcard']=$data['patient_idcard'];
 
 			$result['expert_diagnosis']=$data['expert_diagnosis'];
+			$result['expert_advise']=$data['expert_advise'];
 
 			if(!empty($data['audio_url'])){
 				$result['audio_url'] = \Yii::$app->urlManager->createAbsoluteUrl(['v1/zhumu/getmp3','appointment_no'=>$appointment_no]);
