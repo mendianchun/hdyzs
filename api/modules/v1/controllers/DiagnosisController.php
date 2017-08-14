@@ -58,10 +58,21 @@ class DiagnosisController extends ApiBaseController
 		$queryParam = Yii::$app->request->queryParams;
 		$pageSize = isset($queryParam['size']) ? $queryParam['size'] : Yii::$app->params['list.pagesize'];
 
+
+		$source = isset($queryParam['source']) ? $queryParam['source'] : 'clinic';
+
+
 		$user = \yii::$app->user->identity;
 		$uuid = $user->uuid;
-		$params['AppointmentSearch']['clinic_uuid'] = $uuid;
-		$params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
+
+		if($source == 'expert'){
+			$params['AppointmentSearch']['clinic_uuid'] = isset($queryParam['clinic_uuid']) ? $queryParam['clinic_uuid'] : null;
+			$params['AppointmentSearch']['expert_uuid'] = $uuid;
+		}else{
+			$params['AppointmentSearch']['clinic_uuid'] = $uuid;
+			$params['AppointmentSearch']['expert_uuid'] = isset($queryParam['expert_uuid']) ? $queryParam['expert_uuid'] : null;
+		}
+
 		$params['AppointmentSearch']['dx_status'] = isset($queryParam['dx_status']) ? $queryParam['dx_status'] : null;
 		$params['AppointmentSearch']['status'] = Appointment::STATUS_SUCC;
 		if(isset($queryParam['date'])){
@@ -91,7 +102,8 @@ class DiagnosisController extends ApiBaseController
 				$app=array();
 				$app['appointment_no'] = $item->attributes['appointment_no'];
 				$app['dx_status'] = $item->attributes['dx_status'];
-				//$app['clinic_uuid'] = $item->attributes['clinic_uuid'];
+
+				$app['expert_diagnosis'] = $item->attributes['expert_diagnosis'];
 
 				$app['order_starttime'] = date('Y-m-d H:i',$item->attributes['order_starttime']);
 				$app['patient_name'] = $item->attributes['patient_name'];
