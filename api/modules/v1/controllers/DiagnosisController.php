@@ -66,7 +66,7 @@ class DiagnosisController extends ApiBaseController
 		$uuid = $user->uuid;
 
 		if($source == 'expert'){
-			$params['AppointmentSearch']['clinic_uuid'] = isset($queryParam['clinic_uuid']) ? $queryParam['clinic_uuid'] : null;
+			$params['AppointmentSearch']['clinicName'] = isset($queryParam['clinicName']) ? $queryParam['clinicName'] : null;
 			$params['AppointmentSearch']['expert_uuid'] = $uuid;
 		}else{
 			$params['AppointmentSearch']['clinic_uuid'] = $uuid;
