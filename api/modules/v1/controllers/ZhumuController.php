@@ -294,8 +294,9 @@ class ZhumuController extends ApiBaseController
             exit;
         }
 
-        $appointment = Appointment::findOne(['appointment_no' => $appointment_no, 'clinic_uuid' => $user->uuid]);
-        if (!$appointment) {
+        $appointment = Appointment::findOne(['appointment_no' => $appointment_no]);
+        //只有该诊断的诊所或者专家有权访问音频资源
+        if ($appointment->clinic_uuid != $user->uuid && $appointment->expert_uuid != $user->uuid) {
             echo "没有此预约单";
             exit;
         }
