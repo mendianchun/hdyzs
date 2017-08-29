@@ -156,19 +156,19 @@ class ExpertController extends Controller
 
 	public function actionThumb(){
 
-		$up = new Upload();
-		$experts = Expert::findAll(array('expert_status'=>1));
-		foreach($experts as $expert ){
-			$img = $expert->head_img;
-			$s = '../../data/img/';
-			$img = $s.$img;
-			if(is_file($img)){
-				$info =  pathinfo($img);
-				$up->thumb($info['dirname'].'/',$info['basename']);
-
-			}
-
-		}
+//		$up = new Upload();
+//		$experts = Expert::findAll(array('expert_status'=>1));
+//		foreach($experts as $expert ){
+//			$img = $expert->head_img;
+//			$s = '../../data/img/';
+//			$img = $s.$img;
+//			if(is_file($img)){
+//				$info =  pathinfo($img);
+//				$up->thumb($info['dirname'].'/',$info['basename']);
+//
+//			}
+//
+//		}
 		exit();
 	}
 
