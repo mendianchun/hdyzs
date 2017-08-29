@@ -11,7 +11,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','thumbnail'],
     'modules' => [],
 	'language'=> 'zh-CN',
 	'modules' => [
@@ -24,6 +24,10 @@ return [
 		'@mdm/admin' => '@vendor/mdmsoft/yii2-admin',
 	],
     'components' => [
+	    'thumbnail' => [
+		    'class' => 'himiklab\thumbnail\EasyThumbnail',
+		    'cacheAlias' => 'assets/gallery_thumbnails',
+	    ],
         'user' => [
             'identityClass' => 'common\models\Adminuser',
             'enableAutoLogin' => true,

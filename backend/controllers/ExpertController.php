@@ -11,9 +11,7 @@ use common\models\ExpertTime;
 use common\components\Upload;
 
 
-use backend\models\UploadForm;
 use yii\web\Controller;
-use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\service\Service;
@@ -140,7 +138,6 @@ class ExpertController extends Controller
 			$model = new Upload();
 			$info = $model->upImage();
 
-
 			$info && is_array($info) ?
 				exit(Json::htmlEncode($info)) :
 				exit(Json::htmlEncode([
@@ -155,6 +152,24 @@ class ExpertController extends Controller
 				'msg' => $e->getMessage()
 			]));
 		}
+	}
+
+	public function actionThumb(){
+
+		$up = new Upload();
+		$experts = Expert::findAll(array('expert_status'=>1));
+		foreach($experts as $expert ){
+			$img = $expert->head_img;
+			$s = '../../data/img/';
+			$img = $s.$img;
+			if(is_file($img)){
+				$info =  pathinfo($img);
+				$up->thumb($info['dirname'].'/',$info['basename']);
+
+			}
+
+		}
+		exit();
 	}
 
     /**

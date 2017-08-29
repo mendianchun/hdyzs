@@ -26,7 +26,8 @@
         "php-ffmpeg/php-ffmpeg": "^0.9.3",
         "bailangzhan/yii2-webuploader": "dev-master",
         "2amigos/yii2-qrcode-helper": "*",
-        "yiisoft/yii2-jui": "^2.0"
+        "yiisoft/yii2-jui": "^2.0",
+        "himiklab/yii2-easy-thumbnail-image-helper": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -51,7 +51,15 @@ class ExpertController extends ApiBaseController
             if(!empty($v['free_time'])){
                 $v['free_time'] = json_decode($v['free_time'],true);
             }
-            $v['head_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$v['head_img'];
+	        $v['head_img'] = rtrim(Yii::$app->params['domain'],'/').'/'.$v['head_img'];
+
+	        $thumbnailFileExt = strrchr($v['head_img'], '.');
+	        $len = strlen($v['head_img'])-strlen($thumbnailFileExt);
+	        $thumbnailFileName =  substr($v['head_img'],0,$len) .'_200_200';
+	        $thumbnailFile =  $thumbnailFileName . $thumbnailFileExt;
+
+
+	        $v['head_img_thumb'] = rtrim(Yii::$app->params['domain'],'/').'/'.$thumbnailFile;
 
 	        $v['fee_by_score'] = $v['fee_per_times'] * $fee2score;
 	        $v['fee_by_money'] = $v['fee_per_times'] * $fee2score;
