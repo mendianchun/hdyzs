@@ -153,7 +153,7 @@ class ZhumuController extends ApiBaseController
 //            }
         }
         if(empty($retData)){
-	        return Service::sendError(20412, '专家前一个会诊还没有结束');
+	        return Service::sendError(20412, '专家前一个会诊还没有结束，请耐心等待。');
         }
         return Service::sendSucc($retData);
     }
