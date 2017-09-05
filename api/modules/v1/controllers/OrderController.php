@@ -7,6 +7,7 @@
  */
 namespace api\modules\v1\controllers;
 
+use api\models\User;
 use yii;
 use api\modules\ApiBaseController;
 use api\models\Appointment;
@@ -586,6 +587,56 @@ class OrderController extends ApiBaseController
 
         $result['nums'] = (int)$nums;
         return Service::sendSucc($result);
+    }
+
+
+
+    public function actionSms(){
+	    $params = Yii::$app->request->post();
+	    if(!isset($params['op'])){
+		    return Service::sendError(20218, '缺少参数');
+	    }
+
+	    if (!isset($get_params['appointment_no'])) {
+		    return Service::sendError(20208, '缺少预约单号');
+	    }
+	    $appointment_no = $get_params['appointment_no'];
+	    $op = $params['op'];
+	    $user = \yii::$app->user->identity;
+	    $uuid = $user->uuid;
+
+
+	    if($op=='check'){
+			$date = strtotime(date('Y-m-d 00:00:00',time()));
+
+
+		    $appointment = Appointment::find()->where(['and',['expert_uuid'=>$uuid,'status'=>Appointment::STATUS_SUCC,'dx_status'=>Appointment::DX_STATUS_UN],['>','order_starttime',$date]])->orderBy(['appointment_no' => SORT_ASC])->limit(1)->one();
+			$appointment_arr = $appointment->attributes;
+		    if($appointment_arr['appointment_no'] == $appointment_no){
+			    return Service::sendSucc();
+		    }else{
+			    return Service::sendError(20219, '该预约号不是当前第一位');
+		    }
+	    }elseif($op=='sms'){
+	    	$appointment = Appointment::findOne(['expert_uuid'=>$uuid,'appointment_no'=>$appointment_no]);
+	    	if($appointment){
+			    $clinic = $appointment->clinicUu;
+			    $content = "【".$clinic->attributes['name']."】您预约的会诊提前开始了，请您尽快打开会诊程序，谢谢！";
+
+			    $userInfo = User::findOne(['uuid'=>$appointment->attributes['clinic_uuid']]);
+
+			    $ret = Service::sendSms($userInfo->attributes['mobile'], $content);
+			    echo $ret;
+			    exit;
+		    }else{
+			    return Service::sendError(20202, '获取预约信息失败');
+		    }
+
+	    }else{
+		    return Service::sendError(20218, '缺少参数');
+	    }
+
+
     }
 
     public function actionTest()
