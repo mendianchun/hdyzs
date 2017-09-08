@@ -597,10 +597,10 @@ class OrderController extends ApiBaseController
 		    return Service::sendError(20218, '缺少参数');
 	    }
 
-	    if (!isset($get_params['appointment_no'])) {
+	    if (!isset($params['appointment_no'])) {
 		    return Service::sendError(20208, '缺少预约单号');
 	    }
-	    $appointment_no = $get_params['appointment_no'];
+	    $appointment_no = $params['appointment_no'];
 	    $op = $params['op'];
 	    $user = \yii::$app->user->identity;
 	    $uuid = $user->uuid;
