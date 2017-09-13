@@ -360,6 +360,17 @@ class OrderController extends ApiBaseController
             $result['expert']['id'] = $expert->attributes['id'];
             $result['expert']['name'] = $expert->attributes['name'];
             $result['expert']['head_img'] = Yii::$app->params['domain'] . $expert->attributes['head_img'];
+
+
+	        $thumbnailFileExt = strrchr( $result['expert']['head_img'], '.');
+	        $len = strlen( $result['expert']['head_img'])-strlen($thumbnailFileExt);
+	        $thumbnailFileName =  substr( $result['expert']['head_img'],0,$len) .'_200_200';
+	        $thumbnailFile =  $thumbnailFileName . $thumbnailFileExt;
+
+
+	        $result['expert']['head_img_thumb'] = $thumbnailFile;
+
+
             $result['expert']['user_uuid'] = $expert->attributes['user_uuid'];
         }
         return Service::sendSucc($result);

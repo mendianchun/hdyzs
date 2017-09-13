@@ -59,7 +59,7 @@ class ExpertController extends ApiBaseController
 	        $thumbnailFile =  $thumbnailFileName . $thumbnailFileExt;
 
 
-	        $v['head_img_thumb'] = rtrim(Yii::$app->params['domain'],'/').'/'.$thumbnailFile;
+	        $v['head_img_thumb'] = $thumbnailFile;
 
 	        $v['fee_by_score'] = $v['fee_per_times'] * $fee2score;
 	        $v['fee_by_money'] = $v['fee_per_times'] * $fee2score;
