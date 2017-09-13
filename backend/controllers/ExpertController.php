@@ -22,6 +22,7 @@ use yii\helpers\Json;
  */
 class ExpertController extends Controller
 {
+	public $dir_array =array();
 	//页面时间定义
 	public $time_conf = array(  '1_1'=>'周一上午','1_2'=>'周一下午','1_3'=>'周一晚上',
 								'2_1'=>'周二上午','2_2'=>'周二下午','2_3'=>'周二晚上',
@@ -155,10 +156,17 @@ class ExpertController extends Controller
 	}
 
 	public function actionThumb(){
-
-		$dir = '../../data/img/uploads/clinic/';
-		$result =$this->read_all_dir($dir);
-
+		$up = new Upload();
+		$dir = '../../data/img/uploads/clinic';
+		$this->read_all_dir($dir);
+		$result = array();
+		foreach ($this->dir_array as $img){
+			if(is_file($img)) {
+				$info = pathinfo($img);
+							$up->thumb($info['dirname'] . '/', $info['basename']);
+							$result[] = $img.'_done';
+			}
+		}
 		echo '<pre>';
 		var_dump($result);
 		exit();
@@ -186,7 +194,7 @@ class ExpertController extends Controller
 
 	private function read_all_dir ( $dir )
 	{
-		$up = new Upload();
+
 		$result = array();
 		$handle = opendir($dir);
 		if ( $handle )
@@ -203,11 +211,8 @@ class ExpertController extends Controller
 					else
 					{
 						$result['file'][] = $cur_path;
-						if(is_file($cur_path)) {
-							$info = pathinfo($cur_path);
-							$up->thumb($info['dirname'] . '/', $info['basename']);
-							$result['file'][] = $cur_path.'_done';
-						}
+						$this->dir_array[]=$cur_path;
+
 					}
 				}
 			}
