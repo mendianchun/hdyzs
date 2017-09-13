@@ -12,13 +12,14 @@ namespace console\controllers;
 use yii;
 use common\models\ExpertTime;
 use common\models\Expert;
-
+use common\components\Upload;
 use common\service\Service;
 use common\models\Appointment;
 use yii\console\Controller;
 
 class CrontabController extends Controller
 {
+	public $dir_array =array();
 	public $time_conf = array(  '1_1'=>'周一上午','1_2'=>'周一下午','1_3'=>'周一晚上',
 		'2_1'=>'周二上午','2_2'=>'周二下午','2_3'=>'周二晚上',
 		'3_1'=>'周三上午','3_2'=>'周三下午','3_3'=>'周三晚上',
@@ -144,5 +145,56 @@ class CrontabController extends Controller
 	}
 
 
+	public function actionThumb(){
+		$up = new Upload();
+		$dir = getcwd() .'/data/img/uploads/clinic';
+		//$dir = getcwd() .'/data/img';
+		$this->read_all_dir($dir);
+		$result = array();
+		foreach ($this->dir_array as $img){
+			if(is_file($img)) {
+				$info = pathinfo($img);
+							$up->thumb($info['dirname'] . '/', $info['basename']);
+							$result[] = $img.'_done';
+			}
+		}
+		echo '<pre>';
+		var_dump($this->dir_array);
+		var_dump($result);
+		exit();
+
+
+
+
+		exit();
+	}
+	private function read_all_dir ( $dir )
+	{
+
+		$result = array();
+		$handle = opendir($dir);
+		if ( $handle )
+		{
+			while ( ( $file = readdir ( $handle ) ) !== false )
+			{
+				if ( $file != '.' && $file != '..')
+				{
+					$cur_path = $dir . DIRECTORY_SEPARATOR . $file;
+					if ( is_dir ( $cur_path ) )
+					{
+						$result['dir'][$cur_path] = $this->read_all_dir( $cur_path );
+					}
+					else
+					{
+						$result['file'][] = $cur_path;
+						$this->dir_array[]=$cur_path;
+
+					}
+				}
+			}
+			closedir($handle);
+		}
+		return $result;
+	}
 
 }

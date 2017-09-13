@@ -22,7 +22,6 @@ use yii\helpers\Json;
  */
 class ExpertController extends Controller
 {
-	public $dir_array =array();
 	//页面时间定义
 	public $time_conf = array(  '1_1'=>'周一上午','1_2'=>'周一下午','1_3'=>'周一晚上',
 								'2_1'=>'周二上午','2_2'=>'周二下午','2_3'=>'周二晚上',
@@ -156,22 +155,8 @@ class ExpertController extends Controller
 	}
 
 	public function actionThumb(){
-		$up = new Upload();
-		$dir = '../../data/img/uploads/clinic';
-		$this->read_all_dir($dir);
-		$result = array();
-		foreach ($this->dir_array as $img){
-			if(is_file($img)) {
-				$info = pathinfo($img);
-							$up->thumb($info['dirname'] . '/', $info['basename']);
-							$result[] = $img.'_done';
-			}
-		}
-		echo '<pre>';
-		var_dump($result);
-		exit();
-		return $result;
 
+//
 //		$up = new Upload();
 //		$experts = Expert::findAll(array('expert_status'=>1));
 //		foreach($experts as $expert ){
@@ -192,34 +177,7 @@ class ExpertController extends Controller
 		exit();
 	}
 
-	private function read_all_dir ( $dir )
-	{
 
-		$result = array();
-		$handle = opendir($dir);
-		if ( $handle )
-		{
-			while ( ( $file = readdir ( $handle ) ) !== false )
-			{
-				if ( $file != '.' && $file != '..')
-				{
-					$cur_path = $dir . DIRECTORY_SEPARATOR . $file;
-					if ( is_dir ( $cur_path ) )
-					{
-						$result['dir'][$cur_path] = $this->read_all_dir( $cur_path );
-					}
-					else
-					{
-						$result['file'][] = $cur_path;
-						$this->dir_array[]=$cur_path;
-
-					}
-				}
-			}
-			closedir($handle);
-		}
-		return $result;
-	}
 
     /**
      * Updates an existing Expert model.
