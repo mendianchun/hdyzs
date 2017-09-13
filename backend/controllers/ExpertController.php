@@ -156,6 +156,14 @@ class ExpertController extends Controller
 
 	public function actionThumb(){
 
+		$dir = '../../data/img/uploads/clinic/';
+		$result =$this->read_all_dir($dir);
+
+		echo '<pre>';
+		var_dump($result);
+		exit();
+		return $result;
+
 //		$up = new Upload();
 //		$experts = Expert::findAll(array('expert_status'=>1));
 //		foreach($experts as $expert ){
@@ -169,7 +177,43 @@ class ExpertController extends Controller
 //			}
 //
 //		}
+
+
+
+
 		exit();
+	}
+
+	private function read_all_dir ( $dir )
+	{
+		$up = new Upload();
+		$result = array();
+		$handle = opendir($dir);
+		if ( $handle )
+		{
+			while ( ( $file = readdir ( $handle ) ) !== false )
+			{
+				if ( $file != '.' && $file != '..')
+				{
+					$cur_path = $dir . DIRECTORY_SEPARATOR . $file;
+					if ( is_dir ( $cur_path ) )
+					{
+						$result['dir'][$cur_path] = $this->read_all_dir( $cur_path );
+					}
+					else
+					{
+						$result['file'][] = $cur_path;
+						if(is_file($cur_path)) {
+							$info = pathinfo($cur_path);
+							$up->thumb($info['dirname'] . '/', $info['basename']);
+							$result['file'][] = $cur_path.'_done';
+						}
+					}
+				}
+			}
+			closedir($handle);
+		}
+		return $result;
 	}
 
     /**
