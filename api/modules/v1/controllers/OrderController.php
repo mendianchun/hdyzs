@@ -336,12 +336,15 @@ class OrderController extends ApiBaseController
 
             if ($result['patient_img1']) {
                 $result['patient_img1'] = Yii::$app->params['domain'] . $result['patient_img1'];
+	            $result['patient_img1_thumb'] = $this->thumb($result['patient_img1']);
             }
             if ($result['patient_img2']) {
                 $result['patient_img2'] = Yii::$app->params['domain'] . $result['patient_img2'];
+	            $result['patient_img2_thumb'] = $this->thumb($result['patient_img2']);
             }
             if ($result['patient_img3']) {
                 $result['patient_img3'] = Yii::$app->params['domain'] . $result['patient_img3'];
+	            $result['patient_img3_thumb'] = $this->thumb($result['patient_img3']);
             }
 
 
@@ -361,21 +364,20 @@ class OrderController extends ApiBaseController
             $result['expert']['name'] = $expert->attributes['name'];
             $result['expert']['head_img'] = Yii::$app->params['domain'] . $expert->attributes['head_img'];
 
-
-	        $thumbnailFileExt = strrchr( $result['expert']['head_img'], '.');
-	        $len = strlen( $result['expert']['head_img'])-strlen($thumbnailFileExt);
-	        $thumbnailFileName =  substr( $result['expert']['head_img'],0,$len) .'_200_200';
-	        $thumbnailFile =  $thumbnailFileName . $thumbnailFileExt;
-
-
-	        $result['expert']['head_img_thumb'] = $thumbnailFile;
+	        $result['expert']['head_img_thumb'] = $this->thumb($result['expert']['head_img']);
 
 
             $result['expert']['user_uuid'] = $expert->attributes['user_uuid'];
         }
         return Service::sendSucc($result);
     }
-
+	private function thumb($img){
+		$thumbnailFileExt = strrchr( $img, '.');
+		$len = strlen($img)-strlen($thumbnailFileExt);
+		$thumbnailFileName =  substr($img,0,$len) .'_200_200';
+		$thumbnailFile =  $thumbnailFileName . $thumbnailFileExt;
+		return $thumbnailFile;
+	}
     /*
      * 专家端获取详情
      */
@@ -403,12 +405,15 @@ class OrderController extends ApiBaseController
 
             if ($result['patient_img1']) {
                 $result['patient_img1'] = Yii::$app->params['domain'] . $result['patient_img1'];
+	            $result['patient_img1_thumb'] = $this->thumb($result['patient_img1']);
             }
             if ($result['patient_img2']) {
                 $result['patient_img2'] = Yii::$app->params['domain'] . $result['patient_img2'];
+	            $result['patient_img2_thumb'] = $this->thumb($result['patient_img2']);
             }
             if ($result['patient_img3']) {
                 $result['patient_img3'] = Yii::$app->params['domain'] . $result['patient_img3'];
+	            $result['patient_img3_thumb'] = $this->thumb($result['patient_img3']);
             }
 
 

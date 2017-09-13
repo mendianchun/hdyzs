@@ -12,6 +12,12 @@ use common\service\Service;
 
 use yii\web\HttpException;
 
+
+use Imagine\Image\Box;
+use Imagine\Image\ManipulatorInterface;
+use yii\helpers\Html;
+use yii\imagine\Image;
+
 class UploadController extends ApiBaseController{
 
 
@@ -37,6 +43,8 @@ class UploadController extends ApiBaseController{
      */
     public function actionImg($type)
     {
+	    $thumb_width = 200;
+	    $thumb_height = 200;
         if(!in_array($type,Yii::$app->params['upload.type'])){
             return Service::sendError(20801,'类型错误');
         }
@@ -54,6 +62,10 @@ class UploadController extends ApiBaseController{
             $random = time() . rand(1000, 9999);
             $randName = $random . "." . $extension;
             $targetFile = rtrim($targetFolder,'/') . '/' . $randName;
+
+            $thumbName = $random."_".$thumb_width."_".$thumb_height.$extension;
+	        $thumbFile = rtrim($targetFolder,'/') . '/' . $thumbName;
+
             $uploadfile_path = 'uploads/'.$type.'/'.date('Y/md').'/'.$randName;
             $callback['path'] = $uploadfile_path;
             $callback['url'] = rtrim(Yii::$app->params['domain'],'/').'/'.$uploadfile_path;
@@ -70,6 +82,18 @@ class UploadController extends ApiBaseController{
                 return Service::sendError(20803,'文件大小不能超过'.Yii::$app->params['upload.maxsize'].'MB');
             }
             move_uploaded_file($tempFile,$targetFile);
+
+
+	        $box = new Box($thumb_width, $thumb_height);
+	        $image =  Image::getImagine()->open($targetFile);
+	        $image = $image->thumbnail($box, 'outbound');
+
+	        $options = [
+		        'quality' => 50
+	        ];
+	        $image->save($thumbFile, $options);
+
+
             return Service::sendSucc($callback);
         }else{
             return Service::sendError(20804,'没有上传文件');
