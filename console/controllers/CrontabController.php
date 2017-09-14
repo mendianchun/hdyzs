@@ -146,16 +146,18 @@ class CrontabController extends Controller
 
 
 	public function actionThumb(){
-		$up = new Upload();
+
 		$dir = getcwd() .'/data/img/uploads/clinic';
 		//$dir = getcwd() .'/data/img';
 		$this->read_all_dir($dir);
 		$result = array();
 		foreach ($this->dir_array as $img){
 			if(is_file($img)) {
+				$up = new Upload();
 				$info = pathinfo($img);
-							$up->thumb($info['dirname'] . '/', $info['basename']);
-							$result[] = $img.'_done';
+				$up->thumb($info['dirname'] . '/', $info['basename']);
+				$result[] = $img.'_done';
+				unset($up);
 			}
 		}
 		echo '<pre>';
