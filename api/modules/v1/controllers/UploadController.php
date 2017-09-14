@@ -63,7 +63,7 @@ class UploadController extends ApiBaseController{
             $randName = $random . "." . $extension;
             $targetFile = rtrim($targetFolder,'/') . '/' . $randName;
 
-            $thumbName = $random."_".$thumb_width."_".$thumb_height.$extension;
+            $thumbName = $random."_".$thumb_width."_".$thumb_height. "." .$extension;
 	        $thumbFile = rtrim($targetFolder,'/') . '/' . $thumbName;
 
             $uploadfile_path = 'uploads/'.$type.'/'.date('Y/md').'/'.$randName;
