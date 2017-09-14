@@ -43,6 +43,7 @@ class UploadController extends ApiBaseController{
      */
     public function actionImg($type)
     {
+	    ini_set('memory_limit', '400M');
 	    $thumb_width = 200;
 	    $thumb_height = 200;
         if(!in_array($type,Yii::$app->params['upload.type'])){
