@@ -184,12 +184,15 @@ class DiagnosisController extends ApiBaseController
 			$result['patient_description']=$data['patient_description'];
 			if($data['patient_img1']){
 				$result['patient_img1']=Yii::$app->params['domain'].$data['patient_img1'];
+				$result['patient_img1_thumb'] = $this->thumb($result['patient_img1']);
 			}
 			if($data['patient_img2']){
 				$result['patient_img2']=Yii::$app->params['domain'].$data['patient_img2'];
+				$result['patient_img2_thumb'] = $this->thumb($result['patient_img2']);
 			}
 			if($data['patient_img3']){
 				$result['patient_img3']=Yii::$app->params['domain'].$data['patient_img3'];
+				$result['patient_img3_thumb'] = $this->thumb($result['patient_img3']);
 			}
 
 			$result['patient_name']=$data['patient_name'];
@@ -211,7 +214,13 @@ class DiagnosisController extends ApiBaseController
 		}
 		return $result;
 	}
-
+	private function thumb($img){
+		$thumbnailFileExt = strrchr( $img, '.');
+		$len = strlen($img)-strlen($thumbnailFileExt);
+		$thumbnailFileName =  substr($img,0,$len) .'_200_200';
+		$thumbnailFile =  $thumbnailFileName . $thumbnailFileExt;
+		return $thumbnailFile;
+	}
 
 	/**
 	 * 填写诊断
