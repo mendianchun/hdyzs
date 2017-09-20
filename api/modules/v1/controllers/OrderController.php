@@ -637,7 +637,7 @@ class OrderController extends ApiBaseController
 	    	$appointment = Appointment::findOne(['expert_uuid'=>$uuid,'appointment_no'=>$appointment_no]);
 	    	if($appointment){
 			    $clinic = $appointment->clinicUu;
-			    $content = "【".$clinic->attributes['name']."】您预约的会诊提前开始了，请您尽快打开会诊程序，谢谢！";
+			    $content = "【".$clinic->attributes['name']."】您预约的会诊开始了，请您尽快打开会诊程序，谢谢！";
 
 			    $userInfo = User::findOne(['uuid'=>$appointment->attributes['clinic_uuid']]);
 
