@@ -163,6 +163,7 @@ class Upload extends Model
 			'quality' => $quality === null ? self::QUALITY : $quality
 		];
 		$image->save($thumbnailFile, $options);
+		unset($image);
 		return $thumbnailFile;
 	}
 
