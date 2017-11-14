@@ -198,12 +198,13 @@ class ExpertController extends Controller
 
 	        foreach($post['Expert']['free_time'] as $v){
 		        $keys = explode('_',$v);
-		        $free_time[$keys[0]][]=$this->time_range[$keys[1]];
+
+		        $free_time["$keys[0]"][]=$this->time_range[$keys[1]];
 
 	        }
-	        $model->free_time =json_encode($free_time);
-	        //$expert->free_time =serialize($free_time);
+	        $free_time[8]=array();
 
+	        $model->free_time =json_encode($free_time);
 
 	        $model->fee_per_times =$post['Expert']['fee_per_times'];
 	        $model->fee_per_hour =$post['Expert']['fee_per_hour'];
