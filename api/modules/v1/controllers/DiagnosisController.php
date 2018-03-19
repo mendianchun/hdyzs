@@ -100,7 +100,7 @@ class DiagnosisController extends ApiBaseController
 			$result=array();
 			foreach($data as $item){
 				$app=array();
-				$app['appointment_no'] = $item->attributes['appointment_no'];
+				$app['appointment_no'] = "".$item->attributes['appointment_no']."";
 				$app['dx_status'] = $item->attributes['dx_status'];
 
 				$app['expert_advise'] = $item->attributes['expert_advise'];

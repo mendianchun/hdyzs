@@ -86,7 +86,7 @@ class OrderController extends ApiBaseController
             $result = array();
             foreach ($data as $item) {
                 $app = array();
-                $app['appointment_no'] = $item->attributes['appointment_no'];
+                $app['appointment_no'] = "".$item->attributes['appointment_no']."";
                 $app['clinic_uuid'] = $item->attributes['clinic_uuid'];
 
                 $app['order_starttime'] = date('Y-m-d H:i:s', $item->attributes['order_starttime']);
